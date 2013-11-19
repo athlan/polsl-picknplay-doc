@@ -80,3 +80,5 @@
 # additional restrictions
 *.pdf
 *.undo
+*.texnicle
+.DS_Store
