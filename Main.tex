@@ -1,8 +1,14 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage{polski}
-\usepackage[utf8]{inputenc} 
+\usepackage[utf8]{inputenc}
 % by użyć polskich znaków w systemach Linux 
-% używamy kodowania "latin2" lub "utf8", dla Windows "cp1250" 
+% używamy kodowania "latin2" lub "utf8", dla Windows "cp1250"
+
+% ustawienia obrazow %
+\usepackage{graphicx}
+\graphicspath{ {./assets/images/} }
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+
 \title{Zdalne sterowanie ze smartfona grą marketingową na interaktywnym bilboardzie LED} 
 \author{
   Pelczar Piotr\\
@@ -15,7 +21,7 @@
 \maketitle 
 
 \tableofcontents
-\listoftables 
+\listoftables
 
 \input{./partials/introduction.tex}
 \input{./partials/goal.tex}
