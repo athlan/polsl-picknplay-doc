@@ -82,3 +82,5 @@
 *.undo
 *.texnicle
 .DS_Store
+
+bin/publish-ftp.sh

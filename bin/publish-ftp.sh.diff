@@ -1,0 +1,16 @@
+#!/bin/bash
+
+FTP_HOST=athlan.pl
+FTP_USER=pracadyplomowa@athlan.pl
+FTP_PASS=******
+FTP_PATH=/
+
+# fix username
+FTP_USER=`echo $FTP_USER | sed 's/@/%40/g'`
+echo $FTP_USER
+
+ftp -d ftp://$FTP_USER:$FTP_PASS@$FTP_HOST$FTP_PATH << ftpEnd
+prompt
+put ./target/Main.pdf ./Main.pdf
+quit
+ftpEnd
