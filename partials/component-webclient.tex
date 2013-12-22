@@ -1,9 +1,22 @@
 \section{Klient webowy - pilot uruchomiony na urządzeniu mobilnym}
 
-\subsection{Projektowanie szablonów HTML zgodnie z Responsive Design}
+Kluczowym z punktu widzenia systemu jest poprawnie działający, uniwersalny klient webowy w postaci strony internetowej wyświetlanej w przeglądarce na urządzeniu mobilnym klienta końcowego. Biorąc pod uwagę różnorodność rozdzielczości ekranów, gęstości pikseli (ang. \emph{pixel density}), szybkości wykorzystywanych łącz, wsparcia przeglądarek internetowych na urządzeniach mobilnych dla dyrektyw CSS 3\footnote{CSS (ang. \emph{Cascading Style Sheets}) kaskadowe arkusze stylów, opisujące sposób wyświetlania elementów strony internetowej)}, SVG\footnote{SVG (ang. \emph{Scalable Vector Graphics}) format grafiki wektorowej} rozpoznano szereg problemów oraz zaproponowano rozwiązania.
 
-\subsection{Użycie Web Storage}
+\subsection{Projektowanie stron internetowych zgodnie z Responsive Design}
+
+
 
 \subsection{Wykrywanie gestów telefonu komórkowego}
 
+\lstset{language=JavaScript}
+\begin{lstlisting}[label=some-code,caption=Some Code]
+var test = function(param) {
+	// obsluga gestow
+}
+\end{lstlisting}
+
+\subsubsection{Reprezentacja kursora na płaszczyźnie}
+
 Pozycja kursora reprezentowana jest przez punkt na dwuwymiarowej płaszczyźnie w zakresie \( x\in \langle0, 1\rangle \).
+
+\subsection{Pamięć podręczna Web Storage}
