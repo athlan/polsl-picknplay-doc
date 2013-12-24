@@ -16,7 +16,7 @@ Przeglądarki internetowe uruchamiane na urządzeniach mobilnych, które przewid
 
 Specyfikacja zdarzeń dotyku (\emph{Touch Events specification}\cite{touch-events-w3c}) opracowana przez W3C\footnote{W3C - World Wide Web Consortium} rozwiązuje powyższe problemy definiując interfejsy umożliwiające aplikacjom bezpośrednią obsługę zdarzeń gestów, z możliwością interpretacji wielu dotyków jednocześnie dla urządzeń zdolnych do ich obsługi. Jej pierwsza wersja (\emph{Proposed Recommendation}) powstała już 5 maja 2011, aż po pięciu poprawkach (przechodząc przez statusy \emph{Working Draft} oraz \emph{Candidate Recommendation}) uzyskała status \emph{W3C Recommendation}.
 
-Definiuje ona interfejst punktu dotyku \emph{Touch} jako obiekt niezmienny (ang. \emph{immutable object}\footnote{Immutable object - Obiekt niezmienny raz utworzony, nie może zmieniać swojego stanu}):
+Definiuje ona interfejs punktu dotyku \emph{Touch} jako obiekt niezmienny (ang. \emph{immutable object}\footnote{Immutable object - Obiekt niezmienny raz utworzony, nie może zmieniać swojego stanu}):
 
 \lstset{language=Octave}
 \begin{lstlisting}
@@ -68,7 +68,7 @@ Aby reagować na zdefiniowane zdarzenia, należy zarejestrować procedurę obsł
   Zdarzenie jest wyzwalane, gdy punkt dotyku opuszcza dostępną rzutnię lub gdy występuje błąd implementacji. Niezdefiniowane zachowanie.
 \end{description}
 
-\subsubsection{Respektowanie standardu przez producentów przeglądarek}
+\subsubsection{Respektowanie standardu Touch Events przez producentów przeglądarek}
 \label{subsec:w3c-touch-events-implementations}
 
 Pojawienie się propozycji standardu nie gwarantuje, że producenci popularnych przeglądarek internetowych zaimplementują daną funkcjonalność wg podanej specyfikacji, bądź czy obsługa w ogóle występuje. W chwili obecnej biorąc pod uwagę przeglądarki internetowe dla urządzeń mobilnych, standard jest wspierany przez\cite{caniuse-touch-events}:
@@ -89,7 +89,7 @@ Przeglądarki nie wspierające standardu:
 
 \subsubsection{Użycie biblioteki jQuery Mobile}
 
-Brak respektowania standardów stwarza problemy związane z obsługą gestów na urządzeniach mobilnych. Aby zapewnić poprawne funkcjonowanie należy śledzić zmiany wprowadzane w implementacjach przeglądarek przez producentów oraz ewentualne zmiany w standardach. W projekcie wykorzystana została biblioteka jQuery Mobile posiadająca dużą społeczność\footnote{Ponad 10 tyś poprawek, 36 wersji, 204 osób wnoszących wkład w rozwój biblioteki [Stan na 22 grudnia 2013]}. Wśród wpieranych przeglądarek znajdują się wymienione jako niewspierające standardu z podsekcji ~\ref{subsec:w3c-touch-events-implementations}.
+Brak respektowania standardów stwarza problemy związane z obsługą gestów na urządzeniach mobilnych. Aby zapewnić poprawne funkcjonowanie należy śledzić zmiany wprowadzane w implementacjach przeglądarek przez producentów oraz ewentualne zmiany w standardach. W projekcie wykorzystana została biblioteka \emph{jQuery Mobile} posiadająca dużą społeczność\footnote{Ponad 10 tyś poprawek, 36 wersji, 204 osób wnoszących wkład w rozwój biblioteki [Stan na 22 grudnia 2013]}. Wśród wpieranych przeglądarek znajdują się wymienione jako niewspierające standardu z podsekcji ~\ref{subsec:w3c-touch-events-implementations}.
 
 Biblioteka wykorzystywana w zakresie poruszania punktów dotyków definiuje \emph{wirtualną mysz} (oznaczoną \lstinline{vmouse}) jako abstrakcję na standardową mysz lub dotyk na urządzeniu mobilnym. Zdarzenia obsługujące wirtualną mysz będą wyzwalane dla myszy komputerowej oraz dla panelu dotykowego.
 
@@ -157,3 +157,91 @@ this.run = function() {
 \end{lstlisting}
 
 \subsection{Pamięć podręczna Web Storage}
+
+Klient webowy uruchomiony na urządzeniu mobilnym zawiera pliki z kodem JavaScript, które są pobierane do przeglądarki internetowej celem ich interpretacji i późniejszego wykonania. Ze względu na specyfikę sieci 3G: mniejsza przepustowość (ang. \emph{bandwidth}), koszt transferu (ponoszony przez użytkownika końcowego), większe opóźnienia (ang. \emph{latency}) niezbędnym jest zapamiętywanie lokalnie pobranych plików, celem ich ponownego otwarcia z lokalnej przestrzeni dyskowej urządzenia, bez konieczności dostępu do nich przez sieć.
+
+Przeglądarki internetowe na urządzeniach mobilnych wspierają pamięć tymczasową \emph{cache} protokołu HTTP opisaną w dokumencie RFC-2616 \emph{Hypertext Transfer Protocol - HTTP/1.1}\cite{http-rfc} \footnote{Rozdział 13, \emph{Caching in HTTP}}. Można by było zadać pytanie, czy pamięć jest zachowywana po zamknięciu przeglądarki na urządzeniu mobilnym jako aplikacji, przy blokowaniu i wyłączaniu telefonu. Wykonane testy dowodzą, że przeglądarki internetowe na urządzeniach mobilnych wykazują poprawne zachowanie\cite{http-cache-mobile-benchmark}.
+
+Można by było zaprzestać na serwowaniu plików JavaScript z nagłówkiem \lstinline{Cache-Control} oraz \lstinline{Expires} na bardzo odległy czas, przykładowo:
+
+\lstset{language=Octave}
+\begin{lstlisting}
+Cache-Control: max-age=315360000, must-revalidate
+Expires: Mon, 30 Oct 2023 14:19:41 GMT
+\end{lstlisting}
+
+Zaproponowany standard W3C \emph{Web Storage}\cite{webstorage}\footnote{W3C Recommendation, {\em Web Storage}, \url{http://www.w3.org/TR/webstorage/}}, który również zapewnia przechowywanie danych lokalnie, dał początek testom związanych z szybkością ładowania plików z obu pamięci podręcznych. Co prawda, w swoim zamierzeniu Web Storage nie miał na celu przechowywanie plików wchodzących w skład strony internetowej, ale posiada interfejs, który umożliwia wykorzystanie go właśnie w ten sposób. Wykonane testy wykazały, że ładowanie danych z Web Storage (dokładniej \emph{Local Storage}) jest nawet do 5 razy szybsze, niż w przypadku ładowania danych z pamięci podręcznej przeglądarki (\emph{Native cache})\cite{http-cache-mobile-benchmark}\footnote{Testy dotyczące przeglądarek internetowych na urządzeniach mobilnych opublikowanych 13 maja 2013 przez Petera McLachlana}:
+
+\begin{figure}[h!]
+  \caption[Porównanie czasu ładowania danych z cache przeglądarki oraz Web Storage]{Czerwoną kreską oznaczono średnią.}
+  \centering
+    \includegraphics[width=\textwidth]{localstorage-benchmark}
+\end{figure}
+
+\begin{center}
+    \begin{tabular}{ | l | p{2.5cm} | p{2.5cm} | p{2.5cm} | p{2.5cm} |}
+    \hline
+	Smartphone OS & localStorage \newline śr. (ms) & native browser \newline śr. (ms) & localstorage \newline odch. st. & native browser \newline odch. st. \\ \hline
+	Android 2.2 & 299.94 & 509.32 & 164.76 & 537.95 \\ \hline
+	Android 2.3 & 133.50 & 154.76 & 57.65 & 215.13 \\ \hline
+	Android 4.0 & 97.05 & 103.44 & 31.80 & 179.36 \\ \hline
+	Android 4.1 & 75.60 & 85.57 & 21.60 & 132.03 \\ \hline
+	Android 4.2 & 55.28 & 83.76 & 23.28 & 121.51 \\ \hline
+	iPhone iOS5 & 21.61 & 132.90 & 8.64 & 177.69 \\ \hline
+	iPhone iOS6 & 15.71 & 73.86 & 7.27 & 109.32 \\ \hline
+    \hline
+    \end{tabular}
+\end{center}
+
+W przypadku Local Storage zarówno średni czas ładowania, jak i wariancja i odchylenie standardowe jest znacznie mniejsze.
+
+Dokument standardu W3C\cite{webstorage} definiuje sposób dostępu do danych z pamięci lokalnej przeglądarki. Propozycja wynikła z faktu, iż dane zachowane lokalnie w przeglądarce internetowej przed jego pojawieniem się, implementowane za pomocą mechanizmu ciasteczek (ang. \emph{Cookies}) brały udział w transmisji w protokole HTTP jako dane nagłówkowe wychodzące od strony klienta do serwera, co nie było pożądane ze względu na dodatkowy narzut transmisji. Ponadto serwer jest świadom istnienia danych lokalnych i jest w stanie je odebrać (nagłówek HTTP \lstinline{Cookie: } podczas wysyłania żądania do serwera) oraz, co gorsza modyfikować (nagłówek HTTP \lstinline{Set-Cookie: } podczas wysyłania odpowiedzi od serwera).
+
+Przykładowe żądanie HTTP z ciasteczkiem:
+\lstset{language=Octave}
+\begin{lstlisting}
+GET / HTTP/1.1
+Host: www.example.org
+Cookie: name=value; name2=value2
+Accept: */*
+\end{lstlisting}
+
+Przykładowa odpowiedź HTTP z modyfikacją ciasteczka:
+\lstset{language=Octave}
+\begin{lstlisting}
+HTTP/1.0 200 OK
+Content-type: text/html
+Set-Cookie: name=value
+Set-Cookie: name2=MODIFIED_VALIE; Expires=Wed, 09 Jun 2021 10:18:14 GMT
+
+(content of page)
+\end{lstlisting}
+
+Standard definiuje pamięć jako interfejs \emph{Storage}, na którym można dokonywać operacji odczytu, zapisu, usunięcia.
+
+\lstset{language=Octave}
+\begin{lstlisting}
+interface Storage {
+  readonly attribute unsigned long length;
+  DOMString? key(unsigned long index);
+  getter DOMString? getItem(DOMString key);
+  setter creator void setItem(DOMString key, DOMString value);
+  deleter void removeItem(DOMString key);
+  void clear();
+};
+\end{lstlisting}
+
+Istnieją dwa rodzaje pamięci:
+
+
+\begin{description}
+  \item[Session Storage] \hfill \\
+  opis
+  \item[Local Storage] \hfill \\
+  opis
+\end{description}
+
+
+\subsection{Respektowanie standardu Web Storage przez producentów przeglądarek}
+
+ss
