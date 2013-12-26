@@ -170,7 +170,9 @@ Cache-Control: max-age=315360000, must-revalidate
 Expires: Mon, 30 Oct 2023 14:19:41 GMT
 \end{lstlisting}
 
-Zaproponowany standard W3C \emph{Web Storage}\cite{webstorage}\footnote{W3C Recommendation, {\em Web Storage}, \url{http://www.w3.org/TR/webstorage/}}, który również zapewnia przechowywanie danych lokalnie, dał początek testom związanych z szybkością ładowania plików z obu pamięci podręcznych. Co prawda, w swoim zamierzeniu Web Storage nie miał na celu przechowywanie plików wchodzących w skład strony internetowej, ale posiada interfejs, który umożliwia wykorzystanie go właśnie w ten sposób. Wykonane testy wykazały, że ładowanie danych z Web Storage (dokładniej \emph{Local Storage}) jest nawet do 5 razy szybsze, niż w przypadku ładowania danych z pamięci podręcznej przeglądarki (\emph{Native cache})\cite{http-cache-mobile-benchmark}\footnote{Testy dotyczące przeglądarek internetowych na urządzeniach mobilnych opublikowanych 13 maja 2013 przez Petera McLachlana}:
+Zaproponowany standard W3C \emph{Web Storage}\cite{webstorage}\footnote{W3C Recommendation, {\em Web Storage}, \url{http://www.w3.org/TR/webstorage/}}, który również zapewnia przechowywanie danych lokalnie, dał początek testom związanych z szybkością ładowania plików z obu pamięci podręcznych. Local Storage to pamięć asocjacyjna klucz-wartość (ang. \emph{key-value storage}), gdzie zarówno klucz, jak i wartość są ciągiem znaków. Wartości JavaScript nie będące ciągiem znaków są na niego rzutowane.
+
+Co prawda, w swoim zamierzeniu Web Storage nie miał na celu przechowywanie plików wchodzących w skład strony internetowej, ale posiada interfejs, który umożliwia wykorzystanie go właśnie w ten sposób. Wykonane testy wykazały, że ładowanie danych z Web Storage (dokładniej \emph{Local Storage}) jest nawet do 5 razy szybsze, niż w przypadku ładowania danych z pamięci podręcznej przeglądarki (\emph{Native cache})\cite{http-cache-mobile-benchmark}\footnote{Testy dotyczące przeglądarek internetowych na urządzeniach mobilnych opublikowanych 13 maja 2013 przez Petera McLachlana}:
 
 \begin{figure}[h!]
   \caption[Porównanie czasu ładowania danych z cache przeglądarki oraz Web Storage]{Czerwoną kreską oznaczono średnią.}
@@ -233,15 +235,85 @@ interface Storage {
 
 Istnieją dwa rodzaje pamięci:
 
-
 \begin{description}
-  \item[Session Storage] \hfill \\
-  opis
   \item[Local Storage] \hfill \\
-  opis
+  Przypisany dla danego źródła \emph{Origin}\footnote{Origin to zestaw wartości w postaci: \emph{protocol://domain:port}, gdzie \emph{protocol} to skrótowa nazwa protokołu (np http, https), \emph{domain} to nazwa hosta oraz \emph{port} to numer portu, pod którym jest uruchomiona dana usługa} a trybucie \emph{document} pamięć typu \emph{Storage}. Oznacza to, że każda strona internetowa otwarta w przeglądarce posiada swoją niezależną pamięć podręczną, niedostępną dla stron internetowych uruchomionych z innego adresu (protokół, nazwa hosta, numer portu). \emph{Same Origin Policy} zapewnia, że jedna pamięć może być dzielona tylko i wyłącznie między dokumentami otwartymi przez przeglądarkę dla tej samej nazwy hosta, uruchomiona na wybranym, określonym porcie oraz przekazywana jednym określonym protokołem (np. http, czy https). Dla każdej różnej kombinacji tworzona jest oddzielna pamięć, a dokumenty nie mają dostępu do swoich pamięci na wzajem. Pamięć \emph{Local Storage} ma nieograniczony czas życia, nie ulega zdezaktualizowaniu, dopóki nie zabraknie limitowanego miejsca\footnote{Ilość miejsca jest różna dla przeglądarek} lub użytkownik nie wyczyści danych przeglądarki ręcznie.
+  \item[Session Storage] \hfill \\
+  Ma te same właściwości, jak \emph{Local Storage} za wyjętkiem tej, że pamięć jest czyszczona po zamknięciu sesji, tj. po zamknięciu wszystkich okien dla danego \emph{Origin}.
 \end{description}
 
+\subsubsection{Respektowanie standardu Web Storage przez producentów przeglądarek}
 
-\subsection{Respektowanie standardu Web Storage przez producentów przeglądarek}
+Zaraz po wprowadzeniu propozycji Web Storage, producenci przeglądarek internetowych szybko wprowadzili nową, spójną funkcjonalność. Tendencja utrzymuje się do dziś. Przeglądarki mobilne wspierające standard\cite{caniuse-webstorage}:
 
-ss
+\begin{enumerate}
+  \item iOS Safari,
+  \item Android Browser,
+  \item Blackberry Browser,
+  \item Opera Mobile,
+  \item Chrome for Android,
+  \item Firefox for Android,
+  \item IE Mobile.
+\end{enumerate}
+
+Przeglądarki nie wspierające standardu:
+
+\begin{enumerate}
+  \item Opera Mini
+\end{enumerate}
+
+\subsubsection{Użycie biblioteki basket.js}
+
+W związku z powyższą dywagacją, wszystkie skrypty JavaScript pilota są umieszczone z lokalnej pamięci przeglądarki internetowej Web Storage na telefonie komórkowym. W tym celu opracowana została biblioteka \emph{basket.js} oferująca asynchroniczne ładowanie kodu JavaScript z rozwiązaniem zależności między plikami oraz rozgrywaniem wyścigów\footnote{W asynchronicznym modelu programowania kolejne kawałki kodu nie wykonują się sekwencyjnie, co może doprowadzić do błędów wynikających z zależności między nimi}. basket.js jako interfejs dla programisty używa wzorca projektowego \emph{Promise}.
+
+Dla ułatwienia zarządzania kodem wykonującym się asynchronicznie stosuje się najczęściej trzy wzorce projektowe:
+
+\begin{description}
+  \item[Callback] \hfill \\
+  Polega na zarejestrowaniu funkcji, do której przechodzi się zaraz po wykonaniu asynchronicznej operacji. Przykład:
+  \lstset{language=Octave}
+  \begin{lstlisting}
+  database.query("SELECT * FROM table;", function(data), {
+  	console.log(data) // wiersze do wypisania
+  })
+  \end{lstlisting}
+  \lstinline{function(data)} to sygnatura anonimowej\footnote{Anonimowej - nie posiadającej identyfikatora, w konsekwencji nie można jej ponownie użyć.} funkcji. Zamiast sygnatury może zostać podany identyfikator wcześniej zadeklarowanej funkcji. Minusem tego rozwiązania jest fakt, że istnieje tylko jedna funkcja, która reaguje na zakończenie operacji, co w niektórych przypadkach może być utrudniające. Drugim minusem tego rozwiązania jest to, że zarówno w przypadku błędu, jak i powodzenia, wykonywana jest ta sama funkcja.
+  \item[Events] \hfill \\
+  W odpowiedzi na możliwość reagowania tylko jedną funkcją na zakończenie operacji przychodzi wzorzec projektowy \emph{Events} (ang. zdarzenia), który domyślnie implementuje funkcję, która w pętli iteracyjnie wykonuje wszystkie funkcje zarejestrowane jako callback. Innymi słowy istnieje wiele funkcji callback, które reagują na dane zdarzenie, na przykład:\\
+  Wzorzec projektowy nie rozwiązuje natomiast problemu, iż w przypadku powodzenia lub niepowodzenia operacji, wykonuje się ten sam zestaw funkcji callback. Z wykonania wielu funkcji callback w systemach, gdzie mogą one zostać równolegle, wzorzec projektowy posiada minus wynikający z synchronizacji funkcji.
+  \lstset{language=Octave}
+  \begin{lstlisting}
+  var funckja1 = function() {
+  	console.log('zaszlo zdarzenie klikniecia')
+  }
+  element.on('click', funkcja1)
+  element.on('click', function() {
+  	console.log('zaszlo zdarzenie klikniecia')
+  })
+  \end{lstlisting}
+  \item[Promise] \hfill \\
+  Jest to wzorzec projektowy deklarujący strukturę funkcji reprezentującą zdarzenie, które zajdzie w przyszłości. Pozwala to na wykonywanie funkcji zarówno jak Events, jak i Callback, bowiem obiekty mogą być łączone w synchroniczny łańcuch.
+\end{description}
+
+Przykład użycia biblioteki basket.js jako wzorca projektowego Promise:
+
+\lstset{language=JavaScript}
+\begin{lstlisting}
+basket
+    .require(
+		{ url: 'assets/js/jquery-1.10.2.min.js' },
+		{ url: 'assets/js/socket.io.js' }
+	)
+    .then(function() {
+        basket.require({ url: 'assets/js/jquery.mobile-1.3.2.min.js' });
+    })
+	.then(function() {
+        basket.require({ url: 'app.js' });
+    })
+	.then(function() {
+	 	// ...
+	})
+});
+\end{lstlisting}
+
+Funkcja \lstinline{require} na rzecz obiektu \lstinline{basket} zwraca obiekt Promise, który uruchamia równolegle trzy funkcje callback. Funkcje callback również mogą zwracać obiekty Promise tworząc synchroniczny łańcuch.
