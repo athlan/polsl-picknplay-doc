@@ -2,6 +2,10 @@
 
 W ramach pracy dyplomowej stworzone zostaną dwa systemy, które za pomocą tej samej techniki komunikacji zrealizują dwa przykładowe zadania, aby zaprezentować możliwości wykorzystania nowo powstałych standardów. Pierwszym z nich jest pilot umożliwiający porusznie kursorem na ekranie komputera pracującego pod systemem Linux lub MacOSX (opisany szczegółowo w sekcji ~\ref{sec:component-controll-remote-screen}). Drugi system to implementacja gry PONG dla dwóch graczy z możliwością kolejkowania kandydatów do gry.
 
+
+W załączniku ~\ref{app:network_diagram_app} przedstawiono sieć połączeń pomiędzy fizycznymi komponentami architektury. Rysunek pokazuje możliwość skalowalności systemu.
+
+
 W niniejszej sekcji zostanie przedstawiona architektura systemu w postaci diagramu komponentów oraz interakcji pomiędzy nimi.
 
 \subsection{Pilot do sterowania zdalnym monitorem}
@@ -16,17 +20,13 @@ System pilota do sterowania zdalnym monitorem złożony jest z trzech części:
     \item Przesyłania danych do serwera w trybie ciągłym przy każdej zmianie pozycji kursora przez przesunięcie palca na ekranie telefonu.
   \end{enumerate}
   
-  \item \textbf{Serwera} obsługującego protokół Web Socket, który ma za zadanie obsługę połączeń klientów webowych oraz przekazanie danych do programu sterującego kursorem. Serwer łączy się do programu sterującego kursorem przez standardowe gniazdo systemu operacyjnego.
-  \item \textbf{Programu sterującego kursorem}, który wystawia standardowe gniazdo systemu operacyjnego, przyjmuje dane od serwera, przetwarza je oraz steruje kursorem myszy na ekranie.
+ 
+ \item \textbf{Serwera} obsługującego protokół Web Socket, który ma za zadanie obsługę połączeń klientów webowych oraz przekazanie danych do programu sterująego kursorem. Serwer łączy się do programu sterującego kursorem przez standardowe gniazdo systemu operacyjnego.
+ 
+ \item \textbf{Programu sterującego kursorem}, który wystawia standardowe gniazdo systemu operacyjnego, przyjmuje dane od serwera, przetwarza je oraz steruje kursorem myszy na ekranie.
 \end{enumerate}
 
 \subsubsection{Diagram komponentów}
-
-\begin{figure}[h!]
-  \caption{Diagram komponentów.}
-  \centering
-    \includegraphics[scale=0.6]{components_diagram}
-\end{figure}
 
 
 \subsubsection{Diagram interackji}
