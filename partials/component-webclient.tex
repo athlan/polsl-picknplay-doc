@@ -2,10 +2,6 @@
 
 Kluczowym z punktu widzenia systemu jest poprawnie działający, uniwersalny klient webowy w postaci strony internetowej wyświetlanej w przeglądarce na urządzeniu mobilnym klienta końcowego. Biorąc pod uwagę różnorodność rozdzielczości ekranów, gęstości pikseli (ang. \emph{pixel density}), szybkości wykorzystywanych łącz, wsparcia przeglądarek internetowych na urządzeniach mobilnych dla dyrektyw CSS 3\footnote{CSS (ang. \emph{Cascading Style Sheets}) kaskadowe arkusze stylów, opisujące sposób wyświetlania elementów strony internetowej)}, SVG\footnote{SVG (ang. \emph{Scalable Vector Graphics}) format grafiki wektorowej} rozpoznano szereg problemów oraz zaproponowano rozwiązania.
 
-\subsection{Projektowanie stron internetowych zgodnie z Responsive Design}
-
-TODO:
-
 \subsection{Wykrywanie gestów telefonu komórkowego}
 
 Pojawienie się na rynku urządzeń dotykowych postawiły przed twórcami interfejsów nowe wyzwania, a projektantom mobilnych przeglądarek internetowych wyzwanie obsługi gestów wykonywanych palcami na ekranie i ich interpretacje na istniejące już, dobrze zakorzenione standardy obsługi zdarzeń myszy.
@@ -317,3 +313,92 @@ basket
 \end{lstlisting}
 
 Funkcja \lstinline{require} na rzecz obiektu \lstinline{basket} zwraca obiekt Promise, który uruchamia równolegle trzy funkcje callback. Funkcje callback również mogą zwracać obiekty Promise tworząc synchroniczny łańcuch.
+
+\subsection{Projektowanie stron internetowych zgodnie z Responsive Web Design}
+\label{subsubsec:rwd}
+
+\emph{Responsive Web Design} (RWD) to sposób projektowania stron internetowych przyjaznych do przeglądania oraz obsługiwania na szerokiej gamie rozdzielczości ekranów (począwszy na urządzeniach mobilnych, po netbooki, komputery jak i monitory z dużą rozdzielczością)\cite{rwd}; rozumianej jako brak konieczności skalowania, przewijania pasków przez użytkownika. Zaprojektowane w ten sposób strony internetowe potrafią zmieniać swój układ, rozmiar grafik, czcionek w zależności od wymiarów widocznej powierzchni ekranu (ang. \emph{viewport}).
+
+\subsubsection{Viewport}
+
+Viewport to widoczna część strony internetowej w oknie przeglądarki. W ramach tej części wykonywana jest projekcja rzutni, na której generowana jest strona internetowa w graficznej postaci. Jeżeli rozmiar rzutni strony internetowej jest większy niż viewport, użytkownik nawiguje się po jej zawartości przeciągając pasek przesówania (horyzontalny i/lub wertykalny).
+
+Na rysunkach poniżej prezentowany jest przykładowy viewport w kontekście wyświetlenia strony internetowej:
+
+\begin{figure}[h!]
+  \caption[Apple default viewport w Safari iOS]{Domyślny viewport iOS Safari na urządzeniu firmy Apple.}
+  \centering
+    \includegraphics[scale=0.75]{viewport-default.png} \\
+    Domyślnie w przeglądarce iOS Safari viewport wynosi 980 pikseli szerokości, mimo, iż ekran optymalnie wyświetla 320 pikseli. Aby przedstawić całą stronę internetową szerokość jest dobierana automatycznie.
+\end{figure}
+
+Podczas projektowania interfejsu strony internetowej wyświetlanej na stronie internetowej istotne jest okreslenie viewportu, aby uniknąć nieoczekiwanemu przyjęciu domyślnych wartości, bowiem strategie ich okreslania są różne. Niektóre przeglądarki dopasowują szerokość viewportu do najszerszego elementu strony internetowej, co powoduje, że tekst i elementy interaktywne mogą być niewidoczne. Aby przyjąć szerokość viewportu zgodne z szerokością przeglądarki internetowej na urządzeniu, należy zdefiniować wartość jako \lstinline{device-width}, wówczas szerokość strony zostanie przycięta, a w przypadku projektowania interfejsu zgodnie z zasadą Responsive Web Design (opisanum w podsekcji \ref{subsubsec:rwd}), istnieje możliwość określenia dedykowanych arkuszy styli definiujących wygląd strony w zależności od szerokości viewportu (który nie może być zmieniany na urządzeniu mobilnym, a w przypadku przeglądarki uruchomionej na komputerze - tak, poprzez zmianę rozmiaru okna).
+
+\begin{figure}[h!]
+  \caption[Apple fixed viewport w Safari iOS]{Ustawiony viewport iOS Safari na urządzeniu firmy Apple}
+  \centering
+    \includegraphics[scale=0.75]{viewport-adjusted.png} \\
+    Viewport można regulować ustawiając stałe wartości, np 320px lub \lstinline{device-width} jako szerokość okna przeglądarki.
+\end{figure}
+
+\lstset{language=HTML}
+\begin{lstlisting}
+<meta name="viewport" content="width=device-width" />
+\end{lstlisting}
+
+\subsubsection{Cascading Style Sheet - Media Queries}
+
+Znane są rozszerzenia kaskadowych arkuszy styli (ang. \emph{Cascading Style Sheet}, w skrócie \emph{CSS}) z wersji 2.1\cite{css21}, gdzie za pomocą atrybutu \emph{@media} istnieje możliwość zdefiniowania, jakiego typu urządzenia dotyczy wybrany arkusz styli\footnote{\cite{css21}, Rozdział \emph{Media types}}, tzw \emph{Media Queries}, np:
+
+\begin{description}
+  \item[all] \hfill \\
+  Wszystkie urzadzenia
+  \item[print] \hfill \\
+  Dla urządzeń drukujących lub stron na ekranie wyświetlanych w trybie podglądu do wydruku.
+  \item[handheld] \hfill \\
+  Dla urządzeń kieszonkowych o zmniejszonej rozdzielczości ekranu.
+  \item[projection] \hfill \\
+  Dla urządzeń, które wyświetlają stronę w trybie prezentacyjnym, np projektorów.
+  \item[tty] \hfill \\
+  Dla urządzeń o ściśle określonym obszarze na wyświetlanie znaków, np. terminale, urządzenia przenośne z okraniczonym tekstowym wyświetlaczem.
+  \item[all] \hfill \\
+  c
+\end{description}
+
+Sposob załączania arkusza w zależności od jego przeznaczenia jest następujący dla dokumentu HTML:
+
+\lstset{language=HTML}
+\begin{lstlisting}
+<link rel="stylesheet" type="text/css" href="layout.css"
+  media="screen" />
+<link rel="stylesheet" type="text/css" href="print.css"
+  media="print" />
+\end{lstlisting}
+
+Lub bezpośrednio w arkuszu stylów:
+
+\lstset{language=Octave}
+\begin{lstlisting}
+@media print {
+  body { font-size: 10pt }
+}
+@media screen {
+  body { font-size: 13px }
+}
+@media screen, print {
+  body { line-height: 1.2 }
+}
+\end{lstlisting}
+
+Nie jest to jednak wystarczające w kontekście dostosowania strony internetowej do rozmiarów i rozdzielczości okna przeglądarki. W CSS w wersji 3.1 wprowadzono możliwość załączania styli w zależności od rozdzielczości dostępnej powierzchni (\emph{viewport}) za pomocą rozszerzonego o tę możliwość \emph{Media Queries}\cite{css3}\footnote{\cite{css3} Rozdział \emph{Media Queries}, http://www.w3.org/TR/css3-mediaqueries/}.
+
+Pojawiła się między innymi wartość atrybutu \lstinline{@media}: \lstinline{device-width} oraz \lstinline{device-height} z przedrostkami \lstinline{min-} i \lstinline{max-}, co w pełni wyczerpuje potrzeby projektowania stron internetowych zgodnie z RWD.
+
+Przykładowy kod ładujący arkusz styli dla urządzeń o maksymalnej szerokości 480px:
+
+\lstset{language=Octave}
+\begin{lstlisting}
+<link rel="stylesheet" type="text/css"
+  media="screen and (max-device-width: 480px)"
+  href="landscape.css" />
+\end{lstlisting}
