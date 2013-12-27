@@ -20,7 +20,6 @@ System pilota do sterowania zdalnym monitorem złożony jest z trzech części:
     \item Przesyłania danych do serwera w trybie ciągłym przy każdej zmianie pozycji kursora przez przesunięcie palca na ekranie telefonu.
   \end{enumerate}
   
- 
  \item \textbf{Serwera} obsługującego protokół Web Socket, który ma za zadanie obsługę połączeń klientów webowych oraz przekazanie danych do programu sterująego kursorem. Serwer łączy się do programu sterującego kursorem przez standardowe gniazdo systemu operacyjnego.
  
  \item \textbf{Programu sterującego kursorem}, który wystawia standardowe gniazdo systemu operacyjnego, przyjmuje dane od serwera, przetwarza je oraz steruje kursorem myszy na ekranie.
@@ -28,17 +27,13 @@ System pilota do sterowania zdalnym monitorem złożony jest z trzech części:
 
 \subsubsection{Diagram komponentów}
 
+TODO: Kamil Badyla
+insert as a image
 
 \subsubsection{Diagram interackji}
 
 TODO: Kamil Badyla
 insert as a image
-
-\begin{figure}[h!]
-  \caption{A picture of a gull.}
-  \centering
-    \includegraphics[width=\linewidth]{testimage}
-\end{figure}
 
 \subsection{Gra PONG wyświetlana na zdalnym monitorze}
 
@@ -50,18 +45,3 @@ System gry PONG dla dwóch graczy z możliwością kolejkowania chętnych złoż
   \item \textbf{Klient wyświetlający grę} - aplikacja stworzona jako strona internetowa uruchamiana w przeglądarce na ekranie LED. Wyświetla planszę gry w trakcie jej trwania, lub komunikaty zachęcające do podjęcia rozgrywki w trakcie, gdy nie trwa rozgrywka. Na ekranie można wyświetlać potencjalne reklamy.
 \end{enumerate}
 
-\subsubsection{Diagram komponentów}
-
-\begin{figure}[h!]
-  \caption{A picture of a gull.}
-  \centering
-    \includegraphics[width=\linewidth]{testimage}
-\end{figure}
-
-\subsubsection{Diagram interackji}
-
-\begin{figure}[h!]
-  \caption{A picture of a gull.}
-  \centering
-    \includegraphics[width=\linewidth]{testimage}
-\end{figure}
