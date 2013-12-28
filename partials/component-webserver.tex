@@ -7,7 +7,7 @@ Klient webowy uruchamiany w przeglądarce internetowej na urzadzeniu mobilbym u�
 
 W obu aplikacjach, zarówno grze PONG, jak i pilocie sterującym zdalnym monitorem komunikacja między rozproszonym systemem jest oparta o asynchroniczną wymianę komunikatów (ang. \emph{Asynchronous Message-oriented middleware - MOM})\cite{message-oriented-middleware}.
 
-Dodatkowo przeprowadzano dywagację na temat skalowania stworzonego systemu opisaną w podsekcji \ref{subsub:scalability}. W obliczu skalowalości klienci łączą się do centralnego serwera, który rozdysponuje ruch sieciowy pomiędzy dostępne serwery (ang. \emph{nodes}) obsługujących żądania. W kontekście rozproszenia systemu, architektura MOM polega na asynchronicznem modelu wymiany komunikatów, w przeciwieństwie do modelu żądanie-odpowiedź (\emph{request-response model}). W asynchronicznych systemach kolejki komunikatow pełnią rolę tymczasowego bufora, kiedy odbiorca wiadomości jest zajęty lub niepodłączony do sieci. W dodatku istnieje możliwość stworzenia kolejek trwałych (ang. \emph{persistent queues}), w których wiadomości są zapisywane w pamięci trwałej (np. na dysku) zachowania ich kopii, dzieki czemu nadawca i odbiorca wiadomości nie musi być dostępny w sieci w tym samym czasie - mechanizm ten nazywany jest asynchroniczną dostawa (ang. \emph{asynchronous delivery}). Oznacza to, że gdy odbiorca wiadomości jest niedostępny, wysyłający wiadomości może pracować, a wiadomości zostaną odłożone w kolejce celem późniejszej dostawy, kiedy odbiorca będzie dostępny.
+Dodatkowo przeprowadzano dywagację na temat skalowania stworzonego systemu opisaną w podsekcji \ref{subsub:scalability}. W obliczu skalowalności klienci łączą się do centralnego serwera, który rozdysponuje ruch sieciowy pomiędzy dostępne serwery (ang. \emph{nodes}) obsługujących żądania. W kontekście rozproszenia systemu, architektura MOM polega na asynchronicznem modelu wymiany komunikatów, w przeciwieństwie do modelu żądanie-odpowiedź (\emph{request-response model}). W asynchronicznych systemach kolejki komunikatów pełnią rolę tymczasowego bufora, kiedy odbiorca wiadomości jest zajęty lub niepodłączony do sieci. W dodatku istnieje możliwość stworzenia kolejek trwałych (ang. \emph{persistent queues}), w których wiadomości są zapisywane w pamięci trwałej (np. na dysku) zachowania ich kopii, dzięki czemu nadawca i odbiorca wiadomości nie musi być dostępny w sieci w tym samym czasie - mechanizm ten nazywany jest asynchroniczną dostawa (ang. \emph{asynchronous delivery}). Oznacza to, że gdy odbiorca wiadomości jest niedostępny, wysyłający wiadomości może pracować, a wiadomości zostaną odłożone w kolejce celem późniejszej dostawy, kiedy odbiorca będzie dostępny.
 
 \begin{figure}[H]
   \caption[Model asynchronicznej interakcji w systemach opartych o wymianę komunikatów]{Model asynchronicznej interakcji w systemach opartych o wymianę komunikatów}
@@ -136,7 +136,56 @@ Wykorzystując możliwości osadzanych niewidocznych (lub małych, 1x1 pikseli\f
 \subsubsection{Web Sockets}
 \label{subsub:websockets}
 
-% 
+Opisane metody w sekcji \ref{sub:communication-methods} nie zapewniają komunikacji dwukierunkowej (ang. \emph{full-duplex} lub \emph{bi-directional communication}) za pomocą jednego połączenia TCP. Wychodząc na przeciw oczekiwaniom twórców witryn www czasu rzeczywistego wprowadzony został mechanizm \emph{Web Sockets} ustandaryzowany przez IETF\footnote{Internet Engineering Task Force} w dokumencie RFC-6455\cite{websockets-rfc} umożliwiający nawiązanie połączenia TCP wprost z przeglądarki internetowej. W chwili obecnej większość przeglądarek internetowych wspiera standard Web Sockets\cite{caniuse-websockets}, w tym przeglądarki na urządzeniach mobilnych.
+
+\begin{figure}[H]
+  \caption[Zasada działania protokołu Web Sockets]{Zasada działania protokołu Web Sockets}
+  \centering
+    \includegraphics[scale=0.75]{websockets-flow.jpg}
+\end{figure}
+
+Protokół Web Sockets został zaprojektowany dla przeglądarek internetowych, natomiast może być użyty w jakiejkolwiek aplikacji. Opiera się na protokole HTTP, ale tylko do czasu przełączenia za pomocą \emph{Upgrade Request} na właściwą wymianę danych, by przystąpić do etapu \emph{handshake}. Aby ustanowić połączenie w protokole Web Sockets, klient wysyła żądanie w protokole HTTP:
+
+\lstset{language=Octave}
+\begin{lstlisting}
+GET /chat HTTP/1.1
+Host: server.example.com
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
+Origin: http://example.com
+Sec-WebSocket-Protocol: chat, superchat
+Sec-WebSocket-Version: 13
+\end{lstlisting}
+
+Klient wysyła nagłówek \lstinline{Sec-WebSocket-Key} o wartości będącej wartością losową zakodowaną jako base64\footnote{Jeden ze sposobów kodowania ciągów bajtów}.
+
+Serwer wysyła odpowiedź \emph{101 Switching Protocols}:
+
+\lstset{language=Octave}
+\begin{lstlisting}
+HTTP/1.1 101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
+Sec-WebSocket-Protocol: chat
+\end{lstlisting}
+
+W odpowiedzi na nagłówek \lstinline{Sec-WebSocket-Key} serwer odsyła w odpowiedzi nagłówek \lstinline{Sec-WebSocket-Accept} o wartości będącą równą:
+
+\vspace*{1\baselineskip}
+\lstinline{base64(sha1( klucz ))}
+\vspace*{1\baselineskip}
+
+Gdzie klucz to sklejenie ciągu znaków pochodzących z wartości \lstinline{Sec-WebSocket-Key} oraz stałej, ustalonej wartości \lstinline{258EAFA5-E914-47DA-95CA-C5AB0DC85B11}.
+
+Od tego momentu rozpoczyna się transmisja w protokole Web Socekts, grze przesyłane są ramki w trybie full-duplex:
+
+\begin{figure}[H]
+  \caption[Ramka protokołu Web Sockets]{Ramka protokołu Web Sockets}
+  \centering
+    \includegraphics[scale=0.65]{WebSocketFrame.png}
+\end{figure}
 
 \subsection{Wykorzystana technologia}
 
