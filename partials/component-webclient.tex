@@ -276,6 +276,9 @@ Dla ułatwienia zarządzania kodem wykonującym się asynchronicznie stosuje si�
   \lstinline{function(data)} to sygnatura anonimowej\footnote{Anonimowej - nie posiadającej identyfikatora, w konsekwencji nie można jej ponownie użyć.} funkcji. Zamiast sygnatury może zostać podany identyfikator wcześniej zadeklarowanej funkcji. Minusem tego rozwiązania jest fakt, że istnieje tylko jedna funkcja, która reaguje na zakończenie operacji, co w niektórych przypadkach może być utrudniające. Drugim minusem tego rozwiązania jest to, że zarówno w przypadku błędu, jak i powodzenia, wykonywana jest ta sama funkcja.
   \item[Events] \hfill \\
   W odpowiedzi na możliwość reagowania tylko jedną funkcją na zakończenie operacji przychodzi wzorzec projektowy \emph{Events} (ang. zdarzenia), który domyślnie implementuje funkcję, która w pętli iteracyjnie wykonuje wszystkie funkcje zarejestrowane jako callback. Innymi słowy istnieje wiele funkcji callback, które reagują na dane zdarzenie, na przykład:\\
+
+  
+
   Wzorzec projektowy nie rozwiązuje natomiast problemu, iż w przypadku powodzenia lub niepowodzenia operacji, wykonuje się ten sam zestaw funkcji callback. Z wykonania wielu funkcji callback w systemach, gdzie mogą one zostać równolegle, wzorzec projektowy posiada minus wynikający z synchronizacji funkcji.
   \lstset{language=Octave}
   \begin{lstlisting}
