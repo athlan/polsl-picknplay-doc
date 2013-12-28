@@ -198,6 +198,29 @@ Od tego momentu rozpoczyna się transmisja w protokole Web Socekts, grze przesy�
 \subsubsection{Socket.io}
 \label{subsub:socketio}
 
+Socket.io to biblioteka Node.js, która zapewnia komunikację dwukierunkową między przeglądarka użytkownika, a serwerem. Co ważne, sposób wykorzystania biblioteki zarówno po stornie serwera, jak i klienta jest taki sam. Komunikacja zapewniana jest przez wspierane sposoby opisane w podrozdziale \ref{sub:communication-methods})\footnote{http://socket.io/\#browser-support}:
+
+\begin{enumerate}
+  \item WebSocket
+  \item Adobe® Flash® Socket
+  \item AJAX long polling
+  \item AJAX multipart streaming
+  \item Forever Iframe
+  \item JSONP Polling
+\end{enumerate}
+
+Przykładowy node.js kod po stronie serwera:
+
+\lstinputlisting[language=JavaScript]{assets/src/socketio-example-server.js}
+
+Powyższy kod uruchamia serwer nasłuchujący na porcie 8081, i przyjmuje zgłoszenia. Gdy klient się podłączy, dodawany jest callback na rzecz obiektu klienta \lstinline{socket} na wiadomość nazwaną \emph{the message from client}, który jest wykonywany, gdy wiadomość o takim identyfikatorze nadejdzie, za pomocą konstrukcji \lstinline{socket.on('the_message_from_client', function(data)}. Wysyłanie wiadomości podłączonemu klientowi odbywa się poprzez wywołanie metody emit na rzecz obiektu klienta socket \lstinline{socket.emit('the_message_from_server', function(data)} , która przyjmuje argument jako nazwę wiadomości \emph{the message from server} oraz drugi w postaci obiektu JavaScript, który zostanie zserializowany do formatu JSON i wysłany jako tekst, gdzie po stornie klienta zostanie zdeserializowany i zinterpretowany również jako obiekt JavaScript.
+
+Przykładowy kod po stornie klienta:
+
+\lstinputlisting[language=JavaScript]{assets/src/socketio-example-client.js}
+
+Kod jest bliźniaczo podobny do kodu uruchamianego na serwerze. Klient ustanawia połączenie do adresu podanego jako argument funkcji \lstinline{connect}. Domyślnie używany jest protokół WebSocket ws://, można skorzystać z szyfrowanego protokołu wss://\footnote{analogiczny http:// do https://} wskazując go przed nazwę hosta. Istnieje możliwość skonfigurowania połączenia, np wskazać, czy ma zostać podjęta próba ponownego połączenia przy jego utracie.
+
 \subsubsection{Skalowanie}
 \label{subsub:scalability}
 
