@@ -138,8 +138,8 @@
 			<integer>54</integer>
 			<key>Points</key>
 			<array>
-				<string>{360, 238}</string>
-				<string>{360, 427}</string>
+				<string>{360, 241}</string>
+				<string>{356.65542483329773, 456}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -218,7 +218,7 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{290.00001016259193, 516}, {100, 24}}</string>
+			<string>{{305.00001016259193, 539}, {100, 24}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FitText</key>
@@ -280,7 +280,7 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{305, 444}, {102, 51}}</string>
+			<string>{{305, 472}, {102, 51}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FontInfo</key>
@@ -406,7 +406,7 @@ X klient\
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{290, 428}, {130.5, 83}}</string>
+			<string>{{290, 456}, {130.5, 83}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FontInfo</key>
@@ -1486,7 +1486,7 @@ Klawiatura}</string>
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2013-12-27 16:25:57 +0000</string>
+	<string>2013-12-28 09:06:28 +0000</string>
 	<key>Modifier</key>
 	<string>Kamil Badyla</string>
 	<key>NotesVisible</key>

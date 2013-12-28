@@ -5,7 +5,7 @@
 \label{app:network_diagram_app}
 \begin{figure}[H]
 \begin{center}
-    \includegraphics[scale=0.6]{network_diagram}
+    \includegraphics[width=\linewidth]{network_diagram}
 \end{center}
 \caption{Diagram sieciowy.}
 \label{fig:network_diagram1}
@@ -18,11 +18,27 @@
 \label{app:netwo}
 \begin{figure}[H]
 \begin{center}
-    \includegraphics[scale=0.6]{components_diagram}
+    \includegraphics[scale=0.5]{pong_components_diagram}
 \end{center}
 \caption{Diagram komponentów w grze PONG}
 \label{fig:network_diagram}
 \end{figure}
+
+
+
+\newpage
+\section{Diagram komponentów sterowania ekranem}
+\label{app:netwo}
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[width=\linewidth]{control_components_diagram}
+\end{center}
+\caption{Diagram komponentów do sterowania zdalnym ekranem}
+\label{fig:network_diagram}
+\end{figure}
+
+
+
 
 \newpage
 \section{Program serwera w kliencie}
@@ -48,7 +64,29 @@ W części rodzica, podobnie jak w procesie dziecka zamykany jest nieużywany de
 \newpage
 \section{X Window System}
 \label{app:X Window System}
-TODO: Kamil Badyla
+X Window graficzny system okien:
+\begin{itemize}
+	\item oparty o architekturę klient-serwer
+	\item niezależny od systemu operacyjnego na jakim uruchomiony jest system okien
+	\item oparty o prokół TCP/IP
+\end{itemize}
+
+\begin{description}
+	\item[Co to jest X serwer?] \hfill \\
+		X-Serwer jest to aplikacja komunikująca się z pośrednio z kartą graficzną, myszką, monitorem etc. Udostępnia okno na, którym mogą zostać wyświetleni klienci systemu okien.
+	\item[Co to jest X klient?] \hfill \\
+Używa okna udostępnionego przez X Serwer do wyświetlenia aplikacji. Nie komunikuje się z kartą graficzną, czy urządzeniami wejśica.
+
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[scale=0.85]{x_diagram}
+\end{center}
+\caption{Diagram przedstawiający działanie systemu okien X.}
+\label{fig:}
+\end{figure}
+
+		
+\end{description}
 
 
 
