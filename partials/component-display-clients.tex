@@ -281,16 +281,15 @@ Pakiet \lstinline|quemu-user-static| pozwala na emulowanie binarek zbudowanych s
 Edycja repozytoriów menadżera pakietów:
 \begin{lstlisting}[language=bash]
 cd /root
-cat <<END > /etc/apt/sources.list
+cat <<koniec > /etc/apt/sources.list
 deb http://security.debian.org/ squeeze/updates main contrib non-free
 deb-src http://security.debian.org/ squeeze/updates main contrib non-free
 deb http://ftp.debian.org/debian/  squeeze main contrib non-free
 deb-src http://ftp.debian.org/debian/  squeeze main contrib non-free
-END
+koniec
 apt-get update
 \end{lstlisting}
 
-\\
 Konfiguracja języka i podstawowych narzędzi:
 \begin{lstlisting}[language=bash]
 export LANG=C
@@ -328,9 +327,16 @@ sudo umount mnt2
 sudo umount debian-rootfs/mnt
 \end{lstlisting}
 
+\subsubsection{Oprogramowanie klienckie dla systemu Linux}
 
+Oprogramowanie klienckie składa się z następujących komponentów:
+\begin{itemize}
+	\item serwer
+	\item program generujący zdarzenia urządzeń wejścia na podstawie danych otrzymanych z serwera.
+	\item serwer X
+\end{itemize}
 
-
+Kod źródłowy serwera znajduję się w załączniku ~\ref{app:server_c}, jest on wspólny dla wszystkich platform unixowych.
 
 
 
