@@ -13,6 +13,7 @@ Klient to komputer podłączony bezpośrednio do ekranu wyświetlającego obraz.
 
 Głównym zadaniem klientów jest komunikacja serwerem poprzez sieć Ethernet w celu wyświetlania obrazu na podłączonym do klienta ekranie, oraz możliwość sterowania urządzeniami wejścia (klawiatura, myszka) poprzez udostępniony interfejs w sieci Ethernet.
 
+
 \subsection{Hardware}
 
 \subsubsection{Architektura procesora}
@@ -24,9 +25,11 @@ Procesory oparte o architekturę ARM przetwarzają instrukcje z wykorzystaniem m
 	\item 16-bitowe Thumb (oraz Thumb2)
 \end{itemize}
 
+\\
 Firma ARM projektuje rdzenie procesorów i sprzedaje je producentom. Producenci z kolei tworzą urządzenia typu SoC\footnote{System on Chip} - dodawane są bloki funkcyjne, jednostki wektorowe czy procesory sygnałowe. Istnieje też spora lista firm, które projektują swoje rdzenie wykorzystujące zbiór instrukcji ARM m.in. Apple, XScale, czy Faraday.
-
+\\
 Istotną cechą, którą powinien posiadać procesor ARM jest jednostka MMU\footnote{Memory Managment Unit}. Jest to jednostka odpowiadająca za dostęp do zewnętrznej pamięci, translacje adresu wirtualnego na fizyczny, oraz kontroli uprawnień dostępu do pamięci. Wiele rdzeni ARM nie jest wyposażonych w tą jednostkę, która staje się obligatoryjna podczas gdy chcemy zainstalować system operacyjny Linux. 
+\\
 
 Po wyborze architektury procesora należy wybrać rodzinę procesora. Rodzina Cortex jest kolejną generacją procesorów po ARM7, ARM9, czy ARM11.
 
@@ -78,7 +81,7 @@ Do zbudowania systemu Linux opartego o architekturę ARM posłużono się istnie
 
 \begin{figure}
 \begin{center}
-    \includegraphics[scale=0.5]{kernel}
+    \includegraphics[scale=1]{kernel}
 \end{center}
 \caption{Działanie jądra systemu Linux}
 \label{fig:kernel}
@@ -88,14 +91,22 @@ Jądro \footnote{ang. \emph{Kernel}} systemu Linux jest centralnym miejscem syst
 
 Pierwotnym twórcą jądra Linux jest programista pochodzenia duńskiego Linus Torvalds, natomiast obecnie jądro systemu Linux jest rozwijane przez programistów z całego świata. Jego aktualną wersje można pobrać z oficjalnego otwartego repozytorium github.
 
+\\
+\\
+
+
 Instalując dystrybucję linuksa na komputerze PC zwykle nie ma większego sensu by kompilować jądro. Większość dystrybucji udostępnia gotowy obraz, który zawiera podstawowe programy i usługi niezbędne do instalacji systemu operacyjnego z środowiskiem graficznym. W przypadku systemu wbudowanego wygląda to nieco inaczej. Nie ma jednego gotowego obrazu pasującego do wszystkich jednoukładowych komputerów. Dlatego też w niniejszym rozdziale opisana zostanie instalacja systemu Linux od podstaw \footnote{ang. \emph{Linux From Scratch}}.
+\\
+\\
 
 Na początku należy stworzyć sobie miejsce na dysku, w którym system będzie budowany - \lstinline|mkdir ~/ARM_DEBIAN && alias arm='cd ~/arm' && arm|.
 
 \subsubsection{Przygotowanie karty SDHC}
 
-System debian zostanie zainstalowany na karcie SDHC \footnote{ang. \em{Secure Digital High Capacity}}, po czym zostanie uruchomiony na urządzeniu Rickomagic MK802 II. Komputer ten opiera się o architekturę ARM Cortex-A8, bazuję na chipie firmy AllWinner sun4i.
 
+System debian zostanie zainstalowany na karcie SDHC \footnote{ang. \em{Secure Digital High Capacity}}, po czym zostanie uruchomiony na urządzeniu Rickomagic MK802 II. Komputer ten opiera się o architekturę ARM Cortex-A8, bazuję na chipie firmy AllWinner sun4i.
+\\
+\\
 	\begin{table}[t]
 		\centering
 		\caption{SD Card Layout}
@@ -121,15 +132,19 @@ System debian zostanie zainstalowany na karcie SDHC \footnote{ang. \em{Secure Di
 \end{tabular}
 \end{table}
 
+\\
+\\
 Po włożniu karty SD do czytnika kart pamięci i podłączenia go do komputera, należy sprawdzić i upewnić się jak nazywa się podłączone urządzenie. Jest to o tyle ważne gdyż w systemach linux montowane jest w tym samym katalogu i zwykle z tym samym przedrostkiem co dysk twardy komputera. Gdyby karta pamięci zostałaby źle zidentyfikowana mogło być dojść do bezpowrotnego usunięcia danych z dysku twardego komputera. Po włożeniu karty do czytnika nazwę urządzenia w komputerze można sprawdzić za pomocą polecenia \lstinline|sudo dmesg| wyświetlając systemowy bufor komunikatów. 
-
+\\
+\\
 Pierwszym krokiem w przygotowaniu systemu jest skasowanie pierwszych 2047 sektorów pamięci na karcie pamięci - zgodnie z tym co widzimy na tabeli ~\ref{tab:sd-layout} pierwszy MB pamięci (2048 sektorów * 512B) jest zarezerwowany dla danych potrzebnych do uruchomienia systemu z karty.
-
+\\
 \begin{lstlisting}[language=bash]
 dd if=/dev/zero of=/dev/sdh bs=512 count=2047
 \end{lstlisting}
-
+\\
 Następnie za pomocą programu do partycjonowania (np. fdisk) należy utworzyć dwie partycje - pierwszą zaczynającą się w 2048 sektorze bądź dalszym o wielkości 16MB w której będzie przechowywane jądro (uImage), plik boot.scr i script.bin, oraz drugą partycja zajmująca pozostałą część karty, która będzie przechowywała główny system plików.
+\\
 
 \begin{lstlisting}[language=bash]
 mkdir mnt
@@ -139,6 +154,7 @@ sudo mount /dev/sdh1 mnt
 
 W powyższym fragmencie tworzony jest katalog mnt w domowym folderze projektu, pierwsza partycja na karcie jest formatowana do systemu plików FAT, później montowana jest do katalogu mnt.
 
+
 Niezbędnymi narzędziami do zainstalowania systemu są:
 \begin{itemize}
 	\item {\lstinline|gcc-x-arm-linux-gnueabi|}  - kompilator dla architektury ARM. Fraza eabi, znajdująca się na końcu nazwy tego pakietu to pewien standard opracowany przez firmę ARM. ABI  \footnote{ang. \emph{Application Binary Interface}} jest to zestaw reguł i ustawień kompilacji, które decydują o tym jak dany program współpracuje z innymi bibliotekami, czy aplikacjami. Programy skompilowane przy pomocy kompilatora używającego standardu EABI są przenośne pomiędzy systemami operacyjnymi (jedyną barierą są biblioteki z którymi współpracuje dany program).
@@ -147,11 +163,13 @@ Niezbędnymi narzędziami do zainstalowania systemu są:
 	\item {\lstinline|u-boot-tools|} - zestaw narzędzi do bootloadera, który zostanie opisany w dalszej części pracy.
 \end{itemize}
 
+
 \subsubsection{Bootloader}
 
 W komputerach o architekturze ARM proces uruchamiania systemu operacyjnego oparty jest o program uruchomieniowy Bootstrap. Na samym początku szuka on programu uruchomieniowego w pierwszym sektorze pamięci NAND, następnie przeszukiwana jest karta SD/MMC (szukając pliku boot.bin na pierwszej partycji karty), pamięć Dataflash, i jako ostatnia pamięć EEPROM podłączona do magistrali I2C. Jeżeli w którejś z tych lokacji bootstrap znajdzie prawidłowy kod, to jest on kopiowany do wewnętrznej pamięci operacyjnej procesora (SRAM) i tam uruchamiany. W następnej kolejności uruchamiany jest bootloader pierwszego poziomu, jest to zwykle mały program, którego zadaniem jest inicjalizacja pamięci RAM, oraz jednej z pamięci nieulotnych, a następnie uruchomienie bootloadera drugiego poziomu.
 Najpopularniejszym bootloaderem w systemach opartych o architekturę ARM jest u-boot. Głównym zadaniem bootloadera drugiego poziomu jest wczytanie pliku jądra systemu. Za pomocą u-boota można go wczytać z karty SD, czy nawet poprzez serwer ftp.
-
+\\
+\\
 Aktualną wersję u-boota można pobrać i skompilować za pomocą poleceń:
 
 \begin{lstlisting}[language=bash]
@@ -161,6 +179,8 @@ git checkout sun4i
 make sun4i CROSS_COMPILE=arm-linux-gnueabi-
 \end{lstlisting}
 
+\\
+\\
 W pierwszej lini pobierane jest repozytorium, w linii 3 z kolei przełączamy pobrane repozytorium na odpowiednią gałąź, wreszcie w linii 4 kompilujemy bootloader na architekturę \lstinline|sun4i| używając do tego celu kompilatora \lstinline|arm-linux-gnueabi-gcc|.
 
 Po skompilowaniu można wgrać niezbędny pliki na kartę SD:
@@ -169,6 +189,7 @@ Po skompilowaniu można wgrać niezbędny pliki na kartę SD:
 dd if=spl/sun4i-spl.bin of=/dev/sdh bs=1024 seek=8  (if sun4i-spl.bin not found, try sunxi-spl.bin)
 dd if=u-boot.bin of=/dev/sdh bs=1024 seek=32
 \end{lstlisting}
+\\
 
 Plik boot.cmd jest plikiem konfiguracyjnym, używanym przez program bootstrap:
 
@@ -210,12 +231,14 @@ sudo cp linux-allwinner/arch/arm/boot/uImage mnt/
 \end{lstlisting}
 
 W pierwszej linii generowana jest standardowa konfiguracja jądra dla danej platformy. Parametr \lstinline|ARCH=arm| określa architekturę jądra. Parametr \lstinline|CROSS_COMPILE=arm-linux-gnueabi-| określa przedrostek cross kompilatora, używany przy budowaniu i przy instalacji (czyli cross kompilator dla poleceń w liniach 1-3 to arm-linux-gnueabi-gcc).
-
+\\
+\\
 W linii drugiej budowane są moduły jądra, oraz plik z jądrem, następnie dodawana do niego jest suma kontrolna, oraz informacje wymagane przez bootloader. Parametr j16 jest parametrem programu \lstinline|make| określającym ile jednocześnie zadań może być uruchamianych, przez zadanie w przypadku programu \lstinline|make| rozumiane jest rozwiązanie jednej zależności. Program make za pomocą grafu zależności określa kolejność wykonywanych zadań.
-
+\\
+\\
 Komenda z linii trzeciej instaluje moduły w zadanej lokacji.
-
-Plik script.bin jest plikiem konfiguracyjnym dla danej platformy. Można go wygenerować samemu, dokumentacja znajduję się na oficjalnej stronie architektury sunxi - \url{http://linux-sunxi.org/Fex_Guide}. a następnie skompilować plik konfiguracyjny do formatu bin za pomocą narzędzia \lstinline|fex2bin|. W pliku tym konfigurowane są wartości typowe dla urządzenia tj. adres MAC komputera, czy maksymalna rozdzielczość.  W internecie istnieje wiele gotowych plików konfiguracyjnych dla komputera MK 802 II, na potrzeby niniejszej pracy konfiguracja została pobrana ze strony - \url{http://dl.miniand.com/gamboita/script-mk802ii-1080p60.7z}. 
+\\
+Plik script.bin jest plikiem konfiguracyjnym dla danej platformy. Można go wygenerować samemu, dokumentacja znajduję się na oficjalnej stronie architektury sunxi - http://linux-sunxi.org/Fex_Guide. a następnie skompilować plik konfiguracyjny do formatu bin za pomocą narzędzia \lstinline|fex2bin|. W pliku tym konfigurowane są wartości typowe dla urządzenia tj. adres MAC komputera, czy maksymalna rozdzielczość.  W internecie istnieje wiele gotowych plików konfiguracyjnych dla komputera MK 802 II, na potrzeby niniejszej pracy konfiguracja została pobrana ze strony - http://dl.miniand.com/gamboita/script-mk802ii-1080p60.7z. 
 
 Po wygenerowaniu pliku należy go skopiować na kartę pamięci do pierwszej partycji \lstinline|sudo cp script.bin mnt/script.bin|. 
 
@@ -240,6 +263,7 @@ sudo debootstrap --verbose --arch armel --variant=minbase --foreign squeeze mnt 
 
 W liniach 4-8 powyższego listingu tworzony jest pusty obraz systemu sformatowany do formatu ext3, oraz zamontowany do katalogu mnt. Za pomocą wspomnianego wcześniej narzędzia debootstrap ściągnięto z oficjalnej strony dystrybucji bazowy system operacyjny, oraz zainstalowano go.
 
+
 \begin{lstlisting}[language=bash]
 sudo apt-get install -t testing qemu-user-static
 sudo apt-get install binfmt-support
@@ -253,16 +277,16 @@ sudo chroot mnt/
 \end{lstlisting}
 
 Pakiet \lstinline|quemu-user-static| pozwala na emulowanie binarek zbudowanych statycznie. Ogólnie rzecz biorąc pozwala na uruchamianie procesów linuksowych na procesorze pod który nie zostały one skompilowane. Pakiet binfmt-support pozwala na obsługe dodatkowych formatów binarnych. Za pomocą polecenia \lstinline|modprobe| moduł obsługi dodatkowych formatów binarnych zostaje włączony jako moduł do jądra. Polecenie z linii 4 kopiuje aplikacje do nowo stworzonego systemu. Linie 5-6 to przygotowaniu interfejsu tzw. pseudoterminala. Poprzez zamontowanie systemu plików \lstinline|/proc| do nowo powstającego systemu, po wykonaniu chroota będzie możliwość korzystania z informacji dostarczonych przez jądro systemu. Wreszcie wykonujemy polecenie \lstinline|chroot| \footnote{ang. \emph{change root}}, które jak sama nazwa wskazuje zmienia główny system plików. Po wykonaniu przed ostatniego polecenia linia poleceń powinna wyświetlić komunikat \lstinline|I have no name!@hostname:/#|, ostatnie polecenie uruchamia wszystkie skrypty konfiguracyjne, które muszą zostać wykonane na architekturze docelowej (dlatego właśnie skopiowany został do /usr/bin program qemu-user-static). Mając uruchomiony system na komputerze wykonano podstawową konfiguracje dla systemu debian.
-
+\\
 Edycja repozytoriów menadżera pakietów:
 \begin{lstlisting}[language=bash]
 cd /root
-cat <<END > /etc/apt/sources.list
+cat <<koniec > /etc/apt/sources.list
 deb http://security.debian.org/ squeeze/updates main contrib non-free
 deb-src http://security.debian.org/ squeeze/updates main contrib non-free
 deb http://ftp.debian.org/debian/  squeeze main contrib non-free
 deb-src http://ftp.debian.org/debian/  squeeze main contrib non-free
-END
+koniec
 apt-get update
 \end{lstlisting}
 
@@ -303,4 +327,102 @@ sudo umount mnt2
 sudo umount debian-rootfs/mnt
 \end{lstlisting}
 
-\subsection{System operacyjny MacOSX}
+\subsubsection{Oprogramowanie klienckie dla systemu Linux}
+
+Oprogramowanie klienckie składa się z następujących komponentów:
+\begin{description}
+	\item[serwer] \hfill \\
+Kod źródłowy serwera znajduję się w załączniku ~\ref{app:server_c}, jest on wspólny dla wszystkich platform unixowych.		
+	\item[generator zdarzeń wejścia] \hfill \\ 
+		Program generujący zdarzenia urządzeń wejścia na podstawie danych otrzymanych z serwera. W platformie Linux wykorzystano moduł jądra \lstinline|uinput|. Uinput to moduł pozwalający na generowanie zdarzeń symulujących urządzenia wyjścia. Moduł ten tworzy specjalny plik urządzenia w katalogu \lstinline|/dev|. Plik ten jest wirtualnym interfejsem co znaczy, że nie jest połączony z żadnym fizycznym urządzeniem.
+
+		Jednym z zadań generatora jest ustalenie rozdzielczości ekranu na którym wyświetlany jest obraz. Informacja ta jest niezbędna gdyż koordynaty wysyłane przez serwer są podawane absolutnie, oraz z przedziału od 0 do 1 (ze względu na to, że informacja ta nie może być uzależniona od rozdzielczości monitora). Na platformie Linux rozdzielczość uzyskiwana jest za pomocą następującego polecenia:
+		\begin{lstlisting}[language=bash]
+		"xdpyinfo -display :0 | sed 's/^ *dimensions: *\\([0-9x]*\\).*/\\1/;t;d'";
+		\end{lstlisting}
+		Program xdpyinfo jest to aplikacja służąca do wyświetlania informacji o serwerze X, z kolei za pomocą wyrażenia regularnego i programu sed wyłuskano tylko niezbędne informacje dotyczące rozdzielczości ekranu.
+
+		Istotnym elementem w pisaniu programu generującego zdarzenia urządzeń wejścia jest odbiór danych z serwera, opisanego w załączniku ~\ref{app:server_c}. Program ten wysyła dane do deskryptora pliku o nazwie \lstinline|STDIN_FILENO|. Nie jest to bynajmniej to samo co wskaźnik do pliku o nazwie \lstinline|stdin| przez co nie jest możliwe użycie funkcji wysokiego poziomu jak lstinline|scanf| do wczytania danych. Niezbędne jest użycie funkcji \lstinline|read|, a następnie użycie funkcji \lstinline|sscanf| w celu sformatowaniu danych co pokazuje poniższy fragment kodu:
+
+		\begin{lstlisting}[language=c]
+			read(STDIN_FILENO, buffer, sizeof(buffer));
+			int result = sscanf(buffer, "x:%lf:y:%lf;", &xTmp, &yTmp);
+			int x = xTmp * dim[0];
+			int y = yTmp * dim[1];
+		\end{lstlisting}
+
+		Wczytane koordynaty należy wysłać jako zdarzenia do modułu \lstinline|uinput|. 
+		
+		\begin{lstlisting}[language=c]
+		#include <linux/input.h>
+		#include <linux/uinput.h>
+		int fd = open("/dev/input/uinput", O_WRONLY | O_NONBLOCK);
+		ret = ioctl(fd, UI_SET_EVBIT, EV_ABS);
+		
+		...
+
+		struct input_event ev, synEv;
+	
+
+		...
+		memset(&ev, 0, sizeof(ev));
+		ev.type = EV_ABS;
+		ev.code = ABS_X;
+		ev.value = x;
+		if(write(fd, &ev, sizeof(struct input_event)) < 0)
+            die("error: write");  
+
+		memset(&synEv, 0, sizeof(struct input_event));
+        synEv.type = EV_SYN;
+        synEv.code = 0;
+        synEv.value = 0;
+        if(write(fd, &synEv, sizeof(struct input_event)) < 0)
+            die("error: write");
+
+		...
+		//sending y coordinate
+
+
+		\end{lstlisting}
+		Na początku należy włączyć niezbędne nagłówki (linie 1-2), następnie otworzyć plik urządzenia \lstinline|uinput|, do którego będą wysyłane zdarzenia urządzeń wejścia. W linii 4 powyższego listingu, włączono możliwość wysyłania zdarzeń ruchów myszką podając koordynaty absolutne. Struktury zadeklarowane w linii 8 zawierają 3 pola 
+		\begin{itemize}
+			\item \lstinline|type| - typ zdarzenia (\lstinline|EV_KEY|, \lstinline|EV_ABS|, \lstinline|EV_REL|)		
+			\item \lstinline|code| - dla zdarzeń klawiatury jest to kod klawisza, natomiast dla zdarzeń myszy jest to oś.
+			\item \lstinline|value| - dla zdarzeń klawiatury 1 oznacza przyciśnięcie klawisza, a 0 puszczenie, dla zdarzeń myszy jest to z kolei wartość reprezentująca koordynatę.
+		\end{itemize}
+		Po wypełnieniu struktury odpowiednimi wartościami należy wysłać je do wcześniej otwartego deskryptora pliku (\lstinline|fd|), a następnie wypełnić i wysłać strukturę synchronizującą (\lstinline|evSyn|), której zadaniem jest zatwierdzenie, oraz realizacja wszystkich dotychczasowo wysłanych zdarzeń. 
+	\item[serwer X] \hfill \\
+		Moduł ten opisany jest bardziej szczegółowo w załączniku ~\ref{app:X Window System}.
+
+
+\end{itemize}
+
+
+\subsection{System operacyjny Mac OS X}
+W niniejszym podrozdziale niezostanie omówiony proces instalacji systemu Mac OS X na żadnym z jednoukładowych komputerów gdyż jest to niemożliwe ze względu na to, że system Mac OS X jest dedykowanym oprogramowaniem dla komputerów firmy Apple. 
+\subsubsection{Oprogramowanie klienckie dla systemu Linux}
+
+Serwer odbierający zdarzenia jest wspólny dla wszystkich systemów unixowych i został opisany w załączniku ~\ref{app:server_c}.
+\\
+Kod generator zdarzeń dla systemu Mac OS X jest nieco prostszy aniżeli dla systemu Linux. Bazuje on na zdarzeniach z biblioteki CoreGraphics. Tak jak i dla systemu Linux istotnym elementem jest odczytanie rozdzielczości ekranu. Jest to wykonane za pomocą polecenia:
+\begin{lstlisting}
+system_profiler SPDisplaysDataType | grep Resolution | sed 's/[^0-9 ]*//g' | sed -e 's/^[ \t]*//' | sed 's/  */x/g'
+\end{lstlisting}
+Format wyniku powyższego polecenia jest dokładnie taki sam jak dla instrukcji analogicznej w systemie Linux.
+\\
+Kod programu odpowiadający za wygenerowanie zdarzenia na podstawie koordynatów znajduję się na poniższym listingu:
+\begin{lstlisting}
+		CGEventRef move1 = CGEventCreateMouseEvent(
+		    NULL, kCGEventMouseMoved,
+			CGPointMake(x, y),
+			kCGMouseButtonLeft
+		);
+
+		CGEventPost(kCGHIDEventTap, move1);
+
+		CFRelease(move1);
+\end{lstlisting}
+
+\\
+Funkcja \lstinline|CGEventCreateMouseEvent| tworzy nowe zdarzenie, polegające na przesunięciu kursora myszy do zadanej lokacji.
+
