@@ -2,7 +2,82 @@
 
 \subsection{Język Scala}
 
+\subsubsection{Dlaczego scala?}
+
+\begin{description}
+	\item[Zwięzła] \hfill \par
+		Programy w scali zajmują ok. 30\% kodu aniżeli te same napisane w języku Java.
+	\item[Portowalna] \hfill \par
+		Kod napisy w języku scala kompilowany jest do kodu bajtowego, i uruchamiany na JVM\footnote{Wirtualna Maszyna Javy ang. \emph{Java Virtual Machine}}
+	\item[Hybrydowa] \hfill \par
+		Język scala łączy w sobie dwa najpopularniejsze paradygmaty programowania jest zarazem imperatywna jak i w pełni funkcjonalna.
+\end{description}
+
 \subsection{Framework Play}
 
+\subsubsection{Wprowadzenie}
+\begin{description}
+	\item[Czym jest Play?]\hfill \\
+		W skład frameworka Play prócz samej biblioteki programistycznej wchodzi m.in. wydajny serwer HTTP JBoss Netty, wiele skryptów do zarządzania aplikacją, oraz wbudowany kompilator Java. Framework play jest oparty na wzorcu MVC\footnote{Model Widok Kontroler ang. \emph{Model View Controller}}. Play nie zyskał zbyt wielkiej popularnej w wersji 1.x, natomiast od momentu kiedy został przepisany na język scala zyskuje on coraz większy rozgłos.
+	\item[Główne cechy]\hfill \\
+		\begin{itemize}
+			\item bezstanowy - to znaczy, że nie ma wydzielonego fragmentu przestrzeni na serwerze, która jest ściśle powiązana z zalogowanym użytkownikiem. Na pierwszy rzut oka wydaję się to być wadą, natomiast niesie to ze sobą szereg plusów jak np. świetna skalowalność aplikacji (nie ma potrzeby zapewniania zgodności spójności sesji pomiędzy serwerami).
+			\item oparte na programowaniu reaktywnym\footnote{ang. \emph{Reactive Programming} paradygmat programowania zakładający że oprogramowanie jest zawsze responsywne na nadchodzące zdarzenia.}
+ (iteratee's) 		
+		\item zorientowane na zdarzenia, a nie żądania - wątek nie jest przypisany od początku do końca do jednego żądania
+		\end{itemize}
+\end{description}
+
 \subsection{Zdalne sterowanie programami}
+
+Zgodnie z diagramem znajdującym się w załączniku ~\ref{app:network_diagram_app}, serwer www zarządzający infrastrukturą niekoniecznie musi być umieszczony na tym samym urządzeniu co serwer wyświetlania, z racji tego serwer www, musi sterować tym serwerem przez protokół ssh\footnote{ang. \emph{Secure Shell} - to standard protokołów komunikacyjnych używanych w sieciach komputerowych TCP/IP, w architekturze klient-serwer.\cite{ssh-wiki}}.
+Do logowania do zdalnej stacji roboczej na serwerze www użyto biblioteki \lstinline{scala-ssh}. Poniższy fragment kodu źródłowego przedstawia metody obsługującą logowanie do aplikacji webowej.
+
+\begin{lstlisting}
+def signin() = Action.async(parse.json) {
+    implicit request =>
+    {
+      var login : String = ""
+      var f = Future[Boolean] {
+        var sshIPAddress = (request.body \ "ip_address").asOpt[String]
+        var someLogin = (request.body \ "login").asOpt[String]
+        var password = (request.body \ "password").asOpt[String]
+        if (sshIPAddress.isEmpty || someLogin.isEmpty || password.isEmpty) {
+          false
+        }
+        else {
+          login = someLogin.get
+          SSHUser.connect(sshIPAddress.get, someLogin.get, password.get)
+        }
+      }
+      f.map(fut => {
+        var res = Ok(toJson(Map("success" -> fut)))
+        if (fut) {
+          res.withSession(Security.username -> login)
+        }
+        else
+          res
+      })
+    }
+  }
+\end{lstlisting}
+
+Metoda odpowiada w formacie JSON\footnote{ang. \emph{JavaScxript Object Notation} - lekki format wymiany danych}, gdyż żądanie, które wysyła przeglądarka internetowa jest wysłane w technice AJAX \footnote{ang. \emph{Asynchronous JavaScript and XML}}. Dane, które zostają wysłane do serwera również są w formacie JSON, po wyłuskaniu danych do odpowiednich zmiennych w linii 14 wykonywana jest próba logowania do zdalnej stacji roboczej. Cała metoda \lstinline{signin} jest asynchroniczna przez co wykonanie metody \lstinline{connect} nie blokuje wątku. Dzięki takiemu podejściu wątek, który obecnie czeka na odpowiedź z serwera może obsłużyć kolejne żądanie.
+
+\par
+
+Po pomyślnym zalogowaniu użytkownik może dodać nowych klientów, oraz uruchomić na nich aplikacje wybierając je z listy.
+
+\begin{lstlisting}
+  def runXApp(app: PNPProcessApp) {
+    currentProcesses.foreach(p => p.kill)
+    if (app.name != PNPProcessApp.none.name) {
+      SSHUser.sshClient.exec(app.toString + " -display " + ip_screen_address)
+    }
+  }
+\end{lstlisting}
+
+Powyższa metoda jest wywołana za każdym razem gdy, użytkownik przełączy aplikację. W linii drugiej zabijana jest dotychczasowo uruchomiona aplikacja, a następnie przy pomocy biblioteki \lstinline{scala-ssh} wywoływana jest aplikacja wybrana z listy, z parametrem display określającym miejsce wyświetlenie aplikacji.
+
+
 

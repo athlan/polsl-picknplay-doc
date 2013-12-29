@@ -339,59 +339,59 @@ Kod źródłowy serwera znajduję się w załączniku ~\ref{app:server_c}, jest 
 		Program generujący zdarzenia urządzeń wejścia na podstawie danych otrzymanych z serwera. W platformie Linux wykorzystano moduł jądra \lstinline{uinput}. Uinput to moduł pozwalający na generowanie zdarzeń symulujących urządzenia wyjścia. Moduł ten tworzy specjalny plik urządzenia w katalogu \lstinline{/dev}. Plik ten jest wirtualnym interfejsem co znaczy, że nie jest połączony z żadnym fizycznym urządzeniem.
 
 		Jednym z zadań generatora jest ustalenie rozdzielczości ekranu na którym wyświetlany jest obraz. Informacja ta jest niezbędna gdyż koordynaty wysyłane przez serwer są podawane absolutnie, oraz z przedziału od 0 do 1 (ze względu na to, że informacja ta nie może być uzależniona od rozdzielczości monitora). Na platformie Linux rozdzielczość uzyskiwana jest za pomocą następującego polecenia:
-		\begin{lstlisting}[language=bash]
-		"xdpyinfo -display :0 | sed 's/^ *dimensions: *\\([0-9x]*\\).*/\\1/;t;d'";
-		\end{lstlisting}
+\begin{lstlisting}[language=bash]
+"xdpyinfo -display :0 | sed 's/^ *dimensions: *\\([0-9x]*\\).*/\\1/;t;d'";
+\end{lstlisting}
 		Program xdpyinfo jest to aplikacja służąca do wyświetlania informacji o serwerze X, z kolei za pomocą wyrażenia regularnego i programu sed wyłuskano tylko niezbędne informacje dotyczące rozdzielczości ekranu.
 
 		Istotnym elementem w pisaniu programu generującego zdarzenia urządzeń wejścia jest odbiór danych z serwera, opisanego w załączniku ~\ref{app:server_c}. Program ten wysyła dane do deskryptora pliku o nazwie \lstinline{STDIN_FILENO}. Nie jest to bynajmniej to samo co wskaźnik do pliku o nazwie \lstinline{stdin} przez co nie jest możliwe użycie funkcji wysokiego poziomu jak \lstinline{scanf} do wczytania danych. Niezbędne jest użycie funkcji \lstinline{read}, a następnie użycie funkcji \lstinline{sscanf} w celu sformatowaniu danych co pokazuje poniższy fragment kodu:
 
-		\begin{lstlisting}[language=c]
-			read(STDIN_FILENO, buffer, sizeof(buffer));
-			int result = sscanf(buffer, "x:%lf:y:%lf;", &xTmp, &yTmp);
-			int x = xTmp * dim[0];
-			int y = yTmp * dim[1];
-		\end{lstlisting}
+\begin{lstlisting}[language=c]
+read(STDIN_FILENO, buffer, sizeof(buffer));
+int result = sscanf(buffer, "x:%lf:y:%lf;", &xTmp, &yTmp);
+int x = xTmp * dim[0];
+int y = yTmp * dim[1];
+\end{lstlisting}
 
-		Wczytane koordynaty należy wysłać jako zdarzenia do modułu \lstinline{uinput}. 
-		
-		\begin{lstlisting}[language=c]
-		#include <linux/input.h>
-		#include <linux/uinput.h>
-		int fd = open("/dev/input/uinput", O_WRONLY | O_NONBLOCK);
-		ret = ioctl(fd, UI_SET_EVBIT, EV_ABS);
-		
-		...
+Wczytane koordynaty należy wysłać jako zdarzenia do modułu \lstinline{uinput}. 
 
-		struct input_event ev, synEv;
-	
+\begin{lstlisting}[language=c]
+#include <linux/input.h>
+#include <linux/uinput.h>
+int fd = open("/dev/input/uinput", O_WRONLY | O_NONBLOCK);
+ret = ioctl(fd, UI_SET_EVBIT, EV_ABS);
 
-		...
-		memset(&ev, 0, sizeof(ev));
-		ev.type = EV_ABS;
-		ev.code = ABS_X;
-		ev.value = x;
-		if(write(fd, &ev, sizeof(struct input_event)) < 0)
-            die("error: write");  
+...
 
-		memset(&synEv, 0, sizeof(struct input_event));
-        synEv.type = EV_SYN;
-        synEv.code = 0;
-        synEv.value = 0;
-        if(write(fd, &synEv, sizeof(struct input_event)) < 0)
-            die("error: write");
-
-		...
-		//sending y coordinate
+struct input_event ev, synEv;
 
 
-		\end{lstlisting}
+...
+memset(&ev, 0, sizeof(ev));
+ev.type = EV_ABS;
+ev.code = ABS_X;
+ev.value = x;
+if(write(fd, &ev, sizeof(struct input_event)) < 0)
+die("error: write");  
+
+memset(&synEv, 0, sizeof(struct input_event));
+synEv.type = EV_SYN;
+synEv.code = 0;
+synEv.value = 0;
+if(write(fd, &synEv, sizeof(struct input_event)) < 0)
+die("error: write");
+
+...
+//sending y coordinate
+
+
+\end{lstlisting}
 		Na początku należy włączyć niezbędne nagłówki (linie 1-2), następnie otworzyć plik urządzenia \lstinline{uinput}, do którego będą wysyłane zdarzenia urządzeń wejścia. W linii 4 powyższego listingu, włączono możliwość wysyłania zdarzeń ruchów myszką podając koordynaty absolutne. Struktury zadeklarowane w linii 8 zawierają 3 pola 
-		\begin{itemize}
-			\item \lstinline{type} - typ zdarzenia (\lstinline{EV_KEY}, \lstinline{EV_ABS}, \lstinline{EV_REL})		
-			\item \lstinline{code} - dla zdarzeń klawiatury jest to kod klawisza, natomiast dla zdarzeń myszy jest to oś.
-			\item \lstinline{value} - dla zdarzeń klawiatury 1 oznacza przyciśnięcie klawisza, a 0 puszczenie, dla zdarzeń myszy jest to z kolei wartość reprezentująca koordynatę.
-		\end{itemize}
+\begin{itemize}
+\item \lstinline{type} - typ zdarzenia (\lstinline{EV_KEY}, \lstinline{EV_ABS}, \lstinline{EV_REL})		
+\item \lstinline{code} - dla zdarzeń klawiatury jest to kod klawisza, natomiast dla zdarzeń myszy jest to oś.
+\item \lstinline{value} - dla zdarzeń klawiatury 1 oznacza przyciśnięcie klawisza, a 0 puszczenie, dla zdarzeń myszy jest to z kolei wartość reprezentująca koordynatę.
+\end{itemize}
 		Po wypełnieniu struktury odpowiednimi wartościami należy wysłać je do wcześniej otwartego deskryptora pliku (\lstinline{fd}), a następnie wypełnić i wysłać strukturę synchronizującą (\lstinline{evSyn}), której zadaniem jest zatwierdzenie, oraz realizacja wszystkich dotychczasowo wysłanych zdarzeń. 
 	\item[serwer X] \hfill \\
 		Moduł ten opisany jest bardziej szczegółowo w załączniku ~\ref{app:X Window System}.
@@ -414,15 +414,15 @@ Format wyniku powyższego polecenia jest dokładnie taki sam jak dla instrukcji 
 \\
 Kod programu odpowiadający za wygenerowanie zdarzenia na podstawie koordynatów znajduję się na poniższym listingu:
 \begin{lstlisting}
-		CGEventRef move1 = CGEventCreateMouseEvent(
-		    NULL, kCGEventMouseMoved,
-			CGPointMake(x, y),
-			kCGMouseButtonLeft
-		);
+CGEventRef move1 = CGEventCreateMouseEvent(
+NULL, kCGEventMouseMoved,
+CGPointMake(x, y),
+kCGMouseButtonLeft
+);
 
-		CGEventPost(kCGHIDEventTap, move1);
+CGEventPost(kCGHIDEventTap, move1);
 
-		CFRelease(move1);
+CFRelease(move1);
 \end{lstlisting}
 
 Funkcja \lstinline{CGEventCreateMouseEvent} tworzy nowe zdarzenie, polegające na przesunięciu kursora myszy do zadanej lokacji.

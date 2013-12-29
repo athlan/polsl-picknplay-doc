@@ -87,6 +87,16 @@ Używa okna udostępnionego przez X Serwer do wyświetlenia aplikacji. Nie komun
 	
 \end{description}
 
+\newpage
+\section{Instalacja serwera internetowego apache}
+\label{app:apache}
+Apache to otwarty serwer HTTP. By zainstalować na platformie Linux, należy zainstalować go za pomocą właściwego dla dystrybucji menadżera pakietów, bądź skompilować go ręcznie. 
+\par
+Dystrybucja debian posiada w oficjalnych repozytoriach, paczkę z serwerem Apache2. Można go więc zainstalować poleceniem \lstinline{sudo apt-get install apache2}. Menadżer pakietów ściągnie oraz zainstaluje serwer z niezbędnymi zależnościami.
+\par
+Po pomyślnej instalacji serwera warto skonfigurować moduł userdir. Pozwala on na dostęp do katalogów użytkownika z poziomu przeglądarki według wzorca: \lstinline{localhost/~user}. By włączyć ten moduł należy wykonać polecenie \lstinline{sudo a2enmod userdir}.
+
+
 \section{Zawartość CD}
 
 The contents...
