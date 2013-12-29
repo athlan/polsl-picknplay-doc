@@ -189,11 +189,81 @@ Od tego momentu rozpoczyna się transmisja w protokole Web Socekts, grze przesy�
 
 \subsection{Wykorzystana technologia}
 
+Część serwerowa infrastruktury została napisana w środowisku \emph{Node.js}, stworzonego przez Ryana Dahla w 2009 roku. Node.js używa składni skryptowego\footnote{Kod języków skryptowych wykonywany jest wewnątrz jakiejś aplikacji/środowiska w odróżnieniu od programów napisanych w językach nieskryptowych, które kompilują się i stanowią aplikację} języka JavaScript znanego z tworzenia dynamicznych elementów stron internetowych. Kod JavaScript, choć wykonuje się w ramach przeglądarki internetowej, w Node.js uruchamiany jest po stronie serwera. Technologia umożliwia dużą przepustowość zapewniając nieblokujące operacje wejścia/wyjścia (ang. \emph{non-blocking I/O}) i pętli zdarzeń w pojedynczym wątku \emph{single-threaded event loop}. Podejście to nazywa się programowaniem asynchronicznym (opisanym w podsekcji \ref{subsub:asyncprogramming}).
+
+Wybór platformy obsługującej programowanie asynchroniczne jest jednoznaczny ze względu na specyfikę aplikacji. Większość z nich to oczekiwanie na dane z sieci (ang. \emph{network I/O}). Jeżeli program byłby napisany w modelu synchronicznym, procesor przeznaczałby większość czasu na oczekiwanie na dane z sieci zawieszając (ang. \emph{idle}) jego pracę na funkcjach wejścia/wyjścia. Tymczasem, aby zwiększyć możliwości (uruchomienie tysięcy operacji I/O jednocześnie) korzysta się z asynchronicznego, nieblokującego podejścia pisania aplikacji za pomocą pętli zdarzeń uruchomionej w pojedynczym wątku. Podejście jest odpowiednie do czasu, gdy program nie wykonuje złożonych czasowo operacji, które to mogłyby zawiesić działanie pętli komunikatów uruchomionej w pojedynczym wątku. Większość operacji w stworzonej aplikacji to przekazywanie struktur danych i praca w sieci.
+
 \subsubsection{Synchroniczny i imperatywny model programowania}
 
-\subsubsection{Asynchroniczny i funkcyjny model programowania}
+W porównaniu do programowania asynchronicznego przedstawione krótko zostanie programowanie imperatywne, będące paradygmatem programowania\cite{programming-paradigms} które opisuje kod programu jako sekwencyjnie wykonywany ciąg instrukcji zmieniający stan programu (rejestrów, pamięci). Takie wyobrażenie przepływu programu jest de facto tożsame z fizyczną realizacją kodu maszynowego na komputerze. W tym modelu przebieg programu możemy zdefiniować jako ciąg następujących po sobie instrukcji\ref{fig:syncprogramming-flow}, dzięki czemu jego przebieg jest przewidywalny, bowiem wykonując bieżącą instrukcję można założyć, ze poprzednia się zakończyła powodzeniem, a jej wyniki są dostępne do użycia. Implikuje to, że wykonywanie każdej operacji jest blokujące\ref{fig:syncprogramming-waiting}. Rozwiązaniem tego problemu jest uruchamianie przebiegu programu w wątkach\ref{fig:syncprogramming-threads} mogących komunikowanie się między sobą lub uruchomienie programu jako nowy proces w systemie operacyjnym\footnote{Te zabiegi powodują narzut czasowy związany z przełączaniem kontekstu pracy procesora w postaci odłożeniem stanu rejestrów, mapy pamięci, rejestrów stosu, FPU itd.}.
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}[b]{0.45\linewidth}
+  \label{fig:syncprogramming-flow}
+  \caption[Programowanie synchroniczne - przebieg instrukcji programu w czasie]{Programowanie synchroniczne - przebieg instrukcji programu w czasie}
+  \centering
+    \includegraphics[scale=0.5]{syncprogramming-flow.png}
+\end{minipage}
+
+\begin{minipage}[b]{0.45\linewidth}
+\label{fig:syncprogramming-threads}
+  \caption[Programowanie synchroniczne - wątki]{Programowanie synchroniczne - wątki}
+  \centering
+    \includegraphics[scale=0.5]{syncprogramming-threads.jpg}
+\end{minipage}
+
+\begin{minipage}[b]{0.45\linewidth}
+\label{fig:syncprogramming-waiting}
+  \caption[Programowanie synchroniczne - operacje blokujące]{Programowanie synchroniczne - operacje blokujące}
+  \centering
+    \includegraphics[scale=0.5]{syncprogramming-waiting.png}
+\end{minipage}
+\end{figure}
+
+\subsubsection{Asynchroniczny model programowania}
+\label{subsub:asyncprogramming}
+
+Asynchroniczny model programowania oparty jest na programie uruchomionym w jednym wątku. Znany jest z frameworków graficznych interfejsów użytkownika GUI (na przykład WinApi). W uproszczeniu, budowa programu to nieskończona pętla oraz kolejka operacji odłożona na stos. Z każdym przebiegiem pętla sprawdza w kolejce operacji, czy możliwe są do wykonania jakieś operacje, jeżeli tak, uruchamiane są procedury obsługi (ang. \emph{handlers} lub \emph{callbacks}). Umożliwia to realizację wielu operacji, które oczekują na wyniki bez blokowania pracy całego programu.
+
+\begin{figure}[H]
+  \caption[Event loop w asynchronicznym modelu programowania]{Event loop w asynchronicznym modelu programowania}
+  \centering
+    \includegraphics[width=\linewidth]{asyncprogramming-loop.png}
+\end{figure}
+
+Realizacja niskopoziomowa to użycie funkcji \lstinline{select()} (zarówno systemów POSIX jak i Windows), deskryptorów \lstinline{/dev/poll}, kqueue, poll i epool. Warta rozpoznania jest biblioteka \emph{libevent}\footnote{\url{http://libevent.org/}}, która zakłada abstrakcję na użyte mechanizmy z punktu widzenia programisty\cite{programming-async-sockets}.
+
+Funkcja \lstinline{select()} przyjmuje za parametry deskryptory oraz maksymalny czas upływu. Zwraca wartość jeżeli a) upłynie zdefiniowany czas lub b) gdy w deskryptorze (reprezentującym plik, urządzenie, gniazdo sieciowe lub strumień danych) zajdą zmiany - będzie dostępny do zapisu lub są dostępne dane do odczytu:
+
+\lstset{language=C}
+\begin{lstlisting}
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+int select(int numfds, fd_set *readfds, fd_set *writefds,
+           fd_set *exceptfds, struct timeval *timeout);
+\end{lstlisting}
+
+W przeciwieństwie do synchronicznego modelu w programowaniu imperatywnym, model asynchroniczny wypada korzystniej, gdy\cite{programming-async}:
+
+\begin{enumerate}
+  \item Zadania są zupełnie niezależne od siebie, nie jest konieczna komunikacja między nimi, ani oczekiwanie na rezultaty.
+  \item Zadania wykonują wiele operacji wejścia/wyjścia (I/O) powodujących, że program synchroniczny zostaje zawieszony do momentu otrzymania rezultatu, wtenczas może wykonywać inne zadania.
+\end{enumerate}
+
+Zatem program napisany asynchronicznie blokuje swoje działanie tylko wtedy, gdy nie ma zadań do wykonania i nie jest możliwy dalszy postęp przebiegu programu (dlatego jest nazywany nieblokującym). Przy wykonaniu wielu blokujących zadań program napisany asynchronicznie może być znacznie szybszy spędzając mniej czasu na czekaniu na wyniki, a wykonując wiele pojedynczych zadań podczas przebiegu pętli.
 
 \subsubsection{Zasada działania Node.js}
+
+Node.js jest środowiskiem używającym składni skryptowego języka JavaScript\footnote{Po kliku nieudanych próbach implementacji w C, Lua,  Haskell, twórca Node.js Ryan Dahl, po pojawieniu się Google JavaScript Engine V8 zdecydował się na jego użycie}, udostępniającym mechanizmy programowania asynchronicznego opartego o wywołania funkcji \emph{callbacks}. Node.js działa w pojedynczym wątku opartym o pętlę zdarzeń obsługiwanych przez procedury obsługi (callbacks). Środowisko oparte jest na projekcie opensource \emph{V8 Javascript Engine} wydanym przez Google, który (w odróżnieniu od innych) kompiluje JavaScript do kodu maszynowego\footnote{Obsługiwane platformy: IA-32, x86-64, ARM oraz MIPS ISAs} przed jego wykonaniem.
+
+\begin{figure}[H]
+  \caption[Model działania Node.js]{Model działania Node.js na przykładzie serwera HTTP}
+  \centering
+    \includegraphics[scale=0.75]{nodejs-flow.png}
+\end{figure}
 
 \subsubsection{Socket.io}
 \label{subsub:socketio}
