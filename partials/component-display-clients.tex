@@ -101,7 +101,7 @@ Instalując dystrybucję linuksa na komputerze PC zwykle nie ma większego sensu
 \par
 
 
-Na początku należy stworzyć sobie miejsce na dysku, w którym system będzie budowany - \lstinline|mkdir ~/ARM_DEBIAN && alias arm='cd ~/arm' && arm|.
+Na początku należy stworzyć sobie miejsce na dysku, w którym system będzie budowany - \lstinline{mkdir ~/ARM_DEBIAN && alias arm='cd ~/arm' && arm}.
 
 \subsubsection{Przygotowanie karty SDHC}
 
@@ -134,7 +134,7 @@ System debian zostanie zainstalowany na karcie SDHC \footnote{ang. \em{Secure Di
 \end{table}
 
 \par
-Po włożniu karty SD do czytnika kart pamięci i podłączenia go do komputera, należy sprawdzić i upewnić się jak nazywa się podłączone urządzenie. Jest to o tyle ważne gdyż w systemach linux montowane jest w tym samym katalogu i zwykle z tym samym przedrostkiem co dysk twardy komputera. Gdyby karta pamięci zostałaby źle zidentyfikowana mogło być dojść do bezpowrotnego usunięcia danych z dysku twardego komputera. Po włożeniu karty do czytnika nazwę urządzenia w komputerze można sprawdzić za pomocą polecenia \lstinline|sudo dmesg| wyświetlając systemowy bufor komunikatów. 
+Po włożniu karty SD do czytnika kart pamięci i podłączenia go do komputera, należy sprawdzić i upewnić się jak nazywa się podłączone urządzenie. Jest to o tyle ważne gdyż w systemach linux montowane jest w tym samym katalogu i zwykle z tym samym przedrostkiem co dysk twardy komputera. Gdyby karta pamięci zostałaby źle zidentyfikowana mogło być dojść do bezpowrotnego usunięcia danych z dysku twardego komputera. Po włożeniu karty do czytnika nazwę urządzenia w komputerze można sprawdzić za pomocą polecenia \lstinline{sudo dmesg} wyświetlając systemowy bufor komunikatów. 
 \par
 Pierwszym krokiem w przygotowaniu systemu jest skasowanie pierwszych 2047 sektorów pamięci na karcie pamięci - zgodnie z tym co widzimy na tabeli ~\ref{tab:sd-layout} pierwszy MB pamięci (2048 sektorów * 512B) jest zarezerwowany dla danych potrzebnych do uruchomienia systemu z karty.
 \par
@@ -156,10 +156,10 @@ W powyższym fragmencie tworzony jest katalog mnt w domowym folderze projektu, p
 
 Niezbędnymi narzędziami do zainstalowania systemu są:
 \begin{itemize}
-	\item {\lstinline|gcc-x-arm-linux-gnueabi|}  - kompilator dla architektury ARM. Fraza eabi, znajdująca się na końcu nazwy tego pakietu to pewien standard opracowany przez firmę ARM. ABI  \footnote{ang. \emph{Application Binary Interface}} jest to zestaw reguł i ustawień kompilacji, które decydują o tym jak dany program współpracuje z innymi bibliotekami, czy aplikacjami. Programy skompilowane przy pomocy kompilatora używającego standardu EABI są przenośne pomiędzy systemami operacyjnymi (jedyną barierą są biblioteki z którymi współpracuje dany program).
-	\item {\lstinline|build-essential|} - jak sama nazwa wskazuje jest to zbiór pakietów niezbędnych do budowania oprogramowania. Zależnościami tego pakietu to m.in. g++, libc, czy make.
-	\item {\lstinline|git|} - system kontroli wersji
-	\item {\lstinline|u-boot-tools|} - zestaw narzędzi do bootloadera, który zostanie opisany w dalszej części pracy.
+	\item {\lstinline{gcc-x-arm-linux-gnueabi}}  - kompilator dla architektury ARM. Fraza eabi, znajdująca się na końcu nazwy tego pakietu to pewien standard opracowany przez firmę ARM. ABI  \footnote{ang. \emph{Application Binary Interface}} jest to zestaw reguł i ustawień kompilacji, które decydują o tym jak dany program współpracuje z innymi bibliotekami, czy aplikacjami. Programy skompilowane przy pomocy kompilatora używającego standardu EABI są przenośne pomiędzy systemami operacyjnymi (jedyną barierą są biblioteki z którymi współpracuje dany program).
+	\item {\lstinline{build-essential}} - jak sama nazwa wskazuje jest to zbiór pakietów niezbędnych do budowania oprogramowania. Zależnościami tego pakietu to m.in. g++, libc, czy make.
+	\item {\lstinline{git}} - system kontroli wersji
+	\item {\lstinline{u-boot-tools}} - zestaw narzędzi do bootloadera, który zostanie opisany w dalszej części pracy.
 \end{itemize}
 
 
@@ -181,7 +181,7 @@ make sun4i CROSS_COMPILE=arm-linux-gnueabi-
 
 \par
 
-W pierwszej lini pobierane jest repozytorium, w linii 3 z kolei przełączamy pobrane repozytorium na odpowiednią gałąź, wreszcie w linii 4 kompilujemy bootloader na architekturę \lstinline|sun4i| używając do tego celu kompilatora \lstinline|arm-linux-gnueabi-gcc|.
+W pierwszej lini pobierane jest repozytorium, w linii 3 z kolei przełączamy pobrane repozytorium na odpowiednią gałąź, wreszcie w linii 4 kompilujemy bootloader na architekturę \lstinline{sun4i} używając do tego celu kompilatora \lstinline{arm-linux-gnueabi-gcc}.
 
 Po skompilowaniu można wgrać niezbędny pliki na kartę SD:
 
@@ -220,7 +220,7 @@ Jądro systemu wykrywa i inicjuje sprzęt, oraz uruchamia proces init, który mo
 
 Pierwszym krokiem jest ściągnięcie kodu źródłowego jądra, z racji tego, że architektura ARM Allwinner sun4i nie jest oficjalnie wspierana przez repozytorium w którym znajduję się jądro linuksa posłużono się repozytorium wywodzącym się z niego przystosowanym do potrzeb tej architektury.
 
-Aktualną wersję jądra można pobrać za pomocą polecenia: \lstinline|git clone https://github.com/linux-sunxi/linux-sunxi|, a następnie przełączyć się na odpowiednią gałąź kodu: \lstinline|git checkout sunxi-3.4|. By skompilować jądro należy wykonać polecenia:
+Aktualną wersję jądra można pobrać za pomocą polecenia: \lstinline{git clone https://github.com/linux-sunxi/linux-sunxi}, a następnie przełączyć się na odpowiednią gałąź kodu: \lstinline{git checkout sunxi-3.4}. By skompilować jądro należy wykonać polecenia:
 
 \begin{lstlisting}[language=bash]
 make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- sun4i_defconfig
@@ -231,22 +231,22 @@ arm
 sudo cp linux-allwinner/arch/arm/boot/uImage mnt/
 \end{lstlisting}
 
-W pierwszej linii generowana jest standardowa konfiguracja jądra dla danej platformy. Parametr \lstinline|ARCH=arm| określa architekturę jądra. Parametr \lstinline|CROSS_COMPILE=arm-linux-gnueabi-| określa przedrostek cross kompilatora, używany przy budowaniu i przy instalacji (czyli cross kompilator dla poleceń w liniach 1-3 to arm-linux-gnueabi-gcc).
+W pierwszej linii generowana jest standardowa konfiguracja jądra dla danej platformy. Parametr \lstinline{ARCH=arm} określa architekturę jądra. Parametr \lstinline{CROSS_COMPILE=arm-linux-gnueabi-} określa przedrostek cross kompilatora, używany przy budowaniu i przy instalacji (czyli cross kompilator dla poleceń w liniach 1-3 to arm-linux-gnueabi-gcc).
 
 \par
 
-W linii drugiej budowane są moduły jądra, oraz plik z jądrem, następnie dodawana do niego jest suma kontrolna, oraz informacje wymagane przez bootloader. Parametr j16 jest parametrem programu \lstinline|make| określającym ile jednocześnie zadań może być uruchamianych, przez zadanie w przypadku programu \lstinline|make| rozumiane jest rozwiązanie jednej zależności. Program make za pomocą grafu zależności określa kolejność wykonywanych zadań.
+W linii drugiej budowane są moduły jądra, oraz plik z jądrem, następnie dodawana do niego jest suma kontrolna, oraz informacje wymagane przez bootloader. Parametr j16 jest parametrem programu \lstinline{make} określającym ile jednocześnie zadań może być uruchamianych, przez zadanie w przypadku programu \lstinline{make} rozumiane jest rozwiązanie jednej zależności. Program make za pomocą grafu zależności określa kolejność wykonywanych zadań.
 
 \par
 Komenda z linii trzeciej instaluje moduły w zadanej lokacji.
 \par
-Plik script.bin jest plikiem konfiguracyjnym dla danej platformy. Można go wygenerować samemu, dokumentacja znajduję się na oficjalnej stronie architektury sunxi - \url{http://linux-sunxi.org/Fex_Guide}. a następnie skompilować plik konfiguracyjny do formatu bin za pomocą narzędzia \lstinline|fex2bin|. W pliku tym konfigurowane są wartości typowe dla urządzenia tj. adres MAC komputera, czy maksymalna rozdzielczość.  W internecie istnieje wiele gotowych plików konfiguracyjnych dla komputera MK 802 II, na potrzeby niniejszej pracy konfiguracja została pobrana ze strony - \url{http://dl.miniand.com/gamboita/script-mk802ii-1080p60.7z}. 
+Plik script.bin jest plikiem konfiguracyjnym dla danej platformy. Można go wygenerować samemu, dokumentacja znajduję się na oficjalnej stronie architektury sunxi - \url{http://linux-sunxi.org/Fex_Guide}. a następnie skompilować plik konfiguracyjny do formatu bin za pomocą narzędzia \lstinline{fex2bin}. W pliku tym konfigurowane są wartości typowe dla urządzenia tj. adres MAC komputera, czy maksymalna rozdzielczość.  W internecie istnieje wiele gotowych plików konfiguracyjnych dla komputera MK 802 II, na potrzeby niniejszej pracy konfiguracja została pobrana ze strony - \url{http://dl.miniand.com/gamboita/script-mk802ii-1080p60.7z}. 
 
-Po wygenerowaniu pliku należy go skopiować na kartę pamięci do pierwszej partycji \lstinline|sudo cp script.bin mnt/script.bin|. 
+Po wygenerowaniu pliku należy go skopiować na kartę pamięci do pierwszej partycji \lstinline{sudo cp script.bin mnt/script.bin}. 
 
 Tym sposobem zakończono modyfikacje na partycji pierwszej - przygotowano i skopiowano plik jądra, plik konfiguracyjny urządzenia, oraz plik konfiguracyjny bootloadera. 
 
-By odmontować partycje należy wpisać \lstinline|sudo umount mnt|
+By odmontować partycje należy wpisać \lstinline{sudo umount mnt}
 
 \subsubsection{Przygotowanie głównego systemu plików}
 
@@ -278,7 +278,7 @@ sudo chroot mnt/
 /debootstrap/debootstrap --second-stage
 \end{lstlisting}
 
-Pakiet \lstinline|quemu-user-static| pozwala na emulowanie binarek zbudowanych statycznie. Ogólnie rzecz biorąc pozwala na uruchamianie procesów linuksowych na procesorze pod który nie zostały one skompilowane. Pakiet binfmt-support pozwala na obsługe dodatkowych formatów binarnych. Za pomocą polecenia \lstinline|modprobe| moduł obsługi dodatkowych formatów binarnych zostaje włączony jako moduł do jądra. Polecenie z linii 4 kopiuje aplikacje do nowo stworzonego systemu. Linie 5-6 to przygotowaniu interfejsu tzw. pseudoterminala. Poprzez zamontowanie systemu plików \lstinline|/proc| do nowo powstającego systemu, po wykonaniu chroota będzie możliwość korzystania z informacji dostarczonych przez jądro systemu. Wreszcie wykonujemy polecenie \lstinline|chroot| \footnote{ang. \emph{change root}}, które jak sama nazwa wskazuje zmienia główny system plików. Po wykonaniu przed ostatniego polecenia linia poleceń powinna wyświetlić komunikat \lstinline|I have no name!@hostname:/#|, ostatnie polecenie uruchamia wszystkie skrypty konfiguracyjne, które muszą zostać wykonane na architekturze docelowej (dlatego właśnie skopiowany został do /usr/bin program qemu-user-static). Mając uruchomiony system na komputerze wykonano podstawową konfiguracje dla systemu debian.
+Pakiet \lstinline{quemu-user-static} pozwala na emulowanie binarek zbudowanych statycznie. Ogólnie rzecz biorąc pozwala na uruchamianie procesów linuksowych na procesorze pod który nie zostały one skompilowane. Pakiet binfmt-support pozwala na obsługe dodatkowych formatów binarnych. Za pomocą polecenia \lstinline{modprobe} moduł obsługi dodatkowych formatów binarnych zostaje włączony jako moduł do jądra. Polecenie z linii 4 kopiuje aplikacje do nowo stworzonego systemu. Linie 5-6 to przygotowaniu interfejsu tzw. pseudoterminala. Poprzez zamontowanie systemu plików \lstinline{/proc} do nowo powstającego systemu, po wykonaniu chroota będzie możliwość korzystania z informacji dostarczonych przez jądro systemu. Wreszcie wykonujemy polecenie \lstinline{chroot} \footnote{ang. \emph{change root}}, które jak sama nazwa wskazuje zmienia główny system plików. Po wykonaniu przed ostatniego polecenia linia poleceń powinna wyświetlić komunikat \lstinline{I have no name!@hostname:/#}, ostatnie polecenie uruchamia wszystkie skrypty konfiguracyjne, które muszą zostać wykonane na architekturze docelowej (dlatego właśnie skopiowany został do /usr/bin program qemu-user-static). Mając uruchomiony system na komputerze wykonano podstawową konfiguracje dla systemu debian.
 \\
 Edycja repozytoriów menadżera pakietów:
 \begin{lstlisting}[language=bash]
@@ -308,7 +308,7 @@ apt-get install dhcp3-client udev netbase ifupdown iproute openssh-server \
     iputils-ping wget net-tools ntpdate uboot-mkimage uboot-envtools vim nano less X
 \end{lstlisting}
 
-Po skonfigurowaniu usług internetowych, i konta roota, należy wyjść z trybu \lstinline|chroot|, oraz odmontować partycję:
+Po skonfigurowaniu usług internetowych, i konta roota, należy wyjść z trybu \lstinline{chroot}, oraz odmontować partycję:
 
 \begin{lstlisting}[language=bash]
 exit
@@ -316,7 +316,7 @@ sudo umount mnt/proc
 sudo umount mnt/dev/pts
 \end{lstlisting}
 
-Ostatnim elementem w przygotowywaniu drugiej partycji jest zainstalowaniu modułów jądra na głównym systemie plików, poleceniem: \lstinline|sudo make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- INSTALL_MOD_PATH=../debian-rootfs/mnt modules_install|.
+Ostatnim elementem w przygotowywaniu drugiej partycji jest zainstalowaniu modułów jądra na głównym systemie plików, poleceniem: \lstinline{sudo make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- INSTALL_MOD_PATH=../debian-rootfs/mnt modules_install}.
 
 Po zainstalowaniu modułów pozostaje tylko przygotować drugą partycje na karcie SD i zainstalować przygotowany system plików:
 \begin{lstlisting}[language=bash]
@@ -336,7 +336,7 @@ Oprogramowanie klienckie składa się z następujących komponentów:
 	\item[serwer] \hfill \\
 Kod źródłowy serwera znajduję się w załączniku ~\ref{app:server_c}, jest on wspólny dla wszystkich platform unixowych.		
 	\item[generator zdarzeń wejścia] \hfill \\ 
-		Program generujący zdarzenia urządzeń wejścia na podstawie danych otrzymanych z serwera. W platformie Linux wykorzystano moduł jądra \lstinline|uinput|. Uinput to moduł pozwalający na generowanie zdarzeń symulujących urządzenia wyjścia. Moduł ten tworzy specjalny plik urządzenia w katalogu \lstinline|/dev|. Plik ten jest wirtualnym interfejsem co znaczy, że nie jest połączony z żadnym fizycznym urządzeniem.
+		Program generujący zdarzenia urządzeń wejścia na podstawie danych otrzymanych z serwera. W platformie Linux wykorzystano moduł jądra \lstinline{uinput}. Uinput to moduł pozwalający na generowanie zdarzeń symulujących urządzenia wyjścia. Moduł ten tworzy specjalny plik urządzenia w katalogu \lstinline{/dev}. Plik ten jest wirtualnym interfejsem co znaczy, że nie jest połączony z żadnym fizycznym urządzeniem.
 
 		Jednym z zadań generatora jest ustalenie rozdzielczości ekranu na którym wyświetlany jest obraz. Informacja ta jest niezbędna gdyż koordynaty wysyłane przez serwer są podawane absolutnie, oraz z przedziału od 0 do 1 (ze względu na to, że informacja ta nie może być uzależniona od rozdzielczości monitora). Na platformie Linux rozdzielczość uzyskiwana jest za pomocą następującego polecenia:
 		\begin{lstlisting}[language=bash]
@@ -344,7 +344,7 @@ Kod źródłowy serwera znajduję się w załączniku ~\ref{app:server_c}, jest 
 		\end{lstlisting}
 		Program xdpyinfo jest to aplikacja służąca do wyświetlania informacji o serwerze X, z kolei za pomocą wyrażenia regularnego i programu sed wyłuskano tylko niezbędne informacje dotyczące rozdzielczości ekranu.
 
-		Istotnym elementem w pisaniu programu generującego zdarzenia urządzeń wejścia jest odbiór danych z serwera, opisanego w załączniku ~\ref{app:server_c}. Program ten wysyła dane do deskryptora pliku o nazwie \lstinline|STDIN_FILENO|. Nie jest to bynajmniej to samo co wskaźnik do pliku o nazwie \lstinline|stdin| przez co nie jest możliwe użycie funkcji wysokiego poziomu jak lstinline|scanf| do wczytania danych. Niezbędne jest użycie funkcji \lstinline|read|, a następnie użycie funkcji \lstinline|sscanf| w celu sformatowaniu danych co pokazuje poniższy fragment kodu:
+		Istotnym elementem w pisaniu programu generującego zdarzenia urządzeń wejścia jest odbiór danych z serwera, opisanego w załączniku ~\ref{app:server_c}. Program ten wysyła dane do deskryptora pliku o nazwie \lstinline{STDIN_FILENO}. Nie jest to bynajmniej to samo co wskaźnik do pliku o nazwie \lstinline{stdin} przez co nie jest możliwe użycie funkcji wysokiego poziomu jak \lstinline{scanf} do wczytania danych. Niezbędne jest użycie funkcji \lstinline{read}, a następnie użycie funkcji \lstinline{sscanf} w celu sformatowaniu danych co pokazuje poniższy fragment kodu:
 
 		\begin{lstlisting}[language=c]
 			read(STDIN_FILENO, buffer, sizeof(buffer));
@@ -353,7 +353,7 @@ Kod źródłowy serwera znajduję się w załączniku ~\ref{app:server_c}, jest 
 			int y = yTmp * dim[1];
 		\end{lstlisting}
 
-		Wczytane koordynaty należy wysłać jako zdarzenia do modułu \lstinline|uinput|. 
+		Wczytane koordynaty należy wysłać jako zdarzenia do modułu \lstinline{uinput}. 
 		
 		\begin{lstlisting}[language=c]
 		#include <linux/input.h>
@@ -386,13 +386,13 @@ Kod źródłowy serwera znajduję się w załączniku ~\ref{app:server_c}, jest 
 
 
 		\end{lstlisting}
-		Na początku należy włączyć niezbędne nagłówki (linie 1-2), następnie otworzyć plik urządzenia \lstinline|uinput|, do którego będą wysyłane zdarzenia urządzeń wejścia. W linii 4 powyższego listingu, włączono możliwość wysyłania zdarzeń ruchów myszką podając koordynaty absolutne. Struktury zadeklarowane w linii 8 zawierają 3 pola 
+		Na początku należy włączyć niezbędne nagłówki (linie 1-2), następnie otworzyć plik urządzenia \lstinline{uinput}, do którego będą wysyłane zdarzenia urządzeń wejścia. W linii 4 powyższego listingu, włączono możliwość wysyłania zdarzeń ruchów myszką podając koordynaty absolutne. Struktury zadeklarowane w linii 8 zawierają 3 pola 
 		\begin{itemize}
-			\item \lstinline|type| - typ zdarzenia (\lstinline|EV_KEY|, \lstinline|EV_ABS|, \lstinline|EV_REL|)		
-			\item \lstinline|code| - dla zdarzeń klawiatury jest to kod klawisza, natomiast dla zdarzeń myszy jest to oś.
-			\item \lstinline|value| - dla zdarzeń klawiatury 1 oznacza przyciśnięcie klawisza, a 0 puszczenie, dla zdarzeń myszy jest to z kolei wartość reprezentująca koordynatę.
+			\item \lstinline{type} - typ zdarzenia (\lstinline{EV_KEY}, \lstinline{EV_ABS}, \lstinline{EV_REL})		
+			\item \lstinline{code} - dla zdarzeń klawiatury jest to kod klawisza, natomiast dla zdarzeń myszy jest to oś.
+			\item \lstinline{value} - dla zdarzeń klawiatury 1 oznacza przyciśnięcie klawisza, a 0 puszczenie, dla zdarzeń myszy jest to z kolei wartość reprezentująca koordynatę.
 		\end{itemize}
-		Po wypełnieniu struktury odpowiednimi wartościami należy wysłać je do wcześniej otwartego deskryptora pliku (\lstinline|fd|), a następnie wypełnić i wysłać strukturę synchronizującą (\lstinline|evSyn|), której zadaniem jest zatwierdzenie, oraz realizacja wszystkich dotychczasowo wysłanych zdarzeń. 
+		Po wypełnieniu struktury odpowiednimi wartościami należy wysłać je do wcześniej otwartego deskryptora pliku (\lstinline{fd}), a następnie wypełnić i wysłać strukturę synchronizującą (\lstinline{evSyn}), której zadaniem jest zatwierdzenie, oraz realizacja wszystkich dotychczasowo wysłanych zdarzeń. 
 	\item[serwer X] \hfill \\
 		Moduł ten opisany jest bardziej szczegółowo w załączniku ~\ref{app:X Window System}.
 
@@ -425,6 +425,4 @@ Kod programu odpowiadający za wygenerowanie zdarzenia na podstawie koordynatów
 		CFRelease(move1);
 \end{lstlisting}
 
-\\
-Funkcja \lstinline|CGEventCreateMouseEvent| tworzy nowe zdarzenie, polegające na przesunięciu kursora myszy do zadanej lokacji.
-
+Funkcja \lstinline{CGEventCreateMouseEvent} tworzy nowe zdarzenie, polegające na przesunięciu kursora myszy do zadanej lokacji.
