@@ -1,44 +1,4 @@
-%\section{Specyfikacja zewnętrzna}
+\section{Specyfikacja zewnętrzna}
 
 %\section{Przypadki użycia}
-
-\section{Uruchamianie systemu}
-
-\subsection{Uruchomienie serwera node.js}
-
-Do uruchomienia serwera niezbędna jest instalacja platformy node.js w odpowiedniej wersji. W tym celu należy ściągnąć kod źródłowy z oficjalnego repozytorium (\url{https://github.com/joyent/node} oznaczony tagiem 0.10.12. Po ściągnięciu i rozpakowaniu paczki należy skompilować i zainstalować platformę poleceniami:
-
-\begin{lstlisting}
-./configure
-make
-make install
-\end{lstlisting}
-
-Po pomyślnej instalacji należy ściągnąć repozytorium projektu dostępne po adresem - \url{https://github.com/athlan/remotely}. By rozwiązać wszystkie zależności projektu należy w katalogu z projektem wykonać polecenie \lstinline{npm install}.
-\par
-Do uruchomienia aplikacji pozostaje jeszcze uruchomić serwer sieciowy. W załączniku ~\ref{app:apache} omówiona została instalacja, oraz konfiguracja serwera Apache.
-\par
-Przed ostatnim krokiem w konfiguracji serwera jest wyedytowanie pliku index.html w głównym katalogu projektu remotely. Atrybuty przy znaczniku body to:
-\begin{description}
-	\item[data-server] \hfill \\
-		adres komputera wraz z numerem portu, na którym jest uruchomiony serwer sieciowy
-	\item[data-server-remote-host] \hfill \\
-		adres klienta na który wysyłane będą zdarzenia urządzeń wejścia.
-	\item[data-server-remote-port] \hfill \\
-		numer portu klienta
-\end{description}
-\par
-Po skonfigurowaniu serwera pozostaje go tylko uruchomić poleceniem \lstinline{node server.js}.
-
-
-\subsection{Uruchomienie klienta Linux}
-
-Aby uruchomić oprogramowanie klienta Linux należy pobrać repozytorium dostępne pod adresem: \url{https://github.com/athlan/remotely}, a następnie w folderze client wybrać dostępny system (macosx lub linux), i w odpowiednim podfolderze skompilować oprogramowanie poleceniem \lstinline{make}.
-Po pomyślnej kompilacji należy uruchomić serwer poleceniem \lstinline{./bin/server}.
-
-
-\subsection{Uruchomienie serwera www zarządzającego infrastrukturą}
-
-W celu zainstalowania serwera www zarządzającego infrastrukturą należy zainstalować framework play, a następnie pobrać z repozytorium kod źródłowy aplikacji zarządzającej systemem dostępy pod adresem - \url{https://github.com/badeleux/remotely-web}. Uruchomienie serwera za pomocą polecenia \lstinline|play ~run|, rozwiąże wszystkie zależności, oraz skompiluje kod. 
-
 
