@@ -1,0 +1,28 @@
+\subsection{Serwer zarządzania infrastrukturą}
+
+\subsubsection{Język programowania}
+\begin{description}
+	\item[Zwięzła] \hfill \par
+		Programy w scali zajmują ok. 30\% kodu aniżeli te same napisane w języku Java.
+	\item[Portowalna] \hfill \par
+		Kod napisy w języku scala kompilowany jest do kodu bajtowego, i uruchamiany na JVM\footnote{Wirtualna Maszyna Javy ang. \emph{Java Virtual Machine}}
+	\item[Hybrydowa] \hfill \par
+		Język scala łączy w sobie dwa najpopularniejsze paradygmaty programowania jest zarazem imperatywna jak i w pełni funkcjonalna.
+\end{description}
+
+\subsubsection{Framework}
+
+\begin{description}
+	\item[Czym jest Play?]\hfill \\
+		W skład frameworka Play prócz samej biblioteki programistycznej wchodzi m.in. wydajny serwer HTTP JBoss Netty, wiele skryptów do zarządzania aplikacją, oraz wbudowany kompilator Java. Framework play jest oparty na wzorcu MVC\footnote{Model Widok Kontroler ang. \emph{Model View Controller}}. Play nie zyskał zbyt wielkiej popularnej w wersji 1.x, natomiast od momentu kiedy został przepisany na język scala zyskuje on coraz większy rozgłos.
+	\item[Główne cechy]\hfill \\
+		\begin{itemize}
+			\item bezstanowy - to znaczy, że nie ma wydzielonego fragmentu przestrzeni na serwerze, która jest ściśle powiązana z zalogowanym użytkownikiem. Na pierwszy rzut oka wydaję się to być wadą, natomiast niesie to ze sobą szereg plusów jak np. świetna skalowalność aplikacji (nie ma potrzeby zapewniania zgodności spójności sesji pomiędzy serwerami).
+			\item oparte na programowaniu reaktywnym\footnote{ang. \emph{Reactive Programming} paradygmat programowania zakładający że oprogramowanie jest zawsze responsywne na nadchodzące zdarzenia.}
+ (iteratee's) 		
+		\item zorientowane na zdarzenia, a nie żądania - wątek nie jest przypisany od początku do końca do jednego żądania
+		\end{itemize}
+\end{description}
+
+
+
