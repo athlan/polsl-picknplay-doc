@@ -11,8 +11,6 @@ Klient to komputer podłączony bezpośrednio do ekranu wyświetlającego obraz.
 
 Głównym zadaniem klientów jest komunikacja serwerem poprzez sieć Ethernet w celu wyświetlania obrazu na podłączonym do klienta ekranie, oraz możliwość sterowania urządzeniami wejścia (klawiatura, myszka) poprzez udostępniony interfejs w sieci Ethernet.
 
-\subsubsection{Architektura procesora}
-
 Jeśli chodzi o wybór architektury procesora wybór był całkiem prosty, za sprawą sporej liczby dostępnych urządzeń dostępnych w tej architekturze (32 bitowa architektura ARM\footnote{Advanced RISC Machine} jest najczęściej stosowaną architekturą w urządzeniach mobilnych\cite{acm}), jak i uzasadnioną ich popularnością. Architektura ARM cechuje cię niskim poborem energii, dużą niezawodnością w systemach wbudowanych, oraz dla praktycznie wszystkich dostępnych na rynku procesorów możliwością instalacji w pełni funkcjonalnego systemu operacyjnego.
 Procesory oparte o architekturę ARM przetwarzają instrukcje z wykorzystaniem mechanizmu potokowania. Procesor może wykonywać trzy rodzaje instrukcji:
 \begin{itemize}
@@ -69,6 +67,21 @@ Na rynku można wyodrębnić 3 główne chipy bazujące na architekturze ARM:
 \subsection{System operacyjny dla komputera wyświetlającego obraz na ekranie.}
 
 Nie dysponując zbyt dużą mocą obliczeniową, małą pamięcią operacyjną, oraz niewielką przestrzenią dyskową należy dobrze dobrać, oraz skonfigurować system operacyjny. Do tego celu wybrano dystrybucje linuksa - Debian. Cechuje się ona przede wszystkim wysoką stabilnością (bardzo często wybierana jako system serwerowy), oraz sporą społecznością programistów rozwijających tą dystrybucje co przekłada się na mnogość dostępnych pakietów przygotowanych specjalnie dla tej wersji systemu Linux. Wreszcie system Debian jest wysoce konfigurowalny - oparty o jądro Linux, daje użytkownikowi możliwość zbudowania systemu od podstaw. Dlatego też jako system docelowy i główny wybraliśmy dystrybucje Debian.
+
+\begin{figure}
+\begin{center}
+    \includegraphics[scale=1]{kernel}
+\end{center}
+\caption{Działanie jądra systemu Linux}
+\label{fig:kernel}
+\end{figure}
+
+Jądro \footnote{ang. \emph{Kernel}} systemu Linux jest centralnym miejscem systemu operacyjnego. Jak zaprezentowano na rysunku ~\ref{fig:kernel} jest ono najniżej usytuowaną warstwą systemu operacyjnego odpowiadającą za komunikację z procesorem, pamięcią, czy urządzeniami zewnętrznymi. Kernel m.in. przydziela odpowiednią ilość pamięci operacyjnej dla każdej aplikacji, obsługuje komunikaty i komunikacje między procesorową.
+
+Pierwotnym twórcą jądra Linux jest programista pochodzenia duńskiego Linus Torvalds, natomiast obecnie jądro systemu Linux jest rozwijane przez programistów z całego świata. Jego aktualną wersje można pobrać z oficjalnego otwartego repozytorium github.
+
+
+\par
 
 
 
