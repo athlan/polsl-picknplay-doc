@@ -26,6 +26,7 @@ Prawdopodobnie najpopularniejszy konsolowy edytor tekstu. Vim jest klonem edytor
 \subsection{Wykorzystana technologia w pilotach}
 
 \subsubsection{jQuery Mobile}
+\label{subsub:tool-jquery-mobile}
 
 Brak respektowania standardów (podsekcja \ref{subsec:w3c-touch-events-implementations}) stwarza problemy związane z obsługą gestów na urządzeniach mobilnych. Aby zapewnić poprawne funkcjonowanie należy śledzić zmiany wprowadzane w implementacjach przeglądarek przez producentów oraz ewentualne zmiany w standardach. W projekcie wykorzystana została biblioteka \emph{jQuery Mobile} posiadająca dużą społeczność\footnote{Ponad 10 tyś poprawek, 36 wersji, 204 osób wnoszących wkład w rozwój biblioteki [Stan na 22 grudnia 2013]}. Wśród wpieranych przeglądarek znajdują się wymienione jako niewspierające standardu z podsekcji ~\ref{subsec:w3c-touch-events-implementations}.
 
@@ -49,6 +50,7 @@ $(document).on('vmousemove', function(e) {
 \end{lstlisting}
 
 \subsubsection{Użycie biblioteki basket.js}
+\label{subsub:tools-basketjs}
 
 W związku z dywagacją dotyczącą szybkości działania Web Storage (podsekcja \ref{subsub:webstorage-performance}), wszystkie skrypty JavaScript pilota są umieszczone z lokalnej pamięci przeglądarki internetowej Web Storage na telefonie komórkowym. W tym celu opracowana została biblioteka \emph{basket.js} oferująca asynchroniczne ładowanie kodu JavaScript z rozwiązaniem zależności między plikami oraz rozgrywaniem wyścigów\footnote{W asynchronicznym modelu programowania kolejne kawałki kodu nie wykonują się sekwencyjnie, co może doprowadzić do błędów wynikających z zależności między nimi}. basket.js jako interfejs dla programisty używa wzorca projektowego \emph{Promise}.
 
