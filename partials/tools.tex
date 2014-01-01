@@ -249,11 +249,9 @@ Tak zdefiniowana akcja definiuje blok kodu w sposób synchroniczny zwracający w
 
 Framework Play w zamierzeniu działa na bardzo małym zbiorze wątków, dlatego też podczas gdy dana akcja nie może odpowiedzieć natychmiastowo np. z powodu usługi internetowej czy długiego zapytania do bazy danych, wątek obsługujący daną akcje nie może zostać zablokowany. 
 
-begin{description}
-		
+\begin{description}	
 	\item[Future] \hfill \\
 		Za pomocą zmiennej o tym typie, można uzyskać wartość, kiedy tylko zostanie obliczona, pobrana.
-
 	\item[Promise] \hfill \\
 		Typ Promise działa w przeciwną stronę tzn. jeżeli \lstinline{Future} jest typem konsumenta, tak \lstinline{Promise} jest typem charakterystycznym dla producenta. Za każdym razem gdy programista chcę obliczyć lub pobrać jakieś dane tworzy obiekt \lstinline{Promise}, który jest kontenerem na nowe dane. Z obiektu \lstinline{Promise} otrzymuje się obiekt typu \lstinline{Future}.
 \end{description}

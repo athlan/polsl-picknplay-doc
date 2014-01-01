@@ -23,7 +23,7 @@ Dodatkowo przeprowadzano dywagację na temat skalowania stworzonego systemu opis
     Diagram przedstawiający model producenta i konsumenta wiadomości połączonego przez system kolejek FIFO, źródło\cite{message-oriented-middleware}
 \end{figure}
 
-\subsection{Mechanizmy komunikacji}
+\subsection{Komunikacja HTTP - model Comet}
 \label{sub:communication-methods}
 
 Protokół HTTP\footnote{Hypertext Transfer Protocol} przewiduje komunikację inicjowaną przez klienta do serwera\cite{http-rfc}. Klient wysyła żądanie (ang. \emph{request}) złożoną z nagłówków (ang. \emph{headers}) oraz treści (ang. \emph{body} lub \emph{content}), natomiast serwer zwraca odpowiedź również w postaci nagłówków oraz treści. Każde żądanie jest bezstanowe, swego rodzaju transakcją, to znaczy, że nie zależy od poprzedniego, ani kolejnego. Aby zapewnić transakcyjność stosuje się mechanizmy podtrzymania sesji użytkownika za pomocą przesyłania w nagłówkach ciasteczek zawierający unikatowy identyfikator sesji znany zarówno po stronie klienta, jak i serwera - tym sposobem serwer jest w stanie zidentyfikować następujące po sobie bezstanowe żądania. Istotnym minusem w kontekście prowadzenia komunikacji w protokole HTTP jest to, że serwer nie może zainicjować wysłania danych do przeglądarki, bowiem połączenie jest zamykane zaraz po odesłaniu odpowiedzi. Komunikacja jest jednostronna (ang. \emph{half-duplex communication}).
@@ -47,7 +47,7 @@ Transfer-Encoding: chunked\r\n
 TUTAJ TRESC
 \end{lstlisting}
 
-Aby zapewnić komunikację dwustronną (ang. \emph{full-duplex communication}) (tj. aby serwer mógł wysyłać wiadomości do przeglądarki internetowej w trybie \emph{server push}) stosuje się wiele zabiegów, znanych pod pojęciem komety (ang. \emph{Comet}), których przegląd jest zamieszczony poniżej. Inne znane nazwy tożsame z Comet: \emph{Ajax Push},\footnote{ICEfaces.org [Data dostępu: 27 grudnia 2013]} \emph{Reverse Ajax}\footnote{Crane, Dave; McCarthy, Phil (Lipiec 2008). \emph{Comet and Reverse Ajax: The Next Generation Ajax 2.0}. Apress. ISBN 1-59059-998-5}, \emph{Two-way-web}, \emph{HTTP Streaming}, \footnote{Mahemoff, Michael (Czerwiec 2006). \emph{Web Remoting}. Ajax Design Patterns. O'Reilly Media. s. 19; 85. ISBN 0-596-10180-5}, oraz \emph{HTTP server push}\footnote{Double, Chris (2005-11-05). \emph{"More on Ajax and server push". Different ways of doing server push.}}.
+Aby zapewnić komunikację dwustronną (ang. \emph{full-duplex communication}) (tj. aby serwer mógł wysyłać wiadomości do przeglądarki internetowej w trybie \emph{server push}) stosuje się wiele zabiegów, znanych ogólnie pod pojęciem \emph{Comet} (modelu komunikacji polegającym na wykorzystaniu zawieszonych połączeń HTTP, ang. \emph{long-held HTTP requests}), których przegląd jest zamieszczony poniżej. Inne znane nazwy tożsame z Comet: \emph{Ajax Push},\footnote{ICEfaces.org [Data dostępu: 27 grudnia 2013]} \emph{Reverse Ajax}\footnote{Crane, Dave; McCarthy, Phil (Lipiec 2008). \emph{Comet and Reverse Ajax: The Next Generation Ajax 2.0}. Apress. ISBN 1-59059-998-5}, \emph{Two-way-web}, \emph{HTTP Streaming}, \footnote{Mahemoff, Michael (Czerwiec 2006). \emph{Web Remoting}. Ajax Design Patterns. O'Reilly Media. s. 19; 85. ISBN 0-596-10180-5}, oraz \emph{HTTP server push}\footnote{Double, Chris (2005-11-05). \emph{"More on Ajax and server push". Different ways of doing server push.}}.
 
 \subsubsection{Komunikacja HTTP persistent connection}
 \label{subsub:http-persistent-connection}
