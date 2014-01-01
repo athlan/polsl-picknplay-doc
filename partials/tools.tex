@@ -210,3 +210,86 @@ Przykładowy kod po stornie klienta:
 \lstinputlisting[language=JavaScript]{assets/src/socketio-example-client.js}
 
 Kod jest bliźniaczo podobny do kodu uruchamianego na serwerze. Klient ustanawia połączenie do adresu podanego jako argument funkcji \lstinline{connect}. Domyślnie używany jest protokół WebSocket ws://, można skorzystać z szyfrowanego protokołu wss://\footnote{analogiczny http:// do https://} wskazując go przed nazwę hosta. Istnieje możliwość skonfigurowania połączenia, np wskazać, czy ma zostać podjęta próba ponownego połączenia przy jego utracie.
+
+
+\subsection{Wykorzystane technologie i narzędzia w serwerze zarządzającym infrastrukturą}
+
+\subsubsection{SBT}
+
+SBT (ang. \emph{Simple Build Tool}) to narzędzie służące do budowania projektów, rozwiązywanie zależności, podobne jest bardzo do bardziej znanych tego typu narzędzi jak Maven, czy Ant. Natomiast w przeciwieństwie do tych narzędzi cała konfiguracja odbywa się w jednym pliku i do tego napisanym w języku Scala. Nie jest również niezbędna dodatkowa integracja środowiska programistycznego. By dodać nową zależność do projektu, należy otworzyć plik \lstinline|Build.sbt| i dodać zależność według następującego schematu:
+
+\begin{lstlisting}
+//identyfikator grupy    %%     identyfikator artefaktu  %   wersja
+"com.decodified"         %%     "scala-ssh"              %   "0.6.4"
+\end{lstlisting}
+
+Standardowo SBT korzysta tylko z publicznych standardowych repozytoriów, by dodać nowe (mogą to być repozytoria Maven czy Ivy), należy w tym samym pliku dodać je według następującego przykładu:
+
+\begin{lstlisting}
+resolvers += "spray repo" at "http://repo.spray.io"
+\end{lstlisting}
+
+\subsubsection{Akcje}
+
+W kontrolerach (które w scali są obiektami) definiowane są metody, każda z metod odpowiada za konkretną akcje, odpowiadając na żądanie użytkownika. Proszę przyjrzeć się następującemu kontrolerowi:
+
+\begin{lstlisting}
+object Application extends Controller {
+  def index = Action {
+    Ok("It works!")
+  }
+}
+\end{lstlisting}
+
+Obiekt \lstinline{Application} dziedziczy po cesze \lstinline{Controller}, która głównie zapewnia szereg metod pomocniczych do zdefiniowania akcji. Metoda \lstinline{index} jest definiowana przez funkcję \lstinline{Action} (reprezentowana w Javie jako obiekt), która jako argument przyjmuje obiekt \lstinline{Request}, a zwraca obiekt \lstinline{Response}. 
+
+\par
+
+Tak zdefiniowana akcja definiuje blok kodu w sposób synchroniczny zwracający wynik, jednak aplikacje internetowe coraz częściej zorientowane są wokół usług internetowych (ang. \emph{Web Services}), które w sporej większości nie mają WSLA \footnote{ang. \emph{Web Service Legal Agreement} umowa utrzymania jakości usług. Pozwala autorom na wyszczególnienie wymagań co do usługi, oraz akcji, które powinny zostać podjęte podczas gdy te nie zostaną spełnione}. Tutaj z pomocą przychodzi framework Play z technologią rozwiązującą tego typu problemy.
+
+Framework Play w zamierzeniu działa na bardzo małym zbiorze wątków, dlatego też podczas gdy dana akcja nie może odpowiedzieć natychmiastowo np. z powodu usługi internetowej czy długiego zapytania do bazy danych, wątek obsługujący daną akcje nie może zostać zablokowany. 
+
+begin{description}
+		
+	\item[Future] \hfill \\
+		Za pomocą zmiennej o tym typie, można uzyskać wartość, kiedy tylko zostanie obliczona, pobrana.
+
+	\item[Promise] \hfill \\
+		Typ Promise działa w przeciwną stronę tzn. jeżeli \lstinline{Future} jest typem konsumenta, tak \lstinline{Promise} jest typem charakterystycznym dla producenta. Za każdym razem gdy programista chcę obliczyć lub pobrać jakieś dane tworzy obiekt \lstinline{Promise}, który jest kontenerem na nowe dane. Z obiektu \lstinline{Promise} otrzymuje się obiekt typu \lstinline{Future}.
+\end{description}
+
+\begin{lstlisting}
+def index = Action.async {
+  val foo: Future[Foo] = getFoo()
+  foo.map(f => Ok(f))
+}
+\end{lstlisting}
+
+\par
+
+W linii pierwszej powyższego listingu definiowana jest nie tyle funkcja Action co Action.async stworzone przez wzorzec budowniczego, który to właśnie powoduje, że wątek obsługujący tą akcje jest zwalniany, i system wraca do wykonania tej metody podczas gdy zmienna foo zostanie pobrana/obliczona.
+
+\par
+Interesująca funkcjonalność jest zaprezentowana w linii trzeciej. Funkcja \lstinline{map} wywołana na obiekcie \lstinline{Future}, zwraca rezultat podczas gdy obiekt \lstinline{foo} zostanie uzupełniony. Mechanizm ten jest o tyle interesujący, że w innych językach programowania jest to wykonywane za pomocą funkcji \lstinline{onSuccess}. Takie rozwiązanie w przykładzie, który został przedstawiony byłoby jak najbardziej dopuszczalne natomiast rozważając inny bardziej skomplikowany przypadek:
+
+\begin{lstlisting}
+val rateQuote = future {
+  connection.getCurrentValue(USD)
+}
+rateQuote onSuccess { case quote =>
+  val purchase = future {
+    if (isProfitable(quote)) connection.buy(amount, quote)
+    else throw new Exception("not profitable")
+  }
+  
+  purchase onSuccess {
+    case _ => println("Purchased " + amount + " USD")
+  }
+}
+\end{lstlisting}
+
+Używając metody \lstinline{onSuccess} zagnieżdżamy wykonanie kolejnej operacji. Przedstawione rozwiązanie nie jest najlepsze z dwóch powodów:
+\begin{itemize}
+	\item Każde kolejne zagnieżdżenie następnej operacji powoduje, że kod staję się nieczytelny (ang. \emph{Callback Hell})
+	\item Kod wywołujący zagnieżdżoną operację jest zagnieżdżony co uniemożliwia wywołanie ponownie tego samego kodu z innego miejsca programu.
+\end{itemize}

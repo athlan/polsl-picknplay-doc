@@ -1,28 +1,50 @@
 \subsection{Serwer zarządzania infrastrukturą}
 
+Większość języków programowania, technologii spełnia wymagania niefunkcjonalne dla serwera zarządzania infrastrukturą. Dlatego też przy wyborze technologi skłaniano się ku nowym, wschodzącym technologią tworzenia aplikacji webowych. Z racji tego, że wymagania niefunkcjonalne dla serwera zarządzania infrastrukturą nie zawężały mocno kręgu poszukiwań, naszymi głównymi kryteriami były
+
+\begin{itemize}
+	\item skalowalność
+	\item szybkość wykonania (ang. \emph{execution time})
+	\item szybkość programowania (ang. \emph{development time})
+\end{itemize}
+
 \subsubsection{Język programowania}
+
+Biorąc pod uwagę powyższe wymagania wybraliśmy język scala.
+
+\par
+
 \begin{description}
 	\item[Zwięzła] \hfill \par
-		Programy w scali zajmują ok. 30\% kodu aniżeli te same napisane w języku Java.
+		Programy w scali zajmują ok. 30\%-50\% mniej kodu aniżeli te same napisane w języku Java.
 	\item[Portowalna] \hfill \par
-		Kod napisy w języku scala kompilowany jest do kodu bajtowego, i uruchamiany na JVM\footnote{Wirtualna Maszyna Javy ang. \emph{Java Virtual Machine}}
+		Kod napisy w języku scala kompilowany jest do kodu bajtowego, i uruchamiany na JVM\footnote{Wirtualna Maszyna Javy ang. \emph{Java Virtual Machine}}. Dzięki czemu może korzystać z bibliotek napisanych w języku Java.
 	\item[Hybrydowa] \hfill \par
 		Język scala łączy w sobie dwa najpopularniejsze paradygmaty programowania jest zarazem imperatywna jak i w pełni funkcjonalna.
+	\item[Statyczne typowana] \hfill \par
+		Scala jest statycznie typowana w przeciwieństwie do języków skryptowych takich jak Ruby, czy Python, co wprowadza większy porządek w kodzie, bezpieczne refaktoryzowanie, czy lepsza dokumentacja. Jednak w przeciwieństwie do języka java, scala posiada świetny mechanizm domniemywania typów.
+	\item[Skalowalność] \hfill \par
+		Dostarcza wiele funkcjonalności usprawniających równoleglizacje kodu, przede wszystkim ma niezmienne typy, i równoległość opartą na modelu aktorów (eng. \emph{actor based concurrency}).
 \end{description}
 
 \subsubsection{Framework}
 
+Jako framework została wybrany Play.
+
 \begin{description}
 	\item[Czym jest Play?]\hfill \\
-		W skład frameworka Play prócz samej biblioteki programistycznej wchodzi m.in. wydajny serwer HTTP JBoss Netty, wiele skryptów do zarządzania aplikacją, oraz wbudowany kompilator Java. Framework play jest oparty na wzorcu MVC\footnote{Model Widok Kontroler ang. \emph{Model View Controller}}. Play nie zyskał zbyt wielkiej popularnej w wersji 1.x, natomiast od momentu kiedy został przepisany na język scala zyskuje on coraz większy rozgłos.
+		W skład frameworka Play prócz samej biblioteki programistycznej wchodzi m.in. wydajny serwer HTTP JBoss Netty, wiele skryptów do zarządzania aplikacją, oraz wbudowany kompilator Java. Framework play jest oparty na wzorcu MVC\footnote{Model Widok Kontroler ang. \emph{Model View Controller}}. Play nie zyskał zbyt wielkiej popularnej w wersji 1.x, natomiast od momentu kiedy został przepisany na język scala jest on coraz częściej wybierany przez programistów i analityków. 
 	\item[Główne cechy]\hfill \\
 		\begin{itemize}
-			\item bezstanowy - to znaczy, że nie ma wydzielonego fragmentu przestrzeni na serwerze, która jest ściśle powiązana z zalogowanym użytkownikiem. Na pierwszy rzut oka wydaję się to być wadą, natomiast niesie to ze sobą szereg plusów jak np. świetna skalowalność aplikacji (nie ma potrzeby zapewniania zgodności spójności sesji pomiędzy serwerami).
-			\item oparte na programowaniu reaktywnym\footnote{ang. \emph{Reactive Programming} paradygmat programowania zakładający że oprogramowanie jest zawsze responsywne na nadchodzące zdarzenia.}
+		\item bezstanowy - to znaczy, że nie ma wydzielonego fragmentu przestrzeni na serwerze, która jest ściśle powiązana z zalogowanym użytkownikiem. Na pierwszy rzut oka wydaję się to być wadą, natomiast niesie to ze sobą szereg plusów jak np. świetna skalowalność aplikacji (nie ma potrzeby zapewniania zgodności spójności sesji pomiędzy serwerami).
+		\item oparte na programowaniu reaktywnym\footnote{ang. \emph{Reactive Programming} paradygmat programowania zakładający że oprogramowanie jest zawsze responsywne na nadchodzące zdarzenia.}
  (iteratee's) 		
 		\item zorientowane na zdarzenia, a nie żądania - wątek nie jest przypisany od początku do końca do jednego żądania
+		\item przyjazny dla developera, po przeładowaniu przeglądarki, zmieniony kod jest rekompilowany, a ewentualne błędy podczas uruchomienia są wyświetlane w przeglądarce wraz z stosem wywołań.
+		\item od wersji 2.0 oparty na modelu aktorów, co daje wysoką skalowalność. 
 		\end{itemize}
 \end{description}
+
 
 
 
