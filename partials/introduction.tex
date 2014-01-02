@@ -11,3 +11,44 @@ Możemy wyobrazić sobie sytuację, że na mieście pojawia się ekran LED, na k
 Korzystając z faktu powstania technologii WebSocket protocol (ustandaryzowanej przez IETF\footnote{Internet Engineering Task Force} w 2011 roku w dokumencie RFC\footnote{Request for Comments} 6455\cite{websockets-rfc}) umożliwiającą dwukierunkową transmisję danych pomiędzy przeglądarką internetową oraz serwerem poprzez gniazdo (ang. \emph{socket})  wspieraną przez większość przeglądarek zainstalowanych na urządzeniach mobilnych. Intencją pracy dyplomowej jest stworzenie mechanizmu sterowania komputerem z poziomu przeglądarki internetowej uruchomionej na urządzeniu mobilnym bez konieczności instalacji zewnętrznego oprogramowania w postaci aplikacji dedykowanej dla danego systemu operacyjnego. Korzystając również z faktu, iż aktywni użytkownicy urządzeń mobilnych chętnie aktualizują oprogramowanie, wprowadzenie tej technologii zwiększa zasięg użytkowników, którzy mogą skorzystać z technologii z każdą aktualizacją (200 milionów uaktualnionych urządzeń firmy Apple\footnote{Statystyki z oficjalnych press release firmy Apple, uaktualnienie systemu operacyjnego do iOS7 http://www.apple.com/pr/library/2013/09/23First-Weekend-iPhone-Sales-Top-Nine-Million-Sets-New-Record.html} oraz pokrycia ponad 55,6 proc. Androida w wersji 4.1 i powyżej \footnote{Statystyki z dnia 02.12.2013 r. http://developer.android.com/about/dashboards/index.html}).
 
 Realizacja pracy dyplomowej uwzględnia również optymalizację rozmiaru oraz sposobu ładowania kodu do przeglądarki internetowej na urządzeniu mobilnym mając na uwadze dostęp do wolniejszej sieci 3G (niż w przypadku dostępu do szerokopasmowej sieci Internet lub LTE [ang. \emph{Long Term Evolution}, nazywany inaczej 4G LTE]). W celu szybszego ponownego (przy kolejnych odwiedzinach) ładowania statycznej treści wykorzystany został \emph{Local Sotorage}\cite{webstorage} wprowadzony wraz z HTML5, ustandaryzowany przez W3C\footnote{World Wide Web Consortium} w dokumencie W3C Recommendation Web Storage, a do serwowania statycznej treści po raz pierwszy został zbudowany lokalny CDN (ang. \emph{Content Delivery Network}) złożony z Varnish Cache.
+
+\subsection{Przewodnik po działach pracy}
+
+Praca została podzielona na 13 rozdziałów, według ogólnie przyjętego wzorca. 
+
+\par
+
+W rozdziałach ~\ref{sec:goal} i ~\ref{sec:requirement} został omówiony cel, oraz wymagania jakie zostały postawione zanim przystąpiono do prac budowania systemu. Jest to istotny element w budowie każdego systemu - ściśle postawione wymagania są fundamentem analizy każdego systemu informatycznego.
+
+\par
+W rozdziale ~\ref{sec:analyse} omówiono zostały problemy z jakimi się spotkano pisząc pracę, uzasadnienie wybranych technologii, oraz rozwiązań w każdym z poszczególnych komponentów. 
+
+\par
+
+W części numer ~\ref{sec:tools} zaprezentowano narzędzia jakimi się posługiwano tworząc system, w początkowych podrozdziałach opisano ogólne instrumenty, które używano we wszystkich komponentach aplikacji, natomiast kolejne podrozdziały mówią o poszczególnych częściach i istotnych środkach użytych w celu uzyskania oczekiwanego rezultatu.
+
+\par
+
+W specyfikacji zewnętrznej omówiono system ze strony zwykłego użytkownika na przykładzie gry Pong, jak i część systemu od strony administratora zarządzającego infrastrukturą monitorów. Zamieszczone zostały zrzuty ekranu, oraz krótki ich opis.
+
+\par
+
+Rozdział numer ~\ref{sec:implementation} opisuje wybrane problemy i fragmenty kodu istotne dla tej pracy wraz z opisem używanych funkcji i mechanizmów.
+
+\par
+
+Kolejne podrozdziały omawiają uruchomienie, oraz instalacja systemu niezbędne do poprawnego działania systemu. 
+
+\par
+
+Dodatek ~\ref{app:network_diagram_app} jasno pokazuje fizyczną architekturę aplikacji.
+Dodatki ~\ref{app:pong_comp_diagram}, oraz ~\ref{app:control_comp_diagram} prezentują komponenty oprogramowania wykorzystanego w systemie.
+Dodatek ~\ref{app:server_c} przedstawia kod serwera użytego na wszystkich platformach UNIX-owych właśnie z tego powodu jego treść, oraz omówienie zostało umieszczone w dodatku, gdyż odnosi się do kilku rozdziałów.
+Dodatek ~\ref{app:X Window System} jest krótkich przedstawianiem działania systemu X'ów, nie jest to kompletny przewodnik, ale raczej krótkie uzmysłowienie działania tego oprogramowania.
+Dodatek ~\ref{app:apache} przedstawia instalacje serwera internetowego dla systemu Linux Debian. 
+
+\subsection{Podział prac}
+
+Pan Kamil Badyla odpowiedzialny był za pracę nad oprogramowaniem, konfiguracją, oraz analizą części systemu odpowiedzialnej za wyświetlanie obrazu na rozproszonych monitorach, oraz aplikacji internetowej zarządzającej systemem.
+
+Pan Piotr Pelczar TODO

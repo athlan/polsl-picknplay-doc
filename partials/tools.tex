@@ -1,5 +1,5 @@
 \section{Narzędzia}
-\label{cha:Narzędzia}
+\label{sec:tools}
 
 \subsection{Narzędzia wspomagające zarządzanie projektem}
 
@@ -7,7 +7,7 @@
 \label{sub:GIT}
 Rozproszony system kontroli wersji. System ten pozwola na bezproblemową synchronizacje pracy między stacjami roboczymi. Dzięki temu, że jest on rozproszony nie jest konieczne wyznaczanie głównego serwera, przez który synchronizowany jest kod źródłowy, a każdy z klientów może pełnić rolę serwera do którego wysyłane są zmiany plików objętych systemem kontroli wersji.
 
-Przy realizacji pracy dyplomowej GIT pomógł rozwiązywać konflikty w treści kodu źródłowego, ciągłe nadpisywanie treści plików powstałe w wyniku pracy kilku osób. Do przechowania kodu źródłowego na serwerze zdalnym wykorzystana została darmowa powierzchnia serwisów GitHub oraz Bitbucket. Na Githubie umieszczone zostały aplikacje stworzone w ramach pracy dyplomowej oraz książka napisana w LaTex.
+Przy realizacji pracy dyplomowej GIT pomógł rozwiązywać konflikty w treści kodu źródłowego, ciągłe nadpisywanie treści plików powstałe w wyniku pracy kilku osób. Do przechowania kodu źródłowego na serwerze zdalnym wykorzystana została darmowa powierzchnia serwisów GitHub oraz Bitbucket. Na Githubie umieszczone zostały aplikacje stworzone w ramach pracy dyplomowej oraz książka napisana w LaTeX-u.
 
 
 \subsubsection{Asana}
@@ -233,7 +233,7 @@ Standardowo SBT korzysta tylko z publicznych standardowych repozytoriów, by dod
 resolvers += "spray repo" at "http://repo.spray.io"
 \end{lstlisting}
 
-\subsubsection{Akcje}
+\subsubsection{Akcje we frameworku Play}
 
 W kontrolerach (które w scali są obiektami) definiowane są metody, każda z metod odpowiada za konkretną akcje, odpowiadając na żądanie użytkownika. Proszę przyjrzeć się następującemu kontrolerowi:
 
@@ -245,17 +245,19 @@ object Application extends Controller {
 }
 \end{lstlisting}
 
-Obiekt \lstinline{Application} dziedziczy po cesze \lstinline{Controller}, która głównie zapewnia szereg metod pomocniczych do zdefiniowania akcji. Metoda \lstinline{index} jest definiowana przez funkcję \lstinline{Action} (reprezentowana w Javie jako obiekt), która jako argument przyjmuje obiekt \lstinline{Request}, a zwraca obiekt \lstinline{Response}. 
+Obiekt \lstinline{Application} dziedziczy po cesze \lstinline{Controller}, która między innymi zapewnia szereg metod pomocniczych do zdefiniowania akcji. Metoda \lstinline{index} jest definiowana przez funkcję \lstinline{Action} (reprezentowana w Javie jako obiekt), która jako argument przyjmuje obiekt typu \lstinline{Request}, a zwraca z kolei obiekty typu \lstinline{Response}. 
 
 \par
 
-Tak zdefiniowana akcja definiuje blok kodu w sposób synchroniczny zwracający wynik, jednak aplikacje internetowe coraz częściej zorientowane są wokół usług internetowych (ang. \emph{Web Services}), które w sporej większości nie mają WSLA \footnote{ang. \emph{Web Service Legal Agreement} umowa utrzymania jakości usług. Pozwala autorom na wyszczególnienie wymagań co do usługi, oraz akcji, które powinny zostać podjęte podczas gdy te nie zostaną spełnione}. Tutaj z pomocą przychodzi framework Play z technologią rozwiązującą tego typu problemy.
+Tak zdefiniowana akcja definiuje blok kodu w sposób synchroniczny zwracający wynik, jednak aplikacje internetowe coraz częściej zorientowane są wokół usług internetowych (ang. \emph{Web Services}), które w sporej większości nie mają WSLA\footnote{ang. \emph{Web Service Legal Agreement} umowa utrzymania jakości usług. Pozwala autorom na wyszczególnienie wymagań co do usługi, oraz akcji, które powinny zostać podjęte podczas gdy te nie zostaną spełnione}.
 
-Framework Play w zamierzeniu działa na bardzo małym zbiorze wątków, dlatego też podczas gdy dana akcja nie może odpowiedzieć natychmiastowo np. z powodu usługi internetowej czy długiego zapytania do bazy danych, wątek obsługujący daną akcje nie może zostać zablokowany. 
+\par
+
+Framework Play w założeniu działa na bardzo małym zbiorze wątków, dlatego też podczas gdy dana akcja nie może odpowiedzieć natychmiastowo np. z powodu wykorzystywanej usługi internetowej czy długiego zapytania do bazy danych, wątek obsługujący daną akcje nie może zostać zablokowany, ale musi zostać zwolniony.
 
 \begin{description}	
 	\item[Future] \hfill \\
-		Za pomocą zmiennej o tym typie, można uzyskać wartość, kiedy tylko zostanie obliczona, pobrana.
+		Za pomocą zmiennej o tym typie, można uzyskać wartość, kiedy tylko będzie dostępna.
 	\item[Promise] \hfill \\
 		Typ Promise działa w przeciwną stronę tzn. jeżeli \lstinline{Future} jest typem konsumenta, tak \lstinline{Promise} jest typem charakterystycznym dla producenta. Za każdym razem gdy programista chcę obliczyć lub pobrać jakieś dane tworzy obiekt \lstinline{Promise}, który jest kontenerem na nowe dane. Z obiektu \lstinline{Promise} otrzymuje się obiekt typu \lstinline{Future}.
 \end{description}
@@ -269,29 +271,47 @@ def index = Action.async {
 
 \par
 
-W linii pierwszej powyższego listingu definiowana jest nie tyle funkcja Action co Action.async stworzone przez wzorzec budowniczego, który to właśnie powoduje, że wątek obsługujący tą akcje jest zwalniany, i system wraca do wykonania tej metody podczas gdy zmienna foo zostanie pobrana/obliczona.
+W linii pierwszej powyższego listingu definiowana jest funkcja \lstinline{Action.async}. Funkcja ta powoduje, że wątek obsługujący tą akcje jest zwalniany, i system wraca do wykonania tej metody podczas gdy zmienna \lstinline{foo} zostanie pobrana/obliczona.
 
 \par
-Interesująca funkcjonalność jest zaprezentowana w linii trzeciej. Funkcja \lstinline{map} wywołana na obiekcie \lstinline{Future}, zwraca rezultat podczas gdy obiekt \lstinline{foo} zostanie uzupełniony. Mechanizm ten jest o tyle interesujący, że w innych językach programowania jest to wykonywane za pomocą funkcji \lstinline{onSuccess}. Takie rozwiązanie w przykładzie, który został przedstawiony byłoby jak najbardziej dopuszczalne natomiast rozważając inny bardziej skomplikowany przypadek:
+Interesująca funkcjonalność jest zaprezentowana w linii trzeciej. Funkcja \lstinline{map} wywołana na obiekcie \lstinline{Future}, zwraca rezultat dopiero podczas gdy obiekt \lstinline{foo} zostanie uzupełniony. Mechanizm ten jest o tyle interesujący, że w innych językach programowania jest to wykonywane za pomocą funkcji \lstinline{onSuccess}. Takie rozwiązanie w przykładzie, który został przedstawiony byłoby jak najbardziej dopuszczalne natomiast rozważając inny bardziej skomplikowany przypadek, możemy dojść do wniosku, że nie jest to najlepsze rozwiązanie.
 
 \begin{lstlisting}
-val rateQuote = future {
-  connection.getCurrentValue(USD)
+val currencyValue = future {
+  connection.getCurrencyValue(PLN)
 }
-rateQuote onSuccess { case quote =>
-  val purchase = future {
-    if (isProfitable(quote)) connection.buy(amount, quote)
-    else throw new Exception("not profitable")
-  }
+currencyValue onSuccess { 
+	case quote => val purchase = future {
+		if (isProfitable(quote)) connection.buy(amount, quote)
+		else throw new Exception("not profitable")
+	}
   
-  purchase onSuccess {
-    case _ => println("Purchased " + amount + " USD")
-  }
+	purchase onSuccess {
+		case _ => println("Purchased " + amount + " PLN")
+	 }
 }
 \end{lstlisting}
 
+Powyższy kod odwołuje się do usługi internetowej by sprawdzić kurs waluty, i jeśli kurs waluty jest opłacalny, zadana ilość jest kupowana.
 Używając metody \lstinline{onSuccess} zagnieżdżamy wykonanie kolejnej operacji. Przedstawione rozwiązanie nie jest najlepsze z dwóch powodów:
 \begin{itemize}
 	\item Każde kolejne zagnieżdżenie następnej operacji powoduje, że kod staję się nieczytelny (ang. \emph{Callback Hell})
 	\item Kod wywołujący zagnieżdżoną operację jest zagnieżdżony co uniemożliwia wywołanie ponownie tego samego kodu z innego miejsca programu.
 \end{itemize}
+
+Dlatego zalecanym sposobem do rozwiązania tego problemu jest następujący sposób.
+
+\begin{lstlisting}
+val currencyValue = future {
+  connection.getCurrencyValue(PLN)
+}
+val purchase = currencyValue map { quote => 
+  if (isProfitable(quote)) connection.buy(amount, quote)
+  else throw new Exception("not profitable")
+}
+purchase onSuccess {
+  case _ => println("Purchased " + amount + " PLN")
+}
+\end{lstlisting}
+
+W kodzie źródłowym zamieszonym powyżej zostały wyeliminowane wspomniane problemy. 

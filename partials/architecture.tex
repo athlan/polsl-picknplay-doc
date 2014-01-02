@@ -27,13 +27,7 @@ System pilota do sterowania zdalnym monitorem złożony jest z trzech części:
 
 \subsubsection{Diagram komponentów}
 
-TODO: Kamil Badyla
-insert as a image
-
-\subsubsection{Diagram interackji}
-
-TODO: Kamil Badyla
-insert as a image
+Diagram komponentów przedstawiony jest w załączniku ~\ref{app:control_comp_diagram}.
 
 \subsection{Gra PONG wyświetlana na zdalnym monitorze}
 
@@ -44,4 +38,9 @@ System gry PONG dla dwóch graczy z możliwością kolejkowania chętnych złoż
   \item \textbf{Serwera} obsługującego protokół Web Socket, który ma za zadanie obsługę połączeń klientów webowych, kolejkowanie ich zgłoszeń do gry, oraz uruchomienie gry na kliencie wyświetlającego grę. Serwer komunikuje się z klientem wyświetlającym grę za pomocą Web Socket, jako, że jest napisany jako aplikacja uruchamiana w przeglądarce internetowej.
   \item \textbf{Klient wyświetlający grę} - aplikacja stworzona jako strona internetowa uruchamiana w przeglądarce na ekranie LED. Wyświetla planszę gry w trakcie jej trwania, lub komunikaty zachęcające do podjęcia rozgrywki w trakcie, gdy nie trwa rozgrywka. Na ekranie można wyświetlać potencjalne reklamy.
 \end{enumerate}
+
+\subsubsection{Diagram komponentów}
+
+Diagram komponentów przedstawiony jest w załączniku ~\ref{app:pong_comp_diagram}.
+
 
