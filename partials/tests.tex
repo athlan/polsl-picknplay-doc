@@ -1,6 +1,46 @@
 \newpage
 \section{Testowanie i uruchamianie}
 
+Testowanie i uruchamianie to konieczna część przebiegu prac. Z racji tego, że stworzony projekt nie ma specyfiki monolitycznego programu, a wręcz rozproszenie kodu pomiędzy systemami jest znaczne, w głównej mierze dział skoncentrowany jest zstępującym testom integracyjnym w punktach zestyku komponentów.
+
+Wykonane testy zakładały zarówno poprawną, jak i niepoprawną konfigurację systemu.
+
+Istotnym dla pilotów sterujących były testy funkcjonalne na urządzeniach mobilnych o ekranach różnej rozdzielczości oraz różnych systemach operacyjnych w starszych i nowszych wersjach. Urządzenia mobilne, na których zostały przeprowadzone testy:
+\begin{itemize}
+	\item iPhone 5, system operacyjny: iOS 7.0
+	\item iPhone 4, system operacyjny: iOS 4.1 (brak obsługi Web Sockets)
+	\item iPad, system operacyjny: iOS 3.1.2 (brak obsługi Web Sockets)
+	\item Samsung Galaxy S III, system operacyjny: Android 4.1
+	\item HTC Wildfire S, system operacyjny: Android 2.3.5 (brak obsługi Web Sockets)
+\end{itemize}
+
 \subsection{Pilot do sterowania zdalnym monitorem}
 
+Przetestowana została:
+
+\begin{itemize}
+	\item poprawność wyświetlania się elementów strony internetowej pilota na urządzeniach mobilnych o różnych rozdzielczościach ekranu,
+	\item poprawność przechwytywania i interpretacji punktów styku użytkownika z ekranem urządzenia mobilnego,
+	\item poprawność działania komunikacji klienta pilota z serwerem i vice versa, sposób reagowania na otrzymywane komunikaty wg specyfikacji interfejsów,
+	\item poprawność łączenia się serwera do programu generującego zdarzenia urządzeń wejścia oraz poprawność przesyłanych danych.
+\end{itemize}
+
+Wszystkie testy zostały pomyślnie zakończone.
+
 \subsection{Gra PONG}
+
+Przetestowana została:
+
+\begin{itemize}
+	\item poprawność wyświetlania się elementów strony internetowej pilota na urządzeniach mobilnych o różnych rozdzielczościach ekranu,
+	\item poprawność przechwytywania i interpretacji punktów styku użytkownika z ekranem urządzenia mobilnego,
+	\item poprawność działania komunikacji klienta z serwerem i vice versa, sposób reagowania na otrzymywane komunikaty wg specyfikacji interfejsów,
+	\item poprawność łączenia się serwera do klienta wyświetlającego grę,
+	\item poprawność działania klienta wyświetlającego grę, jego wyświetlania i logiki.
+\end{itemize}
+
+Wszystkie testy zostały pomyślnie zakończone, aczkolwiek sporo czasu zajęło dostosowanie wyglądu pilota pod wszystkie urządzenia mobilne. Urządzenia mobilne bez wsparcia protokołu Web Sockets generowały opóźnienia w komunikacji stosując alternatywne metody komunikacji HTTP Comet.
+
+\subsection{Program generujący zdarzenia urządzeń wejścia}
+
+\subsection{Serwer zarządzania infrastrukturą}
