@@ -1,4 +1,5 @@
 \subsection{Program generujący zdarzenia urządzeń wejścia}
+\label{sub:impl-displayclient-events-dispatcher}
 
 \subsubsection{Linux}
 
@@ -69,7 +70,6 @@ die("error: write");
 
 \end{description}
 
-
 \subsubsection{Mac OS X}
 
 W niniejszym podrozdziale niezostanie omówiony proces instalacji systemu Mac OS X na żadnym z jednoukładowych komputerów gdyż jest to niemożliwe ze względu na to, że system Mac OS X jest dedykowanym oprogramowaniem dla komputerów firmy Apple. 
@@ -96,3 +96,41 @@ CFRelease(move1);
 \end{lstlisting}
 
 Funkcja \lstinline{CGEventCreateMouseEvent} tworzy nowe zdarzenie, polegające na przesunięciu kursora myszy do zadanej lokacji.
+
+\subsection{Klient wyświetlający grę PONG na zdalnym monitorze}
+\label{sub:impl-displayclient-game}
+
+Klient gry napisany w JavaScript oraz CSS 3 wykorzystując jego mechanizmy. Zawiera w sobie logikę gry i wysyła komunikaty do serwera sterującego. Wyświetla napis z zaproszeniem do dołączenia do gry bądź (w trakcie jej trwania) paletki wraz z piłką. Klient jest uruchamiany w przeglądarce internetowej wyświetlanej na zdalnym monitorze.
+
+Interfejs wyjściowy dla gry:
+
+\begin{description}
+	\item[signalGameStop] \hfill \\
+	Komunikat wysyłany do serwera gry, informujący o jej zakończeniu wraz z danymi pozwalającymi ustalić wynik.
+	\begin{enumerate}
+		\item scoreL (int) wynik gracza po lewej stornie
+		\item scoreR (int) wynik gracza po prawej stronie
+	\end{enumerate}
+\end{description}
+
+Interfejs wejściowy dla gry:
+
+\begin{description}
+	\item[paddleMove] \hfill \\
+	Komunikat wysyłany przez serwer gry, informujący o zmianie położenia paletki gracza.
+	\begin{enumerate}
+		\item positionX (float)
+		\item positionY (float)
+		\item paddleId (string) identyfikator paletki (\emph{l} - lewa, \emph{r} - prawa)
+	\end{enumerate}
+\end{description}
+
+\begin{description}
+	\item[signalGameSart] \hfill \\
+	Komunikat wysyłany przez serwer gry, informujący grę o konieczności jej zakończenia (z przyczyny np. ucieczki jednego z gracza tj. rozłączenia się).
+\end{description}
+
+\begin{description}
+	\item[signalGameStop] \hfill \\
+	Komunikat wysyłany przez serwer gry, informujący grę o konieczności jej inicjalizacji oraz rozpoczęcia.
+\end{description}

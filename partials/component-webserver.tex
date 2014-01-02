@@ -1,2 +1,140 @@
 \subsection{Serwer}
 
+Serwer został zaimplementowany w obu przypadkach na platformie Node.js (podsekcja \ref{sub:tool-server-nodejs}), która umożliwia asynchroniczne wykonywanie się kodu w pojedynczym wątku (podsekcja \ref{subsub:asyncprogramming} oraz \ref{sub:tool-server-nodejs}).
+
+\subsubsection{Serwer sterowania zdalnym monitorem}
+
+Serwer sterowania zdalnym ekranem przyjmuje każde połączenie w protokole Web Sockets i przekazuje dane do serwera generującego zdarzenia urządzeń wejścia (podsekcja \ref{sub:impl-displayclient-events-dispatcher}) łącząc się z nim uprzednio poprzez standardowe gniazdo. Każdy podłączony klient wysyła również konfigurację połączenia z serwerem generującym zdarzenia urządzeń wejścia.
+
+\par \hfill
+
+\noindent
+Interfejs wyjściowy dla serwera:
+
+\par \hfill
+
+\noindent
+Dane na temat pozycji kursora wysyłane są w formacie:
+
+\par \hfill
+
+\noindent
+x:\emph{POZYCJA X}:y:\emph{POZYCJA Y};
+
+\par \hfill
+
+\noindent
+gdzie \emph{POZYCJA X} i \emph{POZYCJA Y} to wartości z przedziału \(\langle0, 1\rangle\) (podsekcja \ref{subsub:cursor-representation}).
+
+\par \hfill
+
+Interfejs wejściowy dla serwera:
+
+\begin{description}
+	\item[mouseMoveToPercent] \hfill \\
+	Komunikat wysyłany przez pilota, informujący o pozycji kursora.
+	\begin{enumerate}
+		\item x (float)
+		\item y (float)
+	\end{enumerate}
+\end{description}
+
+\begin{description}
+	\item[connectToRemote] \hfill \\
+	Komunikat wysyłany przez pilota, informujący o połączeniu do serwera programu generującego zdarzenia urządzeń wejścia. Po jego przyjęciu serwer podejmuje próbę nawiązania połączenia z ów programem.
+	\begin{enumerate}
+		\item host (string)
+		\item port (float)
+	\end{enumerate}
+\end{description}
+
+
+\subsubsection{Serwer gry PONG wyświetlanej na zdalnym monitorze}
+
+Serwer gry PONG przyjmuje każde połączenie w protokole Web Sockets oraz dodaje je do kolejki. Zaraz po dodaniu podejmowana jest próba uruchomienia gry dla \(n\) graczy (domyślnie dwóch). Przy każdej zmianie stanu gry (podłączanie i rozłączanie się użytkowników, uruchomienie i zakończenie gry) wysyłana jest informacja do wszystkich o jej zmianie.
+
+Istotnym jest fakt, że serwer jest napisany w taki sposób, aby móc sterować dowolnym programem reprezentującym grę, która spełnia interfejs:
+
+\lstset{language=JavaScript}
+\begin{lstlisting}
+var gameserver = new gameServer.gameserver(app, server, io);
+var clientDispatcher = new clientDispatcher.clientDispatcher(app, server, io, gameserver);
+\end{lstlisting}
+
+Pierwszy program to obsługa gry, a drugi to strategia rozgrywki, czyli w jaki sposób gracze mają zostać włączanie do gry. W przypadku gry PONG gracze ustawiani są w kolejce do gry i wybierani sąsiednie parami.
+
+Interfejs wyjściowy dla serwera:
+
+\begin{description}
+	\item[signalCurrentServerState] \hfill \\
+	Komunikat wysyłany w trybie broadcast do wszystkich użytkowników, informujący o stanie gry oraz kolejki. Wysyłany jest za każdym razem, gdy zmienia się stan gry: ilość użytkowników oczekujących na grę, włączenie gry.
+	\begin{enumerate}
+		\item count (int) ilość użytkowników oczekujących w kolejce do gry
+		\item isGame (boolean) informacja, czy jest rozgrywana gra, czy nie
+	\end{enumerate}
+\end{description}
+
+\begin{description}
+	\item[signalWaitingForPartner] \hfill \\
+	Komunikat wysyłany do pierwszego zakolejkowanego użytkownika, oznaczający, że klient został przyjęty do kolejki oczekujących graczy i oczekuje na partnera do gry.
+\end{description}
+
+\begin{description}
+	\item[welcome] \hfill \\
+	Komunikat wysyłany do wybranych użytkowników biorących udział w grze, oznaczający, że klient rozpoczyna grę.
+\end{description}
+
+\begin{description}
+	\item[gameOver] \hfill \\
+	Komunikat wysyłany do wybranych użytkowników biorących udział w grze, informujący o zakończeniu gry.
+	\begin{enumerate}
+		\item score (int) wynik klienta
+		\item scoreEnermy (int) wynik przeciwnika
+	\end{enumerate}
+\end{description}
+
+Interfejs wejściowy dla serwera:
+
+\begin{description}
+	\item[paddleMove] \hfill \\
+	Komunikat informujący serwer o zmianie położenia punktu zestyku użytkownika z ekranem:
+	\begin{enumerate}
+		\item positionX (float)
+		\item positionY (float)
+	\end{enumerate}
+\end{description}
+
+Z jednej strony serwer prowadzi komunikację z pilotami klientów, z drugiej natomiast z aplikacją wyświetlającą grę (podsekcja \ref{sub:impl-displayclient-game}). I tu wymieniane są komunikaty, kolejno:
+
+Interfejs wyjściowy dla serwera:
+
+\begin{description}
+	\item[paddleMove] \hfill \\
+	Komunikat informujący grę o zmianie położenia paletki gracza.
+	\begin{enumerate}
+		\item positionX (float)
+		\item positionY (float)
+		\item paddleId (string) identyfikator paletki (\emph{l} - lewa, \emph{r} - prawa)
+	\end{enumerate}
+\end{description}
+
+\begin{description}
+	\item[signalGameSart] \hfill \\
+	Komunikat informujący grę o konieczności jej zakończenia (z przyczyny np. ucieczki jednego z gracza tj. rozłączenia się).
+\end{description}
+
+\begin{description}
+	\item[signalGameStop] \hfill \\
+	Komunikat informujący grę o konieczności jej inicjalizacji oraz rozpoczęcia.
+\end{description}
+
+Interfejs wejściowy dla serwera:
+
+\begin{description}
+	\item[signalGameStop] \hfill \\
+	Komunikat klienta gry o jej zakończeniu wraz z danymi pozwalającymi ustalić wynik. Wynik jest wysyłany do klientów.
+	\begin{enumerate}
+		\item scoreL (int) wynik gracza po lewej stornie
+		\item scoreR (int) wynik gracza po prawej stronie
+	\end{enumerate}
+\end{description}

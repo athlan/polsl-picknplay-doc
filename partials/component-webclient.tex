@@ -1,6 +1,7 @@
 \subsection{Klient webowy}
+\label{subsub:impl-webclient}
 
-Klient webowy został zaimplementowany w obu aplikacjach jako statyczna strona internetowa, której kod JavaScript przechowany jest w Web Storage(sekcja \ref{subsub:webstorage}) za pomocą basket.js (sekcja \ref{subsub:tools-basketjs}). Komunikacja z serwerem została zrazlizowana przy pomocy biblioteki Socket.io (sekcja \ref{subsub:socketio}), odbywa się ona za pomocą protokołu Web Sockets (sekcja \ref{subsub:websockets}) lub w przypadku braku wsparcia z jedną ze wspieranych metod przez bibliotekę Socket.io z modelu Comet (sekcja \ref{sub:communication-methods}). W aplikacjach wykrywane są dotknięcia ekranu urządzenia mobilnego (sekcja \ref{sub:touch-detection}) przy użyciu biblioteki jQuery Mobile (sekcja \ref{subsub:tool-jquery-mobile}).
+Klient webowy został zaimplementowany w obu aplikacjach jako statyczna strona internetowa, której kod JavaScript przechowany jest w Web Storage (podsekcja \ref{subsub:webstorage}) za pomocą basket.js (podsekcja \ref{subsub:tools-basketjs}). Komunikacja z serwerem została zrazlizowana przy pomocy biblioteki Socket.io (podsekcja \ref{subsub:socketio}), odbywa się ona za pomocą protokołu Web Sockets (podsekcja \ref{subsub:websockets}) lub w przypadku braku wsparcia z jedną ze wspieranych metod przez bibliotekę Socket.io z modelu Comet (podsekcja \ref{sub:communication-methods}). W aplikacjach wykrywane są dotknięcia ekranu urządzenia mobilnego (sekcja \ref{sub:touch-detection}) przy użyciu biblioteki jQuery Mobile (podsekcja \ref{subsub:tool-jquery-mobile}).
 
 \subsubsection{Reprezentacja kursora na płaszczyźnie}
 \label{subsub:cursor-representation}
@@ -55,7 +56,6 @@ Logika aplikacji pilota jest trywialna. Przechwytuje punty zestyku użytkownika 
 
 \lstset{language=JavaScript}
 \begin{lstlisting}
-
 this.run = function() {
 	// init socket connection
 	that.socket = socketConnect(that.socket, that.serverAddress);
@@ -92,8 +92,79 @@ this.run = function() {
 }
 \end{lstlisting}
 
-Aplikacja posiada również konfigurację serwera, do którego ma być przekazywana pozycja, którą wysyła wiadomością o temacie \emph{connectToRemote}.
+Aplikacja posiada również zapisy konfiguracji (nazwa hosta oraz port) połączenia do serwera programu generującego zdarzenia urządzeń wejścia (podsekcja \ref{sub:impl-displayclient-events-dispatcher}), do którego ma być przekazywana pozycja, którą wysyła wiadomością o temacie \emph{connectToRemote}. Przykładowa konfiguracja\footnote{Pełen opis instalacji w podsekcji \ref{subsub:setup-server-nodejs}}:
 
-\subsubsection{Gra PONG wyświetlana na zdalnym monitorze}
+\lstset{language=HTML}
+\begin{lstlisting}
+<body data-server="192.168.1.127:8080" data-server-remote-host="192.168.1.127" data-server-remote-port="8081">
+</body>
+\end{lstlisting}
 
+Interfejs wyjściowy aplikacji:
 
+\begin{description}
+	\item[mouseMoveToPercent] \hfill \\
+	Komunikat wysyłany do serwera, informujący o pozycji kursora.
+	\begin{enumerate}
+		\item x (float)
+		\item y (float)
+	\end{enumerate}
+\end{description}
+
+\begin{description}
+	\item[connectToRemote] \hfill \\
+	Komunikat wysyłany do serwera, informujący o połączeniu do serwera programu generującego zdarzenia urządzeń wejścia.
+	\begin{enumerate}
+		\item host (string)
+		\item port (float)
+	\end{enumerate}
+\end{description}
+
+Interfejs wejściowy aplikacji:
+
+Brak.
+
+\subsubsection{Pilot gry PONG wyświetlanej na zdalnym monitorze}
+
+Pilot do sterowania grą PONG wyświetlaną na zdalnym monitorze umożliwia zgłoszenie chęci uczestnictwa w grze oraz sterowanie paletką. Na ekranie startowym użytkownik widzi przycisk, dzięki któremu może zgłosić chęć uczestnictwa w grze, następnie pilot wyświetla komunikaty, aż wreszcie umożliwia sterowanie paletką. Aplikacja jest napisana w jQuery oraz ostylowana arkuszem napisanym w CSS 3.
+
+Interfejs wyjściowy aplikacji:
+
+\begin{description}
+	\item[paddleMove] \hfill \\
+	Komunikat informujący serwer o zmianie położenia punktu zestyku użytkownika z ekranem:
+	\begin{enumerate}
+		\item positionX (float)
+		\item positionY (float)
+	\end{enumerate}
+\end{description}
+
+Interfejs wejściowy aplikacji (komunikaty wysyłane przez serwer do klienta):
+
+\begin{description}
+	\item[signalCurrentServerState] \hfill \\
+	Komunikat informujący o stanie gry oraz kolejki. Odbierany jest za każdym razem, gdy zmienia się stan gry: ilość użytkowników oczekujących na grę, włączenie gry. Na podstawie otrzymanych danych wyświetla się komunikat, który w kolejce jest użytkownik.
+	\begin{enumerate}
+		\item count (int) ilość użytkowników oczekujących w kolejce do gry
+		\item isGame (boolean) informacja, czy jest rozgrywana gra, czy nie
+	\end{enumerate}
+\end{description}
+
+\begin{description}
+	\item[signalWaitingForPartner] \hfill \\
+	Komunikat oznaczający, że klient został przyjęty do kolejki oczekujących graczy i oczekuje na partnera do gry.
+\end{description}
+
+\begin{description}
+	\item[welcome] \hfill \\
+	Komunikat oznaczający, że klient rozpoczyna grę.
+\end{description}
+
+\begin{description}
+	\item[gameOver] \hfill \\
+	Komunikat wysyłany przez serwer informujący o zakończeniu gry. Na podstawie otrzymanych danych wyświetla się informacja, czy klient przegrał, czy wygrał.
+	\begin{enumerate}
+		\item score (int) wynik klienta
+		\item scoreEnermy (int) wynik przeciwnika
+	\end{enumerate}
+\end{description}
