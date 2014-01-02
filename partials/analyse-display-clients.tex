@@ -20,7 +20,7 @@ Procesory oparte o architekturę ARM przetwarzają instrukcje z wykorzystaniem m
 \end{itemize}
 
 \par
-Firma ARM projektuje rdzenie procesorów i sprzedaje je producentom. Producenci z kolei tworzą urządzenia typu SoC\footnote{System on Chip} - dodawane są bloki funkcyjne, jednostki wektorowe czy procesory sygnałowe. Istnieje też spora lista firm, które projektują swoje rdzenie wykorzystujące zbiór instrukcji ARM m.in. Apple, XScale, czy Faraday.
+Firma ARM projektuje rdzenie procesorów i sprzedaje je producentom. Producenci z kolei tworzą urządzenia typu SoC \footnote{ang. \emph{System on Chip} scalony system mikroprocesorowy często wyposażony w dodatkowe bloki funkcyjne, jednostki wektorowe czy procesory sygnałowe}. Istnieje też spora lista firm, które projektują swoje rdzenie wykorzystujące zbiór instrukcji ARM m.in. Apple, XScale, czy Faraday.
 
 \par
 Istotną cechą, którą powinien posiadać procesor ARM jest jednostka MMU\footnote{Memory Managment Unit}. Jest to jednostka odpowiadająca za dostęp do zewnętrznej pamięci, translacje adresu wirtualnego na fizyczny, oraz kontroli uprawnień dostępu do pamięci. Wiele rdzeni ARM nie jest wyposażonych w tą jednostkę, która staje się obligatoryjna podczas gdy chcemy zainstalować system operacyjny Linux. 
@@ -66,7 +66,7 @@ Na rynku można wyodrębnić 3 główne chipy bazujące na architekturze ARM:
 
 \subsection{System operacyjny dla komputera wyświetlającego obraz na ekranie.}
 
-Nie dysponując zbyt dużą mocą obliczeniową, małą pamięcią operacyjną, oraz niewielką przestrzenią dyskową należy dobrze dobrać, oraz skonfigurować system operacyjny. Do tego celu wybrano dystrybucje linuksa - Debian. Cechuje się ona przede wszystkim wysoką stabilnością (bardzo często wybierana jako system serwerowy), oraz sporą społecznością programistów rozwijających tą dystrybucje co przekłada się na mnogość dostępnych pakietów przygotowanych specjalnie dla tej wersji systemu Linux. Wreszcie system Debian jest wysoce konfigurowalny - oparty o jądro Linux, daje użytkownikowi możliwość zbudowania systemu od podstaw. Dlatego też jako system docelowy i główny wybraliśmy dystrybucje Debian.
+Nie dysponując zbyt dużą mocą obliczeniową, małą pamięcią operacyjną, oraz niewielką przestrzenią dyskową należy dobrze dobrać, oraz skonfigurować system operacyjny. Do tego celu wybrano dystrybucje linuksa - Debian. Cechuje się ona przede wszystkim wysoką stabilnością (bardzo często wybierana jako system serwerowy), oraz sporą społecznością programistów rozwijających tą dystrybucje co przekłada się na mnogość dostępnych pakietów przygotowanych specjalnie dla tej wersji systemu Linux. Wreszcie system Debian jest wysoce konfigurowalny - oparty o jądro Linux, daje użytkownikowi możliwość zbudowania systemu od podstaw. Dlatego też jako system docelowy i główny, wybraliśmy dystrybucje Debian.
 
 \begin{figure}
 \begin{center}
@@ -79,9 +79,6 @@ Nie dysponując zbyt dużą mocą obliczeniową, małą pamięcią operacyjną, 
 Jądro \footnote{ang. \emph{Kernel}} systemu Linux jest centralnym miejscem systemu operacyjnego. Jak zaprezentowano na rysunku ~\ref{fig:kernel} jest ono najniżej usytuowaną warstwą systemu operacyjnego odpowiadającą za komunikację z procesorem, pamięcią, czy urządzeniami zewnętrznymi. Kernel m.in. przydziela odpowiednią ilość pamięci operacyjnej dla każdej aplikacji, obsługuje komunikaty i komunikacje między procesorową.
 
 Pierwotnym twórcą jądra Linux jest programista pochodzenia duńskiego Linus Torvalds, natomiast obecnie jądro systemu Linux jest rozwijane przez programistów z całego świata. Jego aktualną wersje można pobrać z oficjalnego otwartego repozytorium github.
-
-
-\par
 
 
 
