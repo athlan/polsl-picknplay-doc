@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[11pt,a4paper,twoside]{article}
 \usepackage{polski}
 \usepackage[utf8]{inputenc}
 \usepackage[titletoc]{appendix}
@@ -13,7 +13,8 @@
 
 % ustawienia marginesow
 \usepackage[cm]{fullpage}
-\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+%\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage[top=2.5cm, bottom=2.5cm, inner=3.5cm, outer=2.5cm, twoside]{geometry}
 
 % ustawienia obrazow %
 \usepackage{graphicx}
@@ -90,6 +91,11 @@
         \end{center}
     \endgroup
 \end{titlepage}
+
+\newpage
+\null
+\thispagestyle{empty}
+\newpage
 
 \tableofcontents
 
