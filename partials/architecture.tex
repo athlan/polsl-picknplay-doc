@@ -30,6 +30,10 @@ System pilota do sterowania zdalnym monitorem złożony jest z trzech części:
 
 Diagram komponentów przedstawiony jest w załączniku ~\ref{app:control_comp_diagram}.
 
+\par
+
+Pierwszy komponent poczynając od góry diagramu, prezentuje klienta webowego. Użytkownik otwierając w przeglądarce internetowej adres gry pong pobierze z serwera niezbędne części do wyświetlenia strony: HTML, CSS, JS. Następnie za pomocą websocketów, przeglądarka skomunikuje się z serwerem kontroli. Serwer kontroli jest odpowiedzialny za kolejkowanie użytkowników, oraz przekazywanie odpowiednio sformatowanych komunikatów poprzez gniazdo do programu sterującego kursorem na odpowiednim ekranie.
+
 \subsection{Gra PONG wyświetlana na zdalnym monitorze}
 
 System gry PONG dla dwóch graczy z możliwością kolejkowania chętnych złożony jest z trzech części:
@@ -40,8 +44,10 @@ System gry PONG dla dwóch graczy z możliwością kolejkowania chętnych złoż
   \item \textbf{Klient wyświetlający grę} - aplikacja stworzona jako strona internetowa uruchamiana w przeglądarce na ekranie LED. Wyświetla planszę gry w trakcie jej trwania, lub komunikaty zachęcające do podjęcia rozgrywki w trakcie, gdy nie trwa rozgrywka. Na ekranie można wyświetlać potencjalne reklamy.
 \end{enumerate}
 
-\subsubsection{Diagram komponentów}
+u\subsubsection{Diagram komponentów}
 
 Diagram komponentów przedstawiony jest w załączniku ~\ref{app:pong_comp_diagram}.
 
+\par
 
+Klient webowy podobnie jak dla diagramu komponentów jest odpowiedzialny za pobranie niezbędnej logiki. Na tym diagramie zaprezentowano komponenty dla rozproszonej wersji aplikacji. Klient webowy komunikuje się z HA Proxy (ang. \emph{Load Balancer}), serwerem odpowiadającym za rozładowanie ruchu. Zadaniem HA Proxy jest wybranie węzła pośredniczącego (ang. \emph{Proxy Server}) z którym będzie się odbywała bezpośrednia komunikacja. Serwer Rabbit MQ to system wiadomości, który pośredniczy i zarządza komunikacją pomiędzy serwerem gry a węzłami. Serwer gry zarządza całą logiką, przetwarza komunikaty wysyłane z klienta webowego, jak i z klienta uruchamiającego grę. 
