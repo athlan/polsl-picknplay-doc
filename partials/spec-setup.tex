@@ -275,3 +275,55 @@ Po pomyślnej kompilacji należy uruchomić serwer poleceniem \lstinline{./bin/s
 \subsection{Uruchomienie serwera www zarządzającego infrastrukturą}
 
 W celu zainstalowania serwera www zarządzającego infrastrukturą należy zainstalować framework play, a następnie pobrać z repozytorium kod źródłowy aplikacji zarządzającej systemem dostępy pod adresem - \url{https://github.com/badeleux/remotely-web}. Uruchomienie serwera za pomocą polecenia \lstinline|play ~run|, rozwiąże wszystkie zależności, oraz skompiluje kod. 
+
+\subsection{Instalacja i uruchamianie Varnish cache}
+
+Aby poprawnie skonfigurować Varnish cache należy zainstalowany serwer Apache\ref{app:apache} ustawić na nasłuchiwanie portu innego, niż 80 (przychodzące połączenia dla protokołu HTTP), bowiem serwer Varnish będzie przyjmował połączenia przechodzące.
+
+W pliku \lstinline{/etc/apache2/ports.conf} oraz \lstinline{/etc/apache2/sites-available/default} należy ustawić port na 81:
+\begin{lstlisting}[language=bash]
+NameVirtualHost 127.0.0.1:81
+Listen 127.0.0.1:81
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+<VirtualHost 127.0.0.1:81>
+\end{lstlisting}
+
+Należy przejść do instalacji Varnish cache, do pliku z repozytoriami (\lstinline{/etc/apt/sources.list}) należy dodać:
+\begin{lstlisting}[language=bash]
+deb http://repo.varnish-cache.org/ubuntu/ lucid varnish-3.0
+\end{lstlisting}
+
+Instalacja jest kontynuowana poprzez wykonanie:
+\begin{lstlisting}[language=bash]
+curl http://repo.varnish-cache.org/debian/GPG-key.txt | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install varnish
+\end{lstlisting}
+
+Varnish został zainstalowany, należy go skonfigurować w pliku \lstinline{/etc/default/varnish}:
+
+\begin{lstlisting}[language=bash]
+DAEMON_OPTS="-a :80 \
+            -T localhost:6082 \
+            -f /etc/varnish/default.vcl \
+            -S /etc/varnish/secret \
+            -s malloc,256m"
+\end{lstlisting}
+
+Następnie w pliku \lstinline{/etc/varnish/default.vcl} należy zdefiniować, na jaki serwer przekierowywane są żądania o treść. Należy wskazać serwer Apache nasłuchujący na porcie 81:
+
+\begin{lstlisting}[language=bash]
+backend default {
+    .host = "127.0.0.1";
+    .port = "8080";
+}
+\end{lstlisting}
+
+Obie usługi wymagają zrestartowania:
+
+\begin{lstlisting}[language=bash]
+service apache2 restart
+service varnish restart
+\end{lstlisting}
