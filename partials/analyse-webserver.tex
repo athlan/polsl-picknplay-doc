@@ -186,7 +186,66 @@ Od tego momentu rozpoczyna się transmisja w protokole Web Socekts, grze przesy�
     \includegraphics[scale=0.65]{WebSocketFrame.png}
 \end{figure}
 
-\subsubsection{Skalowanie}
+\subsection{Skalowanie}
 \label{subsub:scalability}
 
-% http://book.mixu.net/node/ch13.html
+Podczas budowy systemu zauważono konieczność skalowania aplikacji przy jednoczesnym dostępie wielu użytkowników. Aby odciążyć serwer gry przy rozsyłaniu komunikatów o stanie gry do wszystkich podłączonych klientów, można wprowadzić warstwę pośrednią w postaci węzłów odpowiedzialnych za utrzymanie połączeń z klientami i przekazywanie im zstępująco i wstępująco wiadomości. Klienci łączą się bezpośrednio z węzłami pośrednimi (jak zobrazowano na diagramie w dodatku \ref{fig:network_diagram1} oraz \ref{fig:pong_comp_diagram}). Za rozłożenie\footnote{Rozumiane jako równomierne zbalansowanie} ruchu sieciowego pomiędzy węzłami odpowiedzialny jest Load Balancer.
+
+Rozróżniane są Load Balancery w dwóch kategoriach w zależności od warstwy działania w modelu sieciowym ISO/OSI:
+\begin{itemize}
+	\item Działające w warstwie 4 - sieciwoej. Tzw. sprzętowe (ang. \emph{hardware L4 load balancing}). Analizuje ramki ruchu sieciowego, szybkie w działaniu.
+	\item Działające w warstwie 7 - aplikacji. Tzw. programowe (ang. \emph{software L7 load balancing}). Pozwala na zaawansowaną analizę logiczną ruchu sieciowego, tańsze, ale wolniejsze.
+\end{itemize}
+
+Znanym programowym load balancerem jest HAProxy, który umożliwia rozłożenie ruchu pomiędzy bliźniacze aplikacje ze względu na kilka algorytmów rozłożenia ruchu\cite{haproxy-conf}:
+
+\begin{description}
+  \item[roundrobin] \hfill \\
+  Zakłada wybór serwera na podstawie karuzeli, jeden po drugim, uwzględniając przypisane wagi. Sprawiedliwy dla krótko trwających połączeń o przybliżonym czasie obsługi, np. HTTP.
+  \item[leastconn] \hfill \\
+  Wybierany jest serwer, który w danym momencie posiada najmniej otwartych połączeń. Sprawiedliwy dla długo trwających połączeń o niejednostajnym czasie obsługi, np. LDAP, połączenia serwerów bazodanowych.
+  \item[source] \hfill \\
+  Adres IP z którego obsługiwane jest połączenie jest argumentem funkcji mieszającej, której wynik jest podzielony przez sumę wszystkich wag. Dzięki temu jeden użytkownik zawsze trafi na ten sam serwer.
+  \item[uri] \hfill \\
+  Adres \emph{URI}\footnote{Część adresu URL przez znakiem zapytania} jest argumentem funkcji mieszającej, której wynik jest podzielony przez sumę wszystkich wag. Zapewnia to, że żądania z danego adresu trafią zawsze na jeden serwer. Strategia przydatna do zwiększenia ograniczonej pamięci cache skoncentrowanej na adresy URI, aby zwiększyć liczbę trafień do pamięci cache (ang. \emph{cache rate}).
+  \item[url_param] \hfill \\
+  Analogicznie do uri, natomiast argument funkcji mieszającej stanowi jeden, wybrany \emph{url param}\footnote{Część adresu URL po znaku zapytania}.
+\end{description}
+
+\subsection{CDN - Content Delivery Network}
+\label{subsub:cdn}
+
+\subsection{Serwowanie statycznej treści}
+
+Aby zmniejszyć czas ładowania statycznych części składowych stron internetowych, umieszcza się je na wielu serwerach CDN\footnote{Content Delivery Network}. Celem ma być szybszy dostęp do statycznych treści, np. wybór najbliższego geograficznie serwera lub serwera który ze względu na uszkodzenia sieci odpowiada szybciej względem innych serwerów.
+
+W ramach pracy dyplomowej skonfigurowany został serwer CDN oparty na Varnish Cache, który udostępnia mechanizm możliwości umieszczenia odpowiedzi HTTP bezpośrednio w pamięci RAM, aby przy ponownym połaczniu nie nastąpił odczyt z dysku lub uruchomienie aplikacji w celu wygenerowania odpowiedzi HTTP. Model, w którym działa Varnish nazywa się man-in-the-middle, a wykorzystany jest mechanizm \emph{reverse proxy}.
+
+\subsection{Reverse Proxy w protokole HTTP}
+
+W przypadku rozkładu ruchu korzysta się z serwerów proxy, które przekazują żądanie klientów na inne serwery. W przypadku optymalizacji serwowania statycznej treści (ang. \emph{static content delivery}) korzysta się z odwrotnego modelu - \emph{reverse} proxy. Korzystając z faktu możliwości wykorzystania zapamiętywania odpowiedzi wygenerowanej przez serwer w protokole HTTP\cite{http-rfc}\footnote{\cite{http-rfc}, rozdział \emph{Caching in HTTP}} przez klientów, dla których pamięć cache jest indywidualna i serwowanie statycznej treści odbywa się dla każdego z nich indywidualnie, powstaje wątpliwość, czy można zapobiec nadmiernym odczytom z dysków.
+
+Protokół HTTP zapewnia dwa modele cacheowania przesłanej odpowiedzi:
+
+\begin{description}
+  \item[Expiration model] \hfill \\
+  Model oparty o czas ważności odpowiedzi. Serwer wraz z odpowiedzią przesyła w nagłówku \lstinline{Expires} datę jej ważności, która jest skojarzona bezpośrednio z adresem URL, do którego przesłane zostało żądanie. W przypadku ponownego wysłania zapytania, przeglądarka użytkownika może wczytać treść odpowiedzi z lokalnej pamięci cache, aby skrócić czas ładowania strony, o ile czas ważności odpowiedzi nie minął.
+  \item[Validation model] \hfill \\
+  Model oparty o poprawność odpowiedzi. Serwer wraz z odpowiedzią przesyła w nagłówku \lstinline{Last-Modified} datę ostatniej modyfikacji odpowiedzi (np. datę modyfikacji pliku). Przy ponownym żądaniu przeglądarka wysyła zapytanie o plik pod wskazany adres URL wraz z uprzednio przesłaną datą. W przypadku, gdy data jest taka sama, serwer odpowiada wyłącznie nagłówkiem \lstinline{304 (Not Modified)} nie przesyłając w odpowiedzi treści statycznej treści. Umożliwia to odciążenie odczytów z dysku serwera.
+\end{description}
+
+W modelu reverse-proxy zamiast odwoływać się do lokalnych pamięci cache użytkowników, kreuje się wirtualnego, globalengo użytkownika z pamięcią cache, który jest widziany jako serwer dla wszystkich klientów, w ten sposób pamięć cache jest wspólna dla wszystkich, co dodatkowo redukuje obciążenie serwera związane z odczytem statycznych plików z dysków. Globalna pamięć może być przechowywana w pamięci RAM, aby szybciej dostarczać treści.
+
+\begin{figure}[H]
+  \caption[Varnish cache miss]{Varnish cache miss}
+  \centering
+    \includegraphics[scale=0.75]{varnish-miss.png} \\
+    Rysunek przedstawia przypadek, gdy Varnish nie znalazł wpisu w cache oraz przekazuje żądanie do serwera aplikacji, aby otrzymać odpowiedź.
+\end{figure}
+
+\begin{figure}[H]
+  \caption[Varnish cache hit]{Varnish cache hit}
+  \centering
+    \includegraphics[scale=0.75]{varnish-hit.png} \\
+    Rysunek przedstawia przypadek, gdy Varnish znalazł wpis w cache, nie jest konieczne przekazanie połączenia do serwera aplikacji, odpowiedź jest wczytywana prosto z pamięci RAM.
+\end{figure}
