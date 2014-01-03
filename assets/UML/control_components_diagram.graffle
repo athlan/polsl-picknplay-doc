@@ -89,6 +89,45 @@
 	<key>GraphicsList</key>
 	<array>
 		<dict>
+			<key>AllowLabelDrop</key>
+			<false/>
+			<key>Class</key>
+			<string>LineGraphic</string>
+			<key>Head</key>
+			<dict>
+				<key>ID</key>
+				<integer>709</integer>
+			</dict>
+			<key>ID</key>
+			<integer>758</integer>
+			<key>Points</key>
+			<array>
+				<string>{348, 374}</string>
+				<string>{317.43556607771478, 350.81568975446152}</string>
+			</array>
+			<key>Style</key>
+			<dict>
+				<key>stroke</key>
+				<dict>
+					<key>HeadArrow</key>
+					<string>StickArrow</string>
+					<key>HeadScale</key>
+					<real>1.4285709857940674</real>
+					<key>Legacy</key>
+					<true/>
+					<key>TailArrow</key>
+					<string>0</string>
+					<key>TailScale</key>
+					<real>0.5</real>
+				</dict>
+			</dict>
+			<key>Tail</key>
+			<dict>
+				<key>ID</key>
+				<integer>5</integer>
+			</dict>
+		</dict>
+		<dict>
 			<key>Bounds</key>
 			<string>{{98.5, 696}, {44, 14}}</string>
 			<key>Class</key>
@@ -613,45 +652,6 @@ kursorem}</string>
 			</dict>
 		</dict>
 		<dict>
-			<key>AllowLabelDrop</key>
-			<false/>
-			<key>Class</key>
-			<string>LineGraphic</string>
-			<key>Head</key>
-			<dict>
-				<key>ID</key>
-				<integer>709</integer>
-			</dict>
-			<key>ID</key>
-			<integer>710</integer>
-			<key>Points</key>
-			<array>
-				<string>{347.58655006661172, 370.71882629707187}</string>
-				<string>{317.45065467582015, 350.22432815282536}</string>
-			</array>
-			<key>Style</key>
-			<dict>
-				<key>stroke</key>
-				<dict>
-					<key>HeadArrow</key>
-					<string>StickArrow</string>
-					<key>HeadScale</key>
-					<real>1.4285709857940674</real>
-					<key>Legacy</key>
-					<true/>
-					<key>TailArrow</key>
-					<string>0</string>
-					<key>TailScale</key>
-					<real>0.5</real>
-				</dict>
-			</dict>
-			<key>Tail</key>
-			<dict>
-				<key>ID</key>
-				<integer>705</integer>
-			</dict>
-		</dict>
-		<dict>
 			<key>Bounds</key>
 			<string>{{302.50000000000023, 338}, {14.537204742431641, 14}}</string>
 			<key>Class</key>
@@ -667,37 +667,6 @@ kursorem}</string>
 					<key>Draws</key>
 					<string>NO</string>
 				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>Bounds</key>
-			<string>{{293, 371.00000091566824}, {110, 50}}</string>
-			<key>Class</key>
-			<string>ShapedGraphic</string>
-			<key>ID</key>
-			<integer>705</integer>
-			<key>Magnets</key>
-			<array>
-				<string>{0, 1}</string>
-				<string>{0, -1}</string>
-				<string>{1, 0}</string>
-				<string>{-1, 0}</string>
-			</array>
-			<key>Shape</key>
-			<string>Rectangle</string>
-			<key>Style</key>
-			<dict/>
-			<key>Text</key>
-			<dict>
-				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg1250\cocoartf1265
-\cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
-
-\f0\b\fs24 \cf0 Punkt wymiany wiadomo\uc0\u347 ci}</string>
-				<key>VerticalPad</key>
-				<integer>0</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -733,7 +702,7 @@ kursorem}</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{162.5, 371.00000091566824}, {90, 50}}</string>
+			<string>{{303, 374}, {90, 50}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>ID</key>
@@ -931,7 +900,7 @@ kursorem}</string>
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f0\b\fs24 \cf0 Serwer Gry}</string>
+\f0\b\fs24 \cf0 Serwer kontroli}</string>
 					</dict>
 				</dict>
 				<dict>
@@ -1369,7 +1338,7 @@ kursorem}</string>
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2013-12-28 08:24:21 +0000</string>
+	<string>2014-01-03 00:00:42 +0000</string>
 	<key>Modifier</key>
 	<string>Kamil Badyla</string>
 	<key>NotesVisible</key>
@@ -1450,7 +1419,7 @@ kursorem}</string>
 			</dict>
 		</array>
 		<key>Frame</key>
-		<string>{{534, 224}, {1228, 778}}</string>
+		<string>{{0, 0}, {1228, 778}}</string>
 		<key>ListView</key>
 		<true/>
 		<key>OutlineWidth</key>
@@ -1464,15 +1433,15 @@ kursorem}</string>
 		<key>SidebarWidth</key>
 		<integer>120</integer>
 		<key>VisibleRegion</key>
-		<string>{{0, 0}, {1093, 639}}</string>
+		<string>{{48.181817137505419, 212.72726811653337}, {980.90906964845942, 567.27271497742231}}</string>
 		<key>Zoom</key>
-		<real>1</real>
+		<real>1.1000000238418579</real>
 		<key>ZoomValues</key>
 		<array>
 			<array>
 				<string>Canvas 1</string>
-				<real>1</real>
-				<real>1</real>
+				<real>1.1000000238418579</real>
+				<real>1.0700000524520874</real>
 			</array>
 		</array>
 	</dict>
