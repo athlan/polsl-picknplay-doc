@@ -208,20 +208,20 @@ Znanym programowym load balancerem jest HAProxy, który umożliwia rozłożenie 
   Adres IP z którego obsługiwane jest połączenie jest argumentem funkcji mieszającej, której wynik jest podzielony przez sumę wszystkich wag. Dzięki temu jeden użytkownik zawsze trafi na ten sam serwer.
   \item[uri] \hfill \\
   Adres \emph{URI}\footnote{Część adresu URL przez znakiem zapytania} jest argumentem funkcji mieszającej, której wynik jest podzielony przez sumę wszystkich wag. Zapewnia to, że żądania z danego adresu trafią zawsze na jeden serwer. Strategia przydatna do zwiększenia ograniczonej pamięci cache skoncentrowanej na adresy URI, aby zwiększyć liczbę trafień do pamięci cache (ang. \emph{cache rate}).
-  \item[url_param] \hfill \\
+  \item[url param] \hfill \\
   Analogicznie do uri, natomiast argument funkcji mieszającej stanowi jeden, wybrany \emph{url param}\footnote{Część adresu URL po znaku zapytania}.
 \end{description}
 
 \subsection{CDN - Content Delivery Network}
 \label{subsub:cdn}
 
-\subsection{Serwowanie statycznej treści}
+\subsubsection{Serwowanie statycznej treści}
 
 Aby zmniejszyć czas ładowania statycznych części składowych stron internetowych, umieszcza się je na wielu serwerach CDN\footnote{Content Delivery Network}. Celem ma być szybszy dostęp do statycznych treści, np. wybór najbliższego geograficznie serwera lub serwera który ze względu na uszkodzenia sieci odpowiada szybciej względem innych serwerów.
 
 W ramach pracy dyplomowej skonfigurowany został serwer CDN oparty na Varnish Cache, który udostępnia mechanizm możliwości umieszczenia odpowiedzi HTTP bezpośrednio w pamięci RAM, aby przy ponownym połaczniu nie nastąpił odczyt z dysku lub uruchomienie aplikacji w celu wygenerowania odpowiedzi HTTP. Model, w którym działa Varnish nazywa się man-in-the-middle, a wykorzystany jest mechanizm \emph{reverse proxy}.
 
-\subsection{Reverse Proxy w protokole HTTP}
+\subsubsection{Reverse Proxy w protokole HTTP}
 
 W przypadku rozkładu ruchu korzysta się z serwerów proxy, które przekazują żądanie klientów na inne serwery. W przypadku optymalizacji serwowania statycznej treści (ang. \emph{static content delivery}) korzysta się z odwrotnego modelu - \emph{reverse} proxy. Korzystając z faktu możliwości wykorzystania zapamiętywania odpowiedzi wygenerowanej przez serwer w protokole HTTP\cite{http-rfc}\footnote{\cite{http-rfc}, rozdział \emph{Caching in HTTP}} przez klientów, dla których pamięć cache jest indywidualna i serwowanie statycznej treści odbywa się dla każdego z nich indywidualnie, powstaje wątpliwość, czy można zapobiec nadmiernym odczytom z dysków.
 
