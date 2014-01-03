@@ -216,6 +216,13 @@ Przykładowy kod po stornie klienta:
 
 Kod jest bliźniaczo podobny do kodu uruchamianego na serwerze. Klient ustanawia połączenie do adresu podanego jako argument funkcji \lstinline{connect}. Domyślnie używany jest protokół WebSocket ws://, można skorzystać z szyfrowanego protokołu wss://\footnote{analogiczny http:// do https://} wskazując go przed nazwę hosta. Istnieje możliwość skonfigurowania połączenia, np wskazać, czy ma zostać podjęta próba ponownego połączenia przy jego utracie.
 
+\subsubsection{HAProxy}
+
+Programowy serwer proxy służący do możliwie równego rozłożenia ruchu sieciowego w warstwie 7 modelu ISO/OSI pomiędzy skonfigurowane serwery.
+
+\subsubsection{Varnish Cahce}
+
+Serwer reverse-proxy służacy do zapamiętywania odpowiedzi generowanych przez aplikacje w pamięci cache umieszczonej w RAM. Instalowany jako serwer, z którym klienci łączą się po dostarczenie treści, w przypadku, gdy Varnish nie posiada zapamiętanej odpowiedzi, połączenie jest przekazywane do docelowego serwera, aby przekazać i zapamiętać wygenerowaną przez niego odpowiedź.
 
 \subsection{Wykorzystane technologie i narzędzia w serwerze zarządzającym infrastrukturą}
 

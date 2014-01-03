@@ -189,7 +189,7 @@ Od tego momentu rozpoczyna się transmisja w protokole Web Socekts, grze przesy�
 \subsection{Skalowanie}
 \label{subsub:scalability}
 
-Podczas budowy systemu zauważono konieczność skalowania aplikacji przy jednoczesnym dostępie wielu użytkowników. Aby odciążyć serwer gry przy rozsyłaniu komunikatów o stanie gry do wszystkich podłączonych klientów, można wprowadzić warstwę pośrednią w postaci węzłów odpowiedzialnych za utrzymanie połączeń z klientami i przekazywanie im zstępująco i wstępująco wiadomości. Klienci łączą się bezpośrednio z węzłami pośrednimi (jak zobrazowano na diagramie w dodatku \ref{fig:network_diagram1} oraz \ref{fig:pong_comp_diagram}). Za rozłożenie\footnote{Rozumiane jako równomierne zbalansowanie} ruchu sieciowego pomiędzy węzłami odpowiedzialny jest Load Balancer.
+Podczas budowy systemu zauważono konieczność skalowania aplikacji przy jednoczesnym dostępie wielu użytkowników. Aby odciążyć serwer gry przy rozsyłaniu komunikatów o stanie gry do wszystkich podłączonych klientów, można wprowadzić warstwę pośrednią w postaci węzłów odpowiedzialnych za utrzymanie połączeń z klientami i przekazywanie im zstępująco i wstępująco wiadomości. Klienci łączą się bezpośrednio z węzłami pośrednimi (jak zobrazowano na diagramie w dodatku \ref{app:network_diagram_app} oraz \ref{app:pong_comp_diagram}). Za rozłożenie\footnote{Rozumiane jako równomierne zbalansowanie} ruchu sieciowego pomiędzy węzłami odpowiedzialny jest Load Balancer.
 
 Rozróżniane są Load Balancery w dwóch kategoriach w zależności od warstwy działania w modelu sieciowym ISO/OSI:
 \begin{itemize}
