@@ -1,14 +1,30 @@
 \newpage
 \section{Uwagi o przebiegu i wynikach prac}
 
-// cos z czego jestesmy "dumni" lub cos co poszlo nie tak i omowic to
-// plus wnioski o przebiegu, usrerce, rozwiazanym jakiegos hype problemu komus pomoze
-// 
+Dzięki precyzyjnie dobranym narzędziom do zarządzania projektem, wybranym spośród dostępnych na rynku, praca zespołowa przebiegała płynnie i bez konieczności częstego fizycznego spotykania się zespołu. Z całą pewnością możemy polecić zaproponowane narzędzia.
 
-\newpage
+Użyto biblioteki Socket.io do założenia pewnego rodzaju poziomu abstrakcji z punktu widzenia programisty na sposób komunikacji w protokole Web Sockets, do czego użyty jest wzorzec projektowy strategia. Elegancko wyglądające rozwiązanie niestety nie zapewnia w pełni wymagań poza funkcjonalnych, bowiem przy przełączeniu się biblioteki na tryb pracy w modelu HTTP Comet widoczne jest znaczne spowolnienie w komunikacji w zaprojektowanych aplikacjach. Z pewnością metody znane z HTTP Comet nie nadają się do tworzenia aplikacji real-time i wprowadzenie protokołu Web Sockets było dobrym posunięciem w obliczu obecnych wymagań rynku, jakimi są tworzenie kompnentów stron internetowych działających w czasie rzeczywistym oparte na komunikację na gniazdach.
+
+%// cos z czego jestesmy "dumni" lub cos co poszlo nie tak i omowic to
+%// plus wnioski o przebiegu, usrerce, rozwiazanym jakiegos hype problemu komus pomoze
+%// 
+
 \section{Podsumowanie}
 
-// 1  - 1.5 strony,
-// czy cel zostal osiagniety i w jakim stopniu
-// czy produkt jest calosciowy niemodyfikowalny, czy sa pomysly na rozbudowe
-// 
+\subsection{Osiągnięcie celu}
+
+Cel pracy został w pełni osiągnięty. Udało się zrealizować założoną architekturę, uruchomić aplikację na zdalnych względem systemu uruchomieniowego monitorach, które są niezależne od producenta. Umożliwia to rozproszenie systemu bez konieczności użycia długiego kabla HDMI. Dodatkowo udało się całkowicie uniezależnić od producenta telefonów komórkowych poprzez użycie protokołu Web Sockets oraz technik HTTP Comet. System jest łatwo konfigurowalny i przenośny.
+
+W ramach pracy dyplomowej zostały zrealizowane dwie aplikacje. Zadaniem pilota sterującego jest poruszanie kursorem myszy na monitorze poprzez dotykanie ekranu urządzenia mobilnego. Wspierane platformy to system MacOSX firmy Apple oraz system Linux. Projekt jest demonstracją możliwości użycia technologii Web Sockets. Drugi projekt, gra PONG pokazuje jak łatwo połączyć nowo powstałe mechanizmy oraz potrzeby marketingu. W ten sposób przygotowane aplikacje udostępnione na ulicy lub w pubach mogą zaangażować konsumentów danej marki, jeżeli kontekst aplikacji jest im dedykowany. Z łatwością można wyobrazić sobie wdrożenie systemu w galerii handlowej w istniejącą już infrastrukturę.
+
+Niestety nie udało się zakończyć próby implementacji skalowalnego systemu za pomocą HAProxy oraz systemu wymiany wiadomości RabbitMQ. Pomimo planu w zaawansowanym stadium, nie został wdrożony ze względu na czas realizacji znacznie wykraczający poza cel pracy. Nie wdrożono również mechanizmu automatycznie wykrywającego adres internetowy na kliencie wyświetlającym grę, który zostałby zakodowany za pomocą możliwego do zeskanowania QR Code. Obecnie ta konfiguracja wykonywana jest ręcznie na routerze.
+
+\subsection{Kierunek dalszego rozwoju}
+
+Kod gry PONG został zaprojektowany w taki sposób, aby można było napisać dowolną inną aplikację obsługującą kolejkę użytkowników łączących się ze stroną internetową będącą pilotem. Serwer zarządzania infrastrukturą przygotowany został, aby zarządzać programami uruchamianymi na monitorach. Jeżeli idzie o kierunek rozwoju w tym zakresie, można dostosować system do naprzemiennej pracy wyświetlania reklam na monitorach z zaproszeniem do udziału w grze miejskiej. Pozostaje otwartym kwestia implementacji gier angażujących klientów pubów w postaci listy utworów, na które stali bywalcy oddają głosy, gry dzięki której można wygrać darmowe wejście do sali bilardowej, bądź otrzymać status majora wieczoru.
+
+Jeżeli idzie o pilota sterującego zdalnym monitorem, w planach jest obsługa myszy dla systemu operacyjnego Windows oraz możliwość obsługi kliknięć i gestów (dla MacOSX oraz Windows 8).
+
+%// 1  - 1.5 strony,
+%// czy cel zostal osiagniety i w jakim stopniu
+%// czy produkt jest calosciowy niemodyfikowalny, czy sa pomysly na rozbudowe
