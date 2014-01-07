@@ -1,11 +1,11 @@
 \newpage
 \section{Testowanie i uruchamianie}
 
-Testowanie i uruchamianie to konieczna część przebiegu prac. Z racji tego, że stworzony projekt nie ma specyfiki monolitycznego programu, a wręcz rozproszenie kodu pomiędzy systemami jest znaczne, w głównej mierze dział skoncentrowany jest zstępującym testom integracyjnym w punktach zestyku komponentów.
+Testowanie i uruchamianie to konieczna część przebiegu prac. Z racji tego, że stworzony projekt nie ma specyfiki monolitycznego programu, a wręcz rozproszenie kodu pomiędzy systemami jest znaczne, w głównej mierze dział skoncentrowany jest na  zstępujących testach integracyjnych w punktach zestyku komponentów.
 
 Wykonane testy zakładały zarówno poprawną, jak i niepoprawną konfigurację systemu.
 
-Istotnym dla pilotów sterujących były testy funkcjonalne na urządzeniach mobilnych o ekranach różnej rozdzielczości oraz różnych systemach operacyjnych w starszych i nowszych wersjach. Urządzenia mobilne, na których zostały przeprowadzone testy:
+Istotnym dla pilotów sterujących były testy funkcjonalne na urządzeniach mobilnych o ekranach różnej rozdzielczości oraz różnych systemach operacyjnych w starszych i nowszych wersjach. Urządzenia mobilne, na których zostały przeprowadzone testy, to:
 \begin{itemize}
 	\item iPhone 5, system operacyjny: iOS 7.0.3
 	\item iPhone 4, system operacyjny: iOS 4.1.0 (brak obsługi Web Sockets)
@@ -16,7 +16,7 @@ Istotnym dla pilotów sterujących były testy funkcjonalne na urządzeniach mob
 
 \subsection{Pilot do sterowania zdalnym monitorem}
 
-Przetestowana została:
+Przetestowane zostały:
 
 \begin{itemize}
 	\item poprawność wyświetlania się elementów strony internetowej pilota na urządzeniach mobilnych o różnych rozdzielczościach ekranu,
@@ -29,7 +29,7 @@ Wszystkie testy zostały pomyślnie zakończone.
 
 \subsection{Gra PONG}
 
-Przetestowana została:
+Przetestowane zostały:
 
 \begin{itemize}
 	\item poprawność wyświetlania się elementów strony internetowej pilota na urządzeniach mobilnych o różnych rozdzielczościach ekranu,
@@ -39,21 +39,21 @@ Przetestowana została:
 	\item poprawność działania klienta wyświetlającego grę, jego wyświetlania i logiki.
 \end{itemize}
 
-Wszystkie testy zostały pomyślnie zakończone, aczkolwiek sporo czasu zajęło dostosowanie wyglądu pilota pod wszystkie urządzenia mobilne. Urządzenia mobilne bez wsparcia protokołu Web Sockets generowały opóźnienia w komunikacji stosując alternatywne metody komunikacji HTTP Comet.
+Wszystkie testy zostały pomyślnie zakończone, aczkolwiek sporo czasu zajęło dostosowanie wyglądu pilota pod wszystkie urządzenia mobilne. Urządzenia mobilne bez wsparcia protokołu Web Sockets generowały opóźnienia w komunikacji, stosując alternatywne metody komunikacji HTTP Comet.
 
 \subsection{Program generujący zdarzenia urządzeń wejścia}
-Przetestowana została:
+Przetestowane zostały:
 \begin{itemize}
-	\item poprawność odbierania komunikatów, oraz przetwarzania ich na systemach operacyjnych Linux, oraz Mac OS X
-	\item poprawność określania rozdzielczości ekranu dla systemów Linux i Mac OS X
+	\item poprawność odbierania komunikatów, oraz przetwarzania ich na systemach operacyjnych Linux, oraz Mac OS X,
+	\item poprawność określania rozdzielczości ekranu dla systemów Linux i Mac OS X.
 \end{itemize}
 
 \subsection{Serwer zarządzania infrastrukturą}
 
-Przetestowana została:
+Przetestowane zostały:
 \begin{itemize}
-	\item poprawność logowania, oraz wylogowywania na zdalny host przez klienta ssh
-	\item poprawność przełączania aplikacji 
-	\item poprawność wyłączania uruchomionej aplikacji
+	\item poprawność logowania, oraz wylogowywania na zdalny host przez klienta ssh,
+	\item poprawność przełączania aplikacji,
+	\item poprawność wyłączania uruchomionej aplikacji.
 \end{itemize}
 

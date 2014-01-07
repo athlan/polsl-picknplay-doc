@@ -6,17 +6,17 @@
 
 \subsubsection{GIT}
 \label{sub:GIT}
-Rozproszony system kontroli wersji. System ten pozwola na bezproblemową synchronizacje pracy między stacjami roboczymi. Dzięki temu, że jest on rozproszony nie jest konieczne wyznaczanie głównego serwera, przez który synchronizowany jest kod źródłowy, a każdy z klientów może pełnić rolę serwera do którego wysyłane są zmiany plików objętych systemem kontroli wersji.
+GIT to rozproszony system kontroli wersji. System ten pozwala na bezproblemową synchronizację pracy między stacjami roboczymi. Dzięki temu, że jest on rozproszony, nie jest konieczne wyznaczanie głównego serwera, przez który synchronizowany jest kod źródłowy, a każdy z klientów może pełnić rolę serwera do którego wysyłane są zmiany plików objętych systemem kontroli wersji.
 
-Przy realizacji pracy dyplomowej GIT pomógł rozwiązywać konflikty w treści kodu źródłowego, ciągłe nadpisywanie treści plików powstałe w wyniku pracy kilku osób. Do przechowania kodu źródłowego na serwerze zdalnym wykorzystana została darmowa powierzchnia serwisów GitHub oraz Bitbucket. Na Githubie umieszczone zostały aplikacje stworzone w ramach pracy dyplomowej oraz książka napisana w LaTeX-u.
+Przy realizacji pracy dyplomowej GIT pomógł rozwiązywać konflikty w treści kodu źródłowego, ciągłe nadpisywanie treści plików powstałe w wyniku pracy kilku osób. Do przechowania kodu źródłowego na serwerze zdalnym wykorzystana została darmowa powierzchnia serwisów GitHub oraz Bitbucket. Na Githubie umieszczone zostały aplikacje stworzone w ramach projektu oraz praca dypomowa napisana w LaTeX-u.
 
 
 \subsubsection{Asana}
 \label{sub:Asana}
 
-Z racji na sposobność pracy w zespole nad pracą dyplomową niezbędne było narzędzie wspomagające komunikację oraz kontrolę wykonywania zadań. Asana to system zarządzania projektem umożliwiający rozdzielanie zadań pomiędzy członków zespołu przypisanych do projektu, śledzenie postępów prac, ustalania przypomnień oraz terminów. System wspomaga komunikację, dzieli obszary zainteresowań na podprojekty, umożliwia oznaczenie zagadnień słowami kluczowymi oraz udostępnia wyszukiwarkę. Narzędzie dostępne w modelu SaaS (ang. Software as a Service) dostępne przez przeglądarkę internetową bez konieczności instalacji oprogramowania.
+Praca w zespole wymagała skorzystania narzędzia wspomagającego komunikację oraz kontrolę wykonywania zadań. Asana to system zarządzania projektem umożliwiający rozdzielanie zadań pomiędzy członków zespołu przypisanych do projektu, śledzenie postępów prac, ustalanie przypomnień oraz terminów. System wspomaga komunikację, dzieli obszary zainteresowań na podprojekty, umożliwia oznaczenie zagadnień słowami kluczowymi oraz udostępnia wyszukiwarkę. Narzędzie oparte o model SaaS (ang. Software as a Service) dostępne przez przeglądarkę internetową bez konieczności instalacji oprogramowania.
 
-W projekcie narzędzie wykorzystane zostało do monitorowania postępów prac oraz tworzenie bazy wiedzy.
+W projekcie narzędzie wykorzystane zostało do monitorowania postępów prac oraz do tworzenia bazy wiedzy.
 
 \subsection{Narzędzia programistyczne}
 
@@ -24,14 +24,14 @@ W projekcie narzędzie wykorzystane zostało do monitorowania postępów prac or
 \label{sub:Vim}
 Prawdopodobnie najpopularniejszy konsolowy edytor tekstu. Vim jest klonem edytora vi, z wieloma nowymi funkcjami. Przede wszystkim jest to modalny edytor tesktu tzn. że posiada więcej niż jeden tryb pracy (INPUT, COMMAND, VISUAL). Dzięki swojej prostocie, szybkości, oraz mnogości wtyczek ten konsolowy edytor jest wciąż bardzo popularny i używany w zastępstwie wielu zintegrowanych środowisk programistycznych jak np. Eclipse czy VisualStudio.  
 
-\subsection{Wykorzystana technologia w pilotach}
+\subsection{Technologia wykorzystana w pilotach}
 
 \subsubsection{jQuery Mobile}
 \label{subsub:tool-jquery-mobile}
 
-Brak respektowania standardów (podsekcja \ref{subsec:w3c-touch-events-implementations}) stwarza problemy związane z obsługą gestów na urządzeniach mobilnych. Aby zapewnić poprawne funkcjonowanie należy śledzić zmiany wprowadzane w implementacjach przeglądarek przez producentów oraz ewentualne zmiany w standardach. W projekcie wykorzystana została biblioteka \emph{jQuery Mobile} posiadająca dużą społeczność\footnote{Ponad 10 tyś poprawek, 36 wersji, 204 osób wnoszących wkład w rozwój biblioteki [Stan na 22 grudnia 2013]}. Wśród wpieranych przeglądarek znajdują się wymienione jako niewspierające standardu z podsekcji ~\ref{subsec:w3c-touch-events-implementations}.
+Brak respektowania standardów (podsekcja \ref{subsec:w3c-touch-events-implementations}) stwarza problemy związane z obsługą gestów na urządzeniach mobilnych. Aby zapewnić poprawne funkcjonowanie, należy śledzić zmiany wprowadzane w implementacjach przeglądarek przez producentów oraz ewentualne zmiany w standardach. W projekcie wykorzystana została biblioteka \emph{jQuery Mobile} posiadająca dużą społeczność\footnote{Ponad 10 tyś poprawek, 36 wersji, 204 osób wnoszących wkład w rozwój biblioteki [Stan na 22 grudnia 2013]}. Wśród wspieranych przeglądarek znajdują się wymienione jako niewspierające standardu z podsekcji ~\ref{subsec:w3c-touch-events-implementations}.
 
-Biblioteka wykorzystywana w zakresie poruszania punktów dotyków definiuje \emph{wirtualną mysz} (oznaczoną \lstinline{vmouse}) jako abstrakcję na standardową mysz lub dotyk na urządzeniu mobilnym. Zdarzenia obsługujące wirtualną mysz będą wyzwalane dla myszy komputerowej oraz dla panelu dotykowego.
+Biblioteka wykorzystywana w zakresie poruszania punktów dotyku definiuje \emph{wirtualną mysz} (oznaczoną \lstinline{vmouse}) jako dotyk na urządzeniu mobilnym. Zdarzenia obsługujące wirtualną mysz są wyzwalane dla myszy komputerowej oraz dla panelu dotykowego.
 
 Zdarzenie \lstinline{vmousemove} symuluje zdarzenia \lstinline{onmousemove} oraz \lstinline{touchmove}. Przykład użycia:
 
@@ -53,12 +53,12 @@ $(document).on('vmousemove', function(e) {
 \subsubsection{Użycie biblioteki basket.js}
 \label{subsub:tools-basketjs}
 
-W związku z dywagacją dotyczącą szybkości działania Web Storage (podsekcja \ref{subsub:webstorage-performance}), wszystkie skrypty JavaScript pilota są umieszczone z lokalnej pamięci przeglądarki internetowej Web Storage na telefonie komórkowym. W tym celu opracowana została biblioteka \emph{basket.js} oferująca asynchroniczne ładowanie kodu JavaScript z rozwiązaniem zależności między plikami oraz rozgrywaniem wyścigów\footnote{W asynchronicznym modelu programowania kolejne kawałki kodu nie wykonują się sekwencyjnie, co może doprowadzić do błędów wynikających z zależności między nimi}. basket.js jako interfejs dla programisty używa wzorca projektowego \emph{Promise}.
+Zgodnie z analizą dokonaną w rozdziale \ref{subsub:webstorage-performance}, wszystkie skrypty JavaScript pilota są umieszczone z lokalnej pamięci przeglądarki internetowej Web Storage na telefonie komórkowym. W tym celu opracowana została biblioteka \emph{basket.js} oferująca asynchroniczne ładowanie kodu JavaScript z rozwiązywaniem zależności między plikami oraz roztrzyganiem wyścigów\footnote{W asynchronicznym modelu programowania kolejne kawałki kodu nie wykonują się sekwencyjnie, co może doprowadzić do błędów wynikających z zależności między nimi.}.Biblioteka basket.js jako interfejsu dla programisty używa wzorca projektowego \emph{Promise}.
 
-Dla ułatwienia zarządzania kodem wykonującym się asynchronicznie stosuje się najczęściej trzy wzorce projektowe:
+Dla ułatwienia zarządzania kodem wykonującym się asynchronicznie stosuje się najczęściej trzy wzorce projektowe: Callback, Events i Promise.
 
 \begin{description}
-  \item[Callback] \hfill \\
+  \item[ Wzorzec Callback] \hfill \\
   Polega na zarejestrowaniu funkcji, do której przechodzi się zaraz po wykonaniu asynchronicznej operacji. Przykład:
   \lstset{language=Octave}
   \begin{lstlisting}
@@ -66,16 +66,16 @@ Dla ułatwienia zarządzania kodem wykonującym się asynchronicznie stosuje si�
   	console.log(data) // wiersze do wypisania
   })
   \end{lstlisting}
-  \lstinline{function(data)} to sygnatura anonimowej\footnote{Anonimowej - nie posiadającej identyfikatora, w konsekwencji nie można jej ponownie użyć.} funkcji. Zamiast sygnatury może zostać podany identyfikator wcześniej zadeklarowanej funkcji. Minusem tego rozwiązania jest fakt, że istnieje tylko jedna funkcja, która reaguje na zakończenie operacji, co w niektórych przypadkach może być utrudniające. Drugim minusem tego rozwiązania jest to, że zarówno w przypadku błędu, jak i powodzenia, wykonywana jest ta sama funkcja.
-  \item[Events] \hfill \\
-  W odpowiedzi na możliwość reagowania tylko jedną funkcją na zakończenie operacji przychodzi wzorzec projektowy \emph{Events} (ang. zdarzenia), który domyślnie implementuje funkcję, która w pętli iteracyjnie wykonuje wszystkie funkcje zarejestrowane jako callback. Innymi słowy istnieje wiele funkcji callback, które reagują na dane zdarzenie, na przykład:\\
+  \lstinline{function(data)} to sygnatura anonimowej\footnote{Anonimowej - nie posiadającej identyfikatora, w konsekwencji nie można jej ponownie użyć.} funkcji. Zamiast sygnatury może zostać podany identyfikator wcześniej zadeklarowanej funkcji. Minusem tego rozwiązania jest fakt, że istnieje tylko jedna funkcja, która reaguje na zakończenie operacji, co w niektórych przypadkach może stwarzać kłopoty. Drugim minusem tego rozwiązania jest to, że zarówno w przypadku błędu, jak i powodzenia, wykonywana jest ta sama funkcja.
+  \item[Wzorzec Events] \hfill \\
+  Jako środek zaradczy na reagowanie tylko jedną funkcją na zakończenie operacji przychodzi wzorzec projektowy \emph{Events} (ang. zdarzenia), który domyślnie implementuje funkcję, która w pętli iteracyjnie wykonuje wszystkie funkcje zarejestrowane jako callback. Innymi słowy, istnieje wiele funkcji callback, które reagują na dane zdarzenie, na przykład:\\
 
   
 
-  Wzorzec projektowy nie rozwiązuje natomiast problemu, iż w przypadku powodzenia lub niepowodzenia operacji, wykonuje się ten sam zestaw funkcji callback. Z wykonania wielu funkcji callback w systemach, gdzie mogą one zostać równolegle, wzorzec projektowy posiada minus wynikający z synchronizacji funkcji.
+  Wzorzec projektowy nie rozwiązuje natomiast problemu, iż w przypadku powodzenia lub niepowodzenia operacji, wykonuje się ten sam zestaw funkcji callback. Z wykonania wielu funkcji callback w systemach, gdzie mogą one być wykonywane równolegle, wzorzec projektowy posiada wadę wynikającą z synchronizacji funkcji.
   \lstset{language=Octave}
   \begin{lstlisting}
-  var funckja1 = function() {
+  var funkcja1 = function() {
   	console.log('zaszlo zdarzenie klikniecia')
   }
   element.on('click', funkcja1)
@@ -84,7 +84,7 @@ Dla ułatwienia zarządzania kodem wykonującym się asynchronicznie stosuje si�
   })
   \end{lstlisting}
   \item[Promise] \hfill \\
-  Jest to wzorzec projektowy deklarujący strukturę funkcji reprezentującą zdarzenie, które zajdzie w przyszłości. Pozwala to na wykonywanie funkcji zarówno jak Events, jak i Callback, bowiem obiekty mogą być łączone w synchroniczny łańcuch.
+  Jest to wzorzec projektowy deklarujący strukturę funkcji reprezentującą zdarzenie, które zajdzie w przyszłości. Pozwala to na wykonywanie funkcji zarówno jako Events, jak i Callback, bowiem obiekty mogą być łączone w synchroniczny łańcuch.
 \end{description}
 
 Przykład użycia biblioteki basket.js jako wzorca projektowego Promise:
@@ -97,7 +97,7 @@ basket
 		{ url: 'assets/js/socket.io.js' }
 	)
     .then(function() {
-        basket.require({ url: 'assets/js/jquery.mobile-1.3.2.min.js' });
+        basket.require({url:'assets/js/jquery.mobile-1.3.2.min.js'});
     })
 	.then(function() {
         basket.require({ url: 'app.js' });
@@ -108,18 +108,18 @@ basket
 });
 \end{lstlisting}
 
-Funkcja \lstinline{require} na rzecz obiektu \lstinline{basket} zwraca obiekt Promise, który uruchamia równolegle trzy funkcje callback. Funkcje callback również mogą zwracać obiekty Promise tworząc synchroniczny łańcuch.
+Funkcja \lstinline{require} na rzecz obiektu \lstinline{basket} zwraca obiekt Promise, który uruchamia równolegle trzy funkcje callback. Funkcje callback również mogą zwracać obiekty Promise, tworząc synchroniczny łańcuch.
 
-\subsection{Wykorzystana technologia w części serwerowej}
+\subsection{Technologia wykorzystywana w części serwerowej}
 \label{sub:tool-server-technology}
 
-Część serwerowa infrastruktury została napisana w środowisku \emph{Node.js}, stworzonego przez Ryana Dahla w 2009 roku. Node.js używa składni skryptowego\footnote{Kod języków skryptowych wykonywany jest wewnątrz jakiejś aplikacji/środowiska w odróżnieniu od programów napisanych w językach nieskryptowych, które kompilują się i stanowią aplikację} języka JavaScript znanego z tworzenia dynamicznych elementów stron internetowych. Kod JavaScript, choć wykonuje się w ramach przeglądarki internetowej, w Node.js uruchamiany jest po stronie serwera. Technologia umożliwia dużą przepustowość zapewniając nieblokujące operacje wejścia/wyjścia (ang. \emph{non-blocking I/O}) i pętli zdarzeń w pojedynczym wątku \emph{single-threaded event loop}. Podejście to nazywa się programowaniem asynchronicznym (opisanym w podsekcji \ref{subsub:asyncprogramming}).
+Część serwerowa infrastruktury została napisana w środowisku \emph{Node.js}, stworzonym przez Ryana Dahla w 2009 roku. Node.js używa składni skryptowego\footnote{Kod języków skryptowych wykonywany jest wewnątrz jakiejś aplikacji/środowiska w odróżnieniu od programów napisanych w językach nieskryptowych, które kompilują się i stanowią aplikację.} języka JavaScript znanego z tworzenia dynamicznych elementów stron internetowych. Kod JavaScript, choć wykonuje się w ramach przeglądarki internetowej, w Node.js uruchamiany jest po stronie serwera. Technologia umożliwia uzyskanie dużej przepustowości, zapewniającej nieblokujące wykonywanie operacji wejścia/wyjścia (ang. \emph{non-blocking I/O}). Podejście to nazywa się programowaniem asynchronicznym (jest ono opisane w podrozdziale \ref{subsub:asyncprogramming}).
 
-Wybór platformy obsługującej programowanie asynchroniczne jest jednoznaczny ze względu na specyfikę aplikacji. Większość z nich to oczekiwanie na dane z sieci (ang. \emph{network I/O}). Jeżeli program byłby napisany w modelu synchronicznym, procesor przeznaczałby większość czasu na oczekiwanie na dane z sieci zawieszając (ang. \emph{idle}) jego pracę na funkcjach wejścia/wyjścia. Tymczasem, aby zwiększyć możliwości (uruchomienie tysięcy operacji I/O jednocześnie) korzysta się z asynchronicznego, nieblokującego podejścia pisania aplikacji za pomocą pętli zdarzeń uruchomionej w pojedynczym wątku. Podejście jest odpowiednie do czasu, gdy program nie wykonuje złożonych czasowo operacji, które to mogłyby zawiesić działanie pętli komunikatów uruchomionej w pojedynczym wątku. Większość operacji w stworzonej aplikacji to przekazywanie struktur danych i praca w sieci.
+Wybór platformy obsługującej programowanie asynchroniczne jest jednoznaczny ze względu na specyfikę aplikacji. Jeżeli program byłby napisany w modelu synchronicznym, procesor przeznaczałby większość czasu na oczekiwanie na dane z sieci zawieszając (ang. \emph{idle}) swoją pracę na funkcjach wejścia/wyjścia. Tymczasem, aby zwiększyć możliwości (uruchomienie tysięcy operacji I/O jednocześnie) korzysta się z asynchronicznego, nieblokującego podejścia pisania aplikacji zprzy użyciu pętli zdarzeń uruchomionej w pojedynczym wątku. Podejście jest odpowiednie do czasu, gdy program nie wykonuje złożonych czasowo operacji, które to mogłyby zawiesić działanie pętli komunikatów uruchomionej w pojedynczym wątku. Większość operacji w stworzonej aplikacji to przekazywanie struktur danych i praca w sieci.
 
 \subsubsection{Synchroniczny i imperatywny model programowania}
 
-W porównaniu do programowania asynchronicznego przedstawione krótko zostanie programowanie imperatywne, będące paradygmatem programowania\cite{programming-paradigms} które opisuje kod programu jako sekwencyjnie wykonywany ciąg instrukcji zmieniający stan programu (rejestrów, pamięci). Takie wyobrażenie przepływu programu jest de facto tożsame z fizyczną realizacją kodu maszynowego na komputerze. W tym modelu przebieg programu możemy zdefiniować jako ciąg następujących po sobie instrukcji\ref{fig:syncprogramming-flow}, dzięki czemu jego przebieg jest przewidywalny, bowiem wykonując bieżącą instrukcję można założyć, ze poprzednia się zakończyła powodzeniem, a jej wyniki są dostępne do użycia. Implikuje to, że wykonywanie każdej operacji jest blokujące\ref{fig:syncprogramming-waiting}. Rozwiązaniem tego problemu jest uruchamianie przebiegu programu w wątkach\ref{fig:syncprogramming-threads} mogących komunikowanie się między sobą lub uruchomienie programu jako nowy proces w systemie operacyjnym\footnote{Te zabiegi powodują narzut czasowy związany z przełączaniem kontekstu pracy procesora w postaci odłożeniem stanu rejestrów, mapy pamięci, rejestrów stosu, FPU itd.}.
+W porównaniu do programowania asynchronicznego przedstawione krótko zostanie programowanie imperatywne, będące paradygmatem programowania\cite{programming-paradigms}, które opisuje kod programu jako sekwencyjnie wykonywany ciąg instrukcji zmieniający stan programu (rejestrów, pamięci). Takie wyobrażenie przebiegu wykonania programu jest de facto tożsame z fizyczną realizacją kodu maszynowego na komputerze. W tym modelu przebieg programu możemy zdefiniować jako ciąg następujących po sobie instrukcji, dzięki czemu ten przebieg jest przewidywalny, bowiem wykonując bieżącą instrukcję można założyć, ze poprzednia się zakończyła powodzeniem, a jej wyniki są dostępne do użycia. Implikuje to, że wykonywanie każdej operacji jest blokujące. Rozwiązaniem tego problemu jest uruchamianie przebiegu programu w wątkach, mogących komunikować się między sobą lub uruchomienie programu jako nowy proces w systemie operacyjnym\footnote{Te zabiegi powodują narzut czasowy związany z przełączaniem kontekstu pracy procesora w postaci odłożenia stanu rejestrów, mapy pamięci, rejestrów stosu, FPU itd.}.
 
 \begin{figure}[ht]
 \centering
@@ -148,7 +148,7 @@ W porównaniu do programowania asynchronicznego przedstawione krótko zostanie p
 \subsubsection{Asynchroniczny model programowania}
 \label{subsub:asyncprogramming}
 
-Asynchroniczny model programowania oparty jest na programie uruchomionym w jednym wątku. Znany jest z frameworków graficznych interfejsów użytkownika GUI (na przykład WinApi). W uproszczeniu, budowa programu to nieskończona pętla oraz kolejka operacji odłożona na stos. Z każdym przebiegiem pętla sprawdza w kolejce operacji, czy możliwe są do wykonania jakieś operacje, jeżeli tak, uruchamiane są procedury obsługi (ang. \emph{handlers} lub \emph{callbacks}). Umożliwia to realizację wielu operacji, które oczekują na wyniki bez blokowania pracy całego programu.
+Asynchroniczny model programowania oparty jest na programie uruchomionym w jednym wątku. Znany jest z frameworków graficznych interfejsów użytkownika GUI (na przykład WinApi). W uproszczeniu, budowa programu to nieskończona pętla oraz kolejka operacji odłożona na stos. Z każdym przebiegiem pętla sprawdza w kolejce operacji, czy możliwe są do wykonania jakieś operacje, jeżeli tak, uruchamiane są procedury obsługi (ang. \emph{handlers} lub \emph{callbacks}). Umożliwia to realizację wielu operacji, które oczekują na wyniki, bez blokowania pracy całego programu.
 
 \begin{figure}[H]
   \caption[Event loop w asynchronicznym modelu programowania]{Event loop w asynchronicznym modelu programowania}
@@ -220,7 +220,7 @@ Kod jest bliźniaczo podobny do kodu uruchamianego na serwerze. Klient ustanawia
 
 Programowy serwer proxy służący do możliwie równego rozłożenia ruchu sieciowego w warstwie 7 modelu ISO/OSI pomiędzy skonfigurowane serwery.
 
-\subsubsection{Varnish Cahce}
+\subsubsection{Varnish Cache}
 
 Serwer reverse-proxy służacy do zapamiętywania odpowiedzi generowanych przez aplikacje w pamięci cache umieszczonej w RAM. Instalowany jako serwer, z którym klienci łączą się po dostarczenie treści, w przypadku, gdy Varnish nie posiada zapamiętanej odpowiedzi, połączenie jest przekazywane do docelowego serwera, aby przekazać i zapamiętać wygenerowaną przez niego odpowiedź.
 
