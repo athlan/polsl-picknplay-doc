@@ -1,11 +1,11 @@
 \subsection{Serwer zarządzania infrastrukturą}
 
-Większość języków programowania, technologii spełnia wymagania niefunkcjonalne dla serwera zarządzania infrastrukturą. Z racji tego, że wymagania niefunkcjonalne dla serwera zarządzania infrastrukturą nie zawężały mocno kręgu poszukiwań, dodatkowymi kryteriami jakie zostały narzucone były:
+Większość języków programowania, technologii spełnia wymagania niefunkcjonalne dla serwera zarządzania infrastrukturą. Z racji tego, że wymagania niefunkcjonalne dla serwera zarządzania infrastrukturą nie zawężały mocno kręgu poszukiwań, dodatkowymi kryteriami, jakie zostały narzucone, były:
 
 \begin{itemize}
-	\item skalowalność
-	\item szybkość wykonania (ang. \emph{execution time})
-	\item szybkość programowania (ang. \emph{development time})
+	\item skalowalność,
+	\item szybkość wykonania (ang. \emph{execution time}),
+	\item szybkość programowania (ang. \emph{development time}).
 \end{itemize}
 
 \subsubsection{Język programowania}
@@ -17,33 +17,33 @@ Biorąc pod uwagę powyższe wymagania wybrano język scala.
 	\item[Dlaczego scala?] \hfill \par 
 	\begin{description}
 		\item[Zwięzła] \hfill \par
-			Programy w scali zajmują ok. 30\%-50\% mniej kodu aniżeli te same napisane w języku Java.
+			Programy napisane w scali mają o ok. 30\%-50\% mniej instrukcji aniżeli te same programy napisane w języku Java.
 		\item[Portowalna] \hfill \par
-			Kod napisy w języku scala kompilowany jest do kodu bajtowego, i uruchamiany na JVM\footnote{Wirtualna Maszyna Javy ang. \emph{Java Virtual Machine}}. Dzięki czemu może korzystać z bibliotek napisanych w języku Java.
+			Kod napisany w języku scala kompilowany jest do kodu bajtowego i uruchamiany na JVM\footnote{Wirtualna Maszyna Javy, ang. \emph{Java Virtual Machine}}. Dzięki czemu może korzystać z bibliotek napisanych w języku Java.i
 		\item[Hybrydowa] \hfill \par
-			Język scala łączy w sobie dwa najpopularniejsze paradygmaty programowania jest zarazem imperatywna jak i w pełni funkcjonalna.
+			Język scala łączy w sobie dwa najpopularniejsze paradygmaty programowania - jest zarazem imperatywna jak i w pełni funkcyjna.
 		\item[Statyczne typowana] \hfill \par
 			Scala jest statycznie typowana w przeciwieństwie do języków skryptowych takich jak Ruby, czy Python, co wprowadza większy porządek w kodzie, bezpieczne refaktoryzowanie, czy pomaga w generowaniu lepszej dokumentacji. Dodatkowo w przeciwieństwie do języka java, scala posiada świetny mechanizm domniemywania typów.
 		\item[Skalowalna] \hfill \par
-			Dostarcza wiele funkcjonalności usprawniających równoleglizacje kodu, przede wszystkim ma niezmienne typy, i równoległość opartą na modelu aktorów (eng. \emph{actor based concurrency}).
+			Dostarcza wiele funkcjonalności usprawniających zrównoleglanie kodu, przede wszystkim ma niezmienne typy i równoległość opartą na modelu aktorów (eng. \emph{actor based concurrency}).
 	\end{description}
 \end{description}
 
 
 \subsubsection{Framework}
 
-Jako framework została wybrany Play! 2.
+Jako framework został wybrany Play! 2.
 
 \begin{description}
 	\item[Czym jest Play! ?]\hfill \\
-		W skład frameworka Play! prócz samej biblioteki programistycznej wchodzi m.in. wydajny serwer HTTP JBoss Netty, wiele skryptów do zarządzania aplikacją, oraz wbudowany kompilator Java. Framework play jest oparty na wzorcu MVC\footnote{Model Widok Kontroler ang. \emph{Model View Controller}}. Play nie zyskał zbyt wielkiej popularnej w wersji 1.x, natomiast od momentu kiedy został przepisany na język scala (od wersji 2.x) jest on coraz częściej wybierany przez programistów i analityków. 
+		W skład frameworka Play! prócz samej biblioteki programistycznej wchodzi m.in. wydajny serwer HTTP JBoss Netty, wiele skryptów do zarządzania aplikacją oraz wbudowany kompilator Java. Framework Play! jest oparty na wzorcu MVC\footnote{Model Widok Kontroler ang. \emph{Model View Controller}}. Play nie zyskał zbyt wielkiej popularnej w wersji 1.x, natomiast od momentu, kiedy został przepisany na język scala (od wersji 2.x), jest on coraz częściej wybierany przez programistów i analityków. 
 	\item[Dlaczego Play! ?]\hfill \\
 		\begin{description}
-			\item[bezstanowy] \hfill \\ nie ma wydzielonego fragmentu przestrzeni na serwerze, która jest ściśle powiązana z zalogowanym użytkownikiem. Na pierwszy rzut oka wydaję się to być wadą, natomiast niesie to ze sobą szereg plusów jak np. świetna skalowalność aplikacji (nie ma potrzeby zapewniania zgodności spójności sesji pomiędzy serwerami).
-			\item[reaktywny] \hfill \\ oparty o programowanie reaktywne\footnote{ang. \emph{Reactive Programming} paradygmat programowania zakładający że oprogramowanie jest zawsze responsywne na nadchodzące zdarzenia.}		
-			\item[zorientowany na zdarzenia, a nie żądania] \hfill \\ wątek nie jest przypisany od początku do końca do jednego żądania
-			\item[przyjazny dla developera] \hfill \\ po przeładowaniu przeglądarki, zmieniony kod jest rekompilowany, a ewentualne błędy podczas uruchomienia są wyświetlane w przeglądarce wraz z stosem wywołań.
-			\item[skalowalny] \hfill \\ od wersji 2.0 oparty na modelu aktorów, co daje wysoką skalowalność. 
+			\item[Bezstanowy] \hfill \\ Nie ma wydzielonego fragmentu przestrzeni na serwerze, która jest ściśle powiązana z zalogowanym użytkownikiem. Na pierwszy rzut oka wydaje się to być wadą, natomiast niesie to ze sobą szereg plusów, jak np. świetna skalowalność aplikacji (nie ma potrzeby zapewniania zgodności sesji pomiędzy serwerami).
+			\item[Reaktywny] \hfill \\ Oparty o programowanie reaktywne.\footnote{ang. \emph{Reactive Programming} paradygmat programowania zakładający że oprogramowanie jest zawsze responsywne na nadchodzące zdarzenia.}		
+			\item[Zorientowany na zdarzenia, a nie żądania] \hfill \\  
+			\item[Przyjazny dla developera] \hfill \\ Po przeładowaniu przeglądarki, zmieniony kod jest rekompilowany, a ewentualne błędy podczas uruchomienia są wyświetlane w przeglądarce wraz ze stosem wywołań.
+			\item[Skalowalny] \hfill \\ Od wersji 2.0 oparty na modelu aktorów, co daje wysoką skalowalność. 
 		\end{description}
 \end{description}
 

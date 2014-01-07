@@ -26,9 +26,7 @@ System pilota do sterowania zdalnym monitorem złożony jest z trzech części:
  \item \textbf{Programu sterującego kursorem}, który wystawia standardowe gniazdo systemu operacyjnego, przyjmuje dane od serwera, przetwarza je oraz steruje kursorem myszy na ekranie.
 \end{enumerate}
 
-\subsubsection{Diagram komponentów}
-
-Diagram komponentów przedstawiony jest w załączniku ~\ref{app:control_comp_diagram}.
+Diagram komponentów przedstawiający powyższy mechanizm znajduję się w załączniku~\ref{app:control_comp_diagram}.
 
 \par
 
@@ -44,10 +42,9 @@ System gry PONG dla dwóch graczy z możliwością kolejkowania chętnych złoż
   \item \textbf{Klient wyświetlający grę} - aplikacja stworzona jako strona internetowa uruchamiana w przeglądarce na ekranie LED. Wyświetla planszę gry w trakcie jej trwania, lub komunikaty zachęcające do podjęcia rozgrywki w trakcie, gdy nie trwa rozgrywka. Na ekranie można wyświetlać potencjalne reklamy.
 \end{enumerate}
 
-u\subsubsection{Diagram komponentów}
 
-Diagram komponentów przedstawiony jest w załączniku ~\ref{app:pong_comp_diagram}.
+Diagram komponentów dla tej części systemu przedstawiony jest w załączniku ~\ref{app:pong_comp_diagram}.
 
 \par
 
-Klient webowy podobnie jak dla diagramu komponentów jest odpowiedzialny za pobranie niezbędnej logiki. Na tym diagramie zaprezentowano komponenty dla rozproszonej wersji aplikacji. Klient webowy komunikuje się z HA Proxy (ang. \emph{Load Balancer}), serwerem odpowiadającym za rozładowanie ruchu. Zadaniem HA Proxy jest wybranie węzła pośredniczącego (ang. \emph{Proxy Server}) z którym będzie się odbywała bezpośrednia komunikacja. Serwer Rabbit MQ to system wiadomości, który pośredniczy i zarządza komunikacją pomiędzy serwerem gry a węzłami. Serwer gry zarządza całą logiką, przetwarza komunikaty wysyłane z klienta webowego, jak i z klienta uruchamiającego grę. 
+Klient webowy podobnie jak dla pilota zdalnego sterowania jest odpowiedzialny za pobranie niezbędnej logiki. Na tym diagramie zaprezentowano komponenty dla rozproszonej wersji aplikacji. Klient webowy komunikuje się z HA Proxy (ang. \emph{Load Balancer}), serwerem odpowiadającym za rozładowanie ruchu. Zadaniem HA Proxy jest wybranie węzła pośredniczącego (ang. \emph{Proxy Server}) z którym będzie się odbywała bezpośrednia komunikacja. Serwer Rabbit MQ to system wiadomości, który pośredniczy i zarządza komunikacją pomiędzy serwerem gry a węzłami. Serwer gry zarządza całą logiką, przetwarza komunikaty wysyłane z klienta webowego, jak i z klienta uruchamiającego grę. 

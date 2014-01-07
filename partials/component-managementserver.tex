@@ -1,9 +1,7 @@
-\subsection{Serwer zarządzania infrastrukturą}
+\subsection{Zarządzania infrastrukturą za pomocą aplikacji internetowej}
 
-\subsubsection{Zdalne sterowanie programami}
-
-Zgodnie z diagramem znajdującym się w załączniku ~\ref{app:network_diagram_app}, serwer www zarządzający infrastrukturą niekoniecznie musi być umieszczony na tym samym urządzeniu co serwer wyświetlania, z racji tego serwer www, musi sterować tym serwerem przez protokół ssh\footnote{ang. \emph{Secure Shell} - to standard protokołów komunikacyjnych używanych w sieciach komputerowych TCP/IP, w architekturze klient-serwer.\cite{ssh-wiki}}.
-Do logowania do zdalnej stacji roboczej na serwerze www użyto biblioteki \lstinline{scala-ssh}. Poniższy fragment kodu źródłowego przedstawia metody obsługującą logowanie do aplikacji webowej.
+Zgodnie z diagramem znajdującym się w załączniku ~\ref{app:network_diagram_app}, serwer www zarządzający infrastrukturą niekoniecznie musi być umieszczony na tym samym urządzeniu co serwer wyświetlania, z racji tego serwer www musi sterować tym serwerem przez protokół ssh\footnote{ang. \emph{Secure Shell} - to standard protokołów komunikacyjnych używanych w sieciach komputerowych TCP/IP, w architekturze klient-serwer.\cite{ssh-wiki}}.
+Do logowania do zdalnej stacji roboczej na serwerze www użyto biblioteki \lstinline{scala-ssh}. Poniższy fragment kodu źródłowego przedstawia metode obsługującą logowanie do aplikacji webowej.
 
 \begin{lstlisting}
 def signin() = Action.async(parse.json) {
@@ -34,11 +32,11 @@ def signin() = Action.async(parse.json) {
   }
 \end{lstlisting}
 
-Metoda odpowiada w formacie JSON\footnote{ang. \emph{JavaScxript Object Notation} - lekki format wymiany danych}, gdyż żądanie, które wysyła przeglądarka internetowa jest wysłane w technice AJAX \footnote{ang. \emph{Asynchronous JavaScript and XML}}. Dane, które zostają wysłane do serwera również są w formacie JSON, po wyłuskaniu danych do odpowiednich zmiennych w linii 14 wykonywana jest próba logowania do zdalnej stacji roboczej. Cała metoda \lstinline{signin} jest asynchroniczna przez co wykonanie metody \lstinline{connect} nie blokuje wątku. Dzięki takiemu podejściu wątek, który obecnie czeka na odpowiedź z serwera może obsłużyć kolejne żądanie.
+Metoda odpowiada w formacie JSON\footnote{ang. \emph{JavaScxript Object Notation} - lekki format wymiany danych.}, gdyż żądanie, które wysyła przeglądarka internetowa, jest wysłane w technice AJAX \footnote{ang. \emph{Asynchronous JavaScript and XML.}}. Dane, które zostają wysłane do serwera, również są w formacie JSON, po wyłuskaniu danych do odpowiednich zmiennych w linii 14 wykonywana jest próba logowania do zdalnej stacji roboczej. Cała metoda \lstinline{signin} jest asynchroniczna, przez co wykonanie metody \lstinline{connect} nie blokuje wątku. Dzięki takiemu podejściu wątek, który obecnie czeka na odpowiedź z serwera, może obsłużyć kolejne żądanie.
 
 \par
 
-Po pomyślnym zalogowaniu użytkownik może dodać nowych klientów, oraz uruchomić na nich aplikacje wybierając je z listy.
+Po pomyślnym zalogowaniu użytkownik może dodać nowych klientów oraz uruchomić na nich aplikacje wybierając je z listy.
 
 \begin{lstlisting}
   def runXApp(app: PNPProcessApp) {
@@ -49,7 +47,7 @@ Po pomyślnym zalogowaniu użytkownik może dodać nowych klientów, oraz urucho
   }
 \end{lstlisting}
 
-Powyższa metoda jest wywołana za każdym razem gdy, użytkownik przełączy aplikację. W linii drugiej zabijana jest dotychczasowo uruchomiona aplikacja, a następnie przy pomocy biblioteki \lstinline{scala-ssh} wywoływana jest aplikacja wybrana z listy, z parametrem display określającym miejsce wyświetlenie aplikacji.
+Powyższa metoda jest wywołana za każdym razem gdy użytkownik przełączy aplikację. W linii drugiej 'zabijana' jest dotychczasowo uruchomiona aplikacja, a następnie przy pomocy biblioteki \lstinline{scala-ssh} wywoływana jest aplikacja wybrana z listy, z parametrem display określającym miejsce wyświetlenie aplikacji.
 
 
 
