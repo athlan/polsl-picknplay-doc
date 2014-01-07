@@ -1,6 +1,4 @@
-\subsection{Serwer zarządzania infrastrukturą}
-
-\subsubsection{Zdalne sterowanie programami}
+\subsection{Zarządzania infrastrukturą za pomocą aplikacji internetowej}
 
 Zgodnie z diagramem znajdującym się w załączniku ~\ref{app:network_diagram_app}, serwer www zarządzający infrastrukturą niekoniecznie musi być umieszczony na tym samym urządzeniu co serwer wyświetlania, z racji tego serwer www musi sterować tym serwerem przez protokół ssh\footnote{ang. \emph{Secure Shell} - to standard protokołów komunikacyjnych używanych w sieciach komputerowych TCP/IP, w architekturze klient-serwer.\cite{ssh-wiki}}.
 Do logowania do zdalnej stacji roboczej na serwerze www użyto biblioteki \lstinline{scala-ssh}. Poniższy fragment kodu źródłowego przedstawia metode obsługującą logowanie do aplikacji webowej.

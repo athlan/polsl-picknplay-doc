@@ -14,7 +14,13 @@ make install
 
 Po pomyślnej instalacji należy ściągnąć repozytorium projektu dostępne po adresem - \url{https://github.com/athlan/remotely}. By rozwiązać wszystkie zależności projektu należy w katalogu z projektem wykonać polecenie \lstinline{npm install}.
 \par
-Do uruchomienia aplikacji pozostaje jeszcze uruchomić serwer sieciowy. W załączniku ~\ref{app:apache} omówiona została instalacja oraz konfiguracja serwera Apache.
+Do uruchomienia aplikacji pozostaje jeszcze uruchomić serwer sieciowy.
+Serwer sieciowy Apache2 to jeden z popularniejszych dostępnych na rynku serwerów. By zainstalować go na platformie Linux, należy zainstalować go za pomocą właściwego dla dystrybucji menadżera pakietów, bądź skompilować go ręcznie. 
+\par
+Dystrybucja debian posiada w oficjalnych repozytoriach paczkę z serwerem Apache2. Można go więc zainstalować poleceniem \lstinline{sudo apt-get install apache2}. Menadżer pakietów ściągnie oraz zainstaluje serwer z niezbędnymi zależnościami.
+\par
+Po pomyślnej instalacji serwera warto skonfigurować moduł userdir. Pozwala on na dostęp do katalogów użytkownika z poziomu przeglądarki według wzorca: \lstinline{localhost/~user}. By włączyć ten moduł należy wykonać polecenie \lstinline{sudo a2enmod userdir}.
+
 \par
 Przedostatnim krokiem w konfiguracji serwera jest wyedytowanie pliku index.html w głównym katalogu projektu remotely. Atrybuty przy znaczniku body to:
 \begin{description}
