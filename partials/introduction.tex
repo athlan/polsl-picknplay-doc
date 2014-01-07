@@ -18,39 +18,39 @@ Praca została podzielona na 13 rozdziałów, według ogólnie przyjętego wzorc
 
 \par
 
-W rozdziałach ~\ref{sec:goal} i ~\ref{sec:requirement} został omówiony cel, oraz wymagania jakie zostały postawione zanim przystąpiono do prac budowania systemu. Jest to istotny element w budowie każdego systemu - ściśle postawione wymagania są fundamentem analizy każdego systemu informatycznego.
+W rozdziałach ~\ref{sec:goal} i ~\ref{sec:requirement} został omówiony cel oraz wymagania, jakie zostały postawione zanim przystąpiono do prac budowania systemu. Jest to istotny element w budowie każdego systemu - ściśle postawione wymagania są fundamentem analizy każdego systemu informatycznego.
 
 \par
-W rozdziale ~\ref{sec:analyse} omówiono zostały problemy z jakimi się spotkano pisząc pracę, uzasadnienie wybranych technologii, oraz rozwiązań w każdym z poszczególnych komponentów.
-
-\par
-
-W części numer ~\ref{sec:tools} zaprezentowano narzędzia jakimi się posługiwano tworząc system, w początkowych podrozdziałach opisano ogólne instrumenty, które używano we wszystkich komponentach aplikacji, natomiast kolejne podrozdziały mówią o poszczególnych częściach i istotnych środkach użytych w celu uzyskania oczekiwanego rezultatu.
+W rozdziale ~\ref{sec:analyse} omówione zostały problemy, z jakimi się spotkano pisząc pracę, uzasadnienie wybranych technologii, oraz rozwiązań w każdym z poszczególnych komponentów.
 
 \par
 
-W specyfikacji zewnętrznej (rozdział numer  ~\ref{sec:spec-out}) omówiono system ze strony zwykłego użytkownika na przykładzie gry Pong, jak i część systemu od strony administratora zarządzającego infrastrukturą monitorów. Zamieszczone zostały zrzuty ekranu, oraz krótki ich opis.
+W rozdziale ~\ref{sec:tools} zaprezentowano narzędzia, jakimi się posługiwano tworząc system, w początkowych podrozdziałach opisano ogólne instrumenty, których używano we wszystkich komponentach aplikacji, natomiast kolejne podrozdziały mówią o poszczególnych częściach i istotnych środkach użytych w celu uzyskania oczekiwanego rezultatu.
 
 \par
 
-Rozdział numer ~\ref{sec:implementation} opisuje wybrane problemy i fragmenty kodu istotne dla tej pracy wraz z opisem używanych funkcji i mechanizmów.
+W specyfikacji zewnętrznej (rozdział  ~\ref{sec:spec-out}) omówiono system widziany od strony zwykłego użytkownika na przykładzie gry Pong, jak i część systemu widoczną ze strony administratora zarządzającego infrastrukturą monitorów. Zamieszczone zostały zrzuty ekranu oraz krótki ich opis.
 
 \par
 
-Kolejne podrozdziały omawiają uruchomienie, oraz instalacja systemu niezbędne do poprawnego działania systemu. 
+Rozdział ~\ref{sec:implementation} opisuje wybrane problemy i fragmenty kodu istotne dla tej pracy wraz z opisem używanych funkcji i mechanizmów.
+
+\par
+
+Kolejne podrozdziały omawiają uruchomienie oraz instalację systemu, niezbędne elementy do poprawnego działania systemu. 
 
 \par
 
 Dodatek ~\ref{app:network_diagram_app} jasno pokazuje fizyczną architekturę aplikacji.
 Dodatki ~\ref{app:pong_comp_diagram}, oraz ~\ref{app:control_comp_diagram} prezentują komponenty oprogramowania wykorzystanego w systemie.
-Dodatek ~\ref{app:server_c} przedstawia kod serwera użytego na wszystkich platformach UNIX-owych właśnie z tego powodu jego treść, oraz omówienie zostało umieszczone w dodatku, gdyż odnosi się do kilku rozdziałów.
-Dodatek ~\ref{app:X Window System} jest krótkich przedstawianiem działania systemu X'ów, nie jest to kompletny przewodnik, ale raczej krótkie uzmysłowienie działania tego oprogramowania.
-Dodatek ~\ref{app:apache} przedstawia instalacje serwera internetowego dla systemu Linux Debian. 
+Dodatek ~\ref{app:server_c} przedstawia kod serwera użytego na wszystkich platformach UNIX-owych, właśnie z tego powodu jego treść, oraz omówienie zostało umieszczone w dodatku, gdyż odnosi się do kilku rozdziałów.
+Dodatek ~\ref{app:X Window System} jest krótkim przedstawianiem działania systemu X'ów, nie jest to kompletny przewodnik, ale raczej krótkie uzmysłowienie działania tego oprogramowania.
+Dodatek ~\ref{app:apache} przedstawia instalację serwera internetowego dla systemu Linux Debian. 
 
 \subsection{Podział prac}
 
-Pan Kamil Badyla odpowiedzialny był za pracę nad oprogramowaniem, konfiguracją, oraz analizą części systemu odpowiedzialnej za wyświetlanie obrazu na rozproszonych monitorach, oraz aplikacji internetowej zarządzającej systemem.
+Kamil Badyla odpowiedzialny był za pracę nad analizą, konfiguracją i oprogramowaniem, części systemu odpowiedzialnej za wyświetlanie obrazu na rozproszonych monitorach, jak też aplikacji internetowej zarządzającej systemem.
 
-Pan Piotr Pelczar odpowiedzialny był za pracę nad zaprojektowaniem ogólnej architektury systemu, napisaniem pilotów sterujących oraz serwerów, do których łączą się piloty. Napisana została również przykładowa gra PONG oraz przeprowadzona została również dywagacja na temat możliwości rozproszenia systemu. Przeprowadził konfigurację CDN za pomocą Varnish Cache.
+Piotr Pelczar odpowiedzialny był za pracę nad zaprojektowaniem ogólnej architektury systemu, napisaniem pilotów sterujących oraz serwerów, do których łączą się piloty. Napisał przykładową grę PONG oraz przeprowadził dywagację na temat możliwości rozproszenia systemu. Przeprowadził konfigurację CDN za pomocą Varnish Cache.
 
 Wspólna praca to integracja systemów, dokumentacja, testowanie i uruchamianie oraz wyciąganie wniosków.

@@ -2,20 +2,20 @@
 \label{sub:impl-displayclient-events-dispatcher}
 
 \subsubsection{Linux}
-
+Aplikacja dla systemu Linux składa się z następujących komponentów: 
 \begin{description}
 	\item[serwer] \hfill \\
-Kod źródłowy serwera znajduję się w załączniku ~\ref{app:server_c}, jest on wspólny dla wszystkich platform unixowych.		
+Kod źródłowy serwera znajduje się w załączniku ~\ref{app:server_c}, jest on wspólny dla wszystkich platform unixowych.		
 	\item[generator zdarzeń wejścia] \hfill \\ 
-		Program generujący zdarzenia urządzeń wejścia na podstawie danych otrzymanych z serwera. W platformie Linux wykorzystano moduł jądra \lstinline{uinput}. Uinput to moduł pozwalający na generowanie zdarzeń symulujących urządzenia wyjścia. Moduł ten tworzy specjalny plik urządzenia w katalogu \lstinline{/dev}. Plik ten jest wirtualnym interfejsem co znaczy, że nie jest połączony z żadnym fizycznym urządzeniem.
+		Program generujący zdarzenia urządzeń wejścia na podstawie danych otrzymanych z serwera. W platformie Linux wykorzystano moduł jądra \lstinline{uinput}. Uinput to moduł pozwalający na generowanie zdarzeń symulujących urządzenia wyjścia. Moduł ten tworzy specjalny plik urządzenia w katalogu \lstinline{/dev}. Plik ten jest wirtualnym interfejsem, co znaczy, że nie jest połączony z żadnym fizycznym urządzeniem.
 
-		Jednym z zadań generatora jest ustalenie rozdzielczości ekranu na którym wyświetlany jest obraz. Informacja ta jest niezbędna gdyż koordynaty wysyłane przez serwer są podawane absolutnie, oraz z przedziału od 0 do 1 (ze względu na to, że informacja ta nie może być uzależniona od rozdzielczości monitora). Na platformie Linux rozdzielczość uzyskiwana jest za pomocą następującego polecenia:
+		Jednym z zadań generatora jest ustalenie rozdzielczości ekranu, na którym wyświetlany jest obraz. Informacja ta jest niezbędna, gdyż koordynaty wysyłane przez serwer są podawane absolutnie, oraz z przedziału od 0 do 1 (ze względu na to, że informacja ta nie może być uzależniona od rozdzielczości monitora). Na platformie Linux rozdzielczość uzyskiwana jest za pomocą następującego polecenia:
 \begin{lstlisting}[language=bash]
 "xdpyinfo -display :0 | sed 's/^ *dimensions: *\\([0-9x]*\\).*/\\1/;t;d'";
 \end{lstlisting}
 		Program xdpyinfo jest to aplikacja służąca do wyświetlania informacji o serwerze X, z kolei za pomocą wyrażenia regularnego i programu sed wyłuskano tylko niezbędne informacje dotyczące rozdzielczości ekranu.
 
-		Istotnym elementem w pisaniu programu generującego zdarzenia urządzeń wejścia jest odbiór danych z serwera, opisanego w załączniku ~\ref{app:server_c}. Program ten wysyła dane do deskryptora pliku o nazwie \lstinline{STDIN_FILENO}. Nie jest to bynajmniej to samo co wskaźnik do pliku o nazwie \lstinline{stdin} przez co nie jest możliwe użycie funkcji wysokiego poziomu jak \lstinline{scanf} do wczytania danych. Niezbędne jest użycie funkcji \lstinline{read}, a następnie użycie funkcji \lstinline{sscanf} w celu sformatowaniu danych co pokazuje poniższy fragment kodu:
+		Istotnym elementem w pisaniu programu generującego zdarzenia urządzeń wejścia jest odbiór danych z serwera, opisanego w załączniku ~\ref{app:server_c}. Program ten wysyła dane do deskryptora pliku o nazwie \lstinline{STDIN_FILENO}. Nie jest to bynajmniej to samo, co wskaźnik do pliku o nazwie \lstinline{stdin}, przez co nie jest możliwe użycie funkcji wysokiego poziomu, takiej jak na przykład: \lstinline{scanf}, do wczytania danych. Niezbędne jest użycie funkcji \lstinline{read}, a następnie użycie funkcji \lstinline{sscanf} w celu sformatowaniu danych, co pokazuje poniższy fragment kodu:
 
 \begin{lstlisting}[language=c]
 read(STDIN_FILENO, buffer, sizeof(buffer));
@@ -24,7 +24,7 @@ int x = xTmp * dim[0];
 int y = yTmp * dim[1];
 \end{lstlisting}
 
-Wczytane koordynaty należy wysłać jako zdarzenia do modułu \lstinline{uinput}. 
+Wczytane koordynaty należy wysłać jako parametry zdarzeń do modułu \lstinline{uinput}. 
 
 \begin{lstlisting}[language=c]
 #include <linux/input.h>
@@ -57,14 +57,15 @@ die("error: write");
 
 
 \end{lstlisting}
-		Na początku należy włączyć niezbędne nagłówki (linie 1-2), następnie otworzyć plik urządzenia \lstinline{uinput}, do którego będą wysyłane zdarzenia urządzeń wejścia. W linii 4 powyższego listingu, włączono możliwość wysyłania zdarzeń ruchów myszką podając koordynaty absolutne. Struktury zadeklarowane w linii 8 zawierają 3 pola 
+		Na początku należy włączyć niezbędne nagłówki (linie 1-2), następnie otworzyć plik urządzenia \lstinline{uinput}, do którego będą wysyłane zdarzenia urządzeń wejścia. W linii 4 powyższego listingu włączono możliwość wysyłania zdarzeń ruchów myszką, podając koordynaty absolutne. Struktury zadeklarowane w linii 8 zawierają 3 pola: 
 \begin{itemize}
 \item \lstinline{type} - typ zdarzenia (\lstinline{EV_KEY}, \lstinline{EV_ABS}, \lstinline{EV_REL})		
 \item \lstinline{code} - dla zdarzeń klawiatury jest to kod klawisza, natomiast dla zdarzeń myszy jest to oś.
 \item \lstinline{value} - dla zdarzeń klawiatury 1 oznacza przyciśnięcie klawisza, a 0 puszczenie, dla zdarzeń myszy jest to z kolei wartość reprezentująca koordynatę.
 \end{itemize}
-		Po wypełnieniu struktury odpowiednimi wartościami należy wysłać je do wcześniej otwartego deskryptora pliku (\lstinline{fd}), a następnie wypełnić i wysłać strukturę synchronizującą (\lstinline{evSyn}), której zadaniem jest zatwierdzenie, oraz realizacja wszystkich dotychczasowo wysłanych zdarzeń. 
+		Po wypełnieniu struktury odpowiednimi wartościami należy wysłać je do wcześniej otwartego pliku (\lstinline{fd}), a następnie wypełnić i wysłać strukturę synchronizującą (\lstinline{evSyn}), której zadaniem jest zatwierdzenie, oraz realizacja wszystkich dotychczasowo wysłanych zdarzeń. 
 	\item[serwer X] \hfill \\
+	Ta część systemu jest odpowiedzialna za wyświetlanie klientów X.
 		Moduł ten opisany jest bardziej szczegółowo w załączniku ~\ref{app:X Window System}.
 
 
@@ -72,22 +73,22 @@ die("error: write");
 
 \subsubsection{Mac OS X}
 
-W niniejszym podrozdziale niezostanie omówiony proces instalacji systemu Mac OS X na żadnym z jednoukładowych komputerów gdyż jest to niemożliwe ze względu na to, że system Mac OS X jest dedykowanym oprogramowaniem dla komputerów firmy Apple. 
+W niniejszym podrozdziale nie zostanie omówiony proces instalacji systemu Mac OS X na żadnym z jednoukładowych komputerów, gdyż jest to niemożliwe ze względu na to, że system Mac OS X jest dedykowanym oprogramowaniem dla komputerów firmy Apple. 
 
 Serwer odbierający zdarzenia jest wspólny dla wszystkich systemów unixowych i został opisany w załączniku ~\ref{app:server_c}.
 \\
-Kod generator zdarzeń dla systemu Mac OS X jest nieco prostszy aniżeli dla systemu Linux. Bazuje on na zdarzeniach z biblioteki CoreGraphics. Tak jak i dla systemu Linux istotnym elementem jest odczytanie rozdzielczości ekranu. Jest to wykonane za pomocą polecenia:
+Kod generatora zdarzeń dla systemu Mac OS X jest nieco prostszy aniżeli dla systemu Linux. Bazuje on na zdarzeniach z biblioteki CoreGraphics. Tak jak i dla systemu Linux, istotnym elementem jest odczytanie rozdzielczości ekranu. Jest to wykonane za pomocą polecenia:
 \begin{lstlisting}
 system_profiler SPDisplaysDataType | grep Resolution | sed 's/[^0-9 ]*//g' | sed -e 's/^[ \t]*//' | sed 's/  */x/g'
 \end{lstlisting}
-Format wyniku powyższego polecenia jest dokładnie taki sam jak dla instrukcji analogicznej w systemie Linux.
+Format wyniku powyższego polecenia jest dokładnie taki sam, jak dla instrukcji analogicznej w systemie Linux.
 \\
-Kod programu odpowiadający za wygenerowanie zdarzenia na podstawie koordynatów znajduję się na poniższym listingu:
+Kod programu odpowiadający za wygenerowanie zdarzenia na podstawie koordynat znajduje się na poniższym listingu:
 \begin{lstlisting}
-CGEventRef move1 = CGEventCreateMouseEvent(
-NULL, kCGEventMouseMoved,
-CGPointMake(x, y),
-kCGMouseButtonLeft
+	CGEventRef move1 = CGEventCreateMouseEvent(
+	NULL, kCGEventMouseMoved,
+	CGPointMake(x, y),
+	kCGMouseButtonLeft
 );
 
 CGEventPost(kCGHIDEventTap, move1);
@@ -100,9 +101,9 @@ Funkcja \lstinline{CGEventCreateMouseEvent} tworzy nowe zdarzenie, polegające n
 \subsection{Klient wyświetlający grę PONG na zdalnym monitorze}
 \label{sub:impl-displayclient-game}
 
-Klient gry napisany w JavaScript oraz CSS 3 wykorzystując jego mechanizmy. Zawiera w sobie logikę gry i wysyła komunikaty do serwera sterującego. Wyświetla napis z zaproszeniem do dołączenia do gry bądź (w trakcie jej trwania) paletki wraz z piłką. Klient jest uruchamiany w przeglądarce internetowej wyświetlanej na zdalnym monitorze.
+Klient gry został napisany w JavaScript oraz CSS 3 wykorzystując jego mechanizmy. Zawiera w sobie logikę gry i wysyła komunikaty do serwera sterującego. Wyświetla napis z zaproszeniem do dołączenia do gry bądź (w trakcie jej trwania) paletki wraz z piłką. Klient jest uruchamiany w przeglądarce internetowej wyświetlanej na zdalnym monitorze.
 
-Interfejs wyjściowy dla gry:
+Interfejs wyjściowy dla gry: 
 
 \begin{description}
 	\item[signalGameStop] \hfill \\

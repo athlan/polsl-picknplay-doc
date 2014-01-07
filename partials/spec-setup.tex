@@ -14,16 +14,22 @@ make install
 
 Po pomyślnej instalacji należy ściągnąć repozytorium projektu dostępne po adresem - \url{https://github.com/athlan/remotely}. By rozwiązać wszystkie zależności projektu należy w katalogu z projektem wykonać polecenie \lstinline{npm install}.
 \par
-Do uruchomienia aplikacji pozostaje jeszcze uruchomić serwer sieciowy. W załączniku ~\ref{app:apache} omówiona została instalacja, oraz konfiguracja serwera Apache.
+Do uruchomienia aplikacji pozostaje jeszcze uruchomić serwer sieciowy.
+Serwer sieciowy Apache2 to jeden z popularniejszych dostępnych na rynku serwerów. By zainstalować go na platformie Linux, należy zainstalować go za pomocą właściwego dla dystrybucji menadżera pakietów, bądź skompilować go ręcznie. 
 \par
-Przed ostatnim krokiem w konfiguracji serwera jest wyedytowanie pliku index.html w głównym katalogu projektu remotely. Atrybuty przy znaczniku body to:
+Dystrybucja debian posiada w oficjalnych repozytoriach paczkę z serwerem Apache2. Można go więc zainstalować poleceniem \lstinline{sudo apt-get install apache2}. Menadżer pakietów ściągnie oraz zainstaluje serwer z niezbędnymi zależnościami.
+\par
+Po pomyślnej instalacji serwera warto skonfigurować moduł userdir. Pozwala on na dostęp do katalogów użytkownika z poziomu przeglądarki według wzorca: \lstinline{localhost/~user}. By włączyć ten moduł należy wykonać polecenie \lstinline{sudo a2enmod userdir}.
+
+\par
+Przedostatnim krokiem w konfiguracji serwera jest wyedytowanie pliku index.html w głównym katalogu projektu remotely. Atrybuty przy znaczniku body to:
 \begin{description}
 	\item[data-server] \hfill \\
-		adres komputera wraz z numerem portu, na którym jest uruchomiony serwer sieciowy
+		adres komputera wraz z numerem portu, na którym jest uruchomiony serwer sieciowy,
 	\item[data-server-remote-host] \hfill \\
-		adres klienta na który wysyłane będą zdarzenia urządzeń wejścia.
+		adres klienta na który wysyłane będą zdarzenia urządzeń wejścia,
 	\item[data-server-remote-port] \hfill \\
-		numer portu klienta
+		numer portu klienta.
 \end{description}
 \par
 Po skonfigurowaniu serwera pozostaje go tylko uruchomić poleceniem \lstinline{node server.js}.
@@ -32,7 +38,7 @@ Po skonfigurowaniu serwera pozostaje go tylko uruchomić poleceniem \lstinline{n
 \subsection{Przygotowanie bazowej wersji systemu Linux wyświetlającego obraz na ekranie}
 
 
-Instalując dystrybucję linuksa na komputerze PC zwykle nie ma większego sensu by kompilować jądro. Większość dystrybucji udostępnia gotowy obraz, który zawiera podstawowe programy i usługi niezbędne do instalacji systemu operacyjnego z środowiskiem graficznym. W przypadku systemu wbudowanego wygląda to nieco inaczej. Nie ma jednego gotowego obrazu pasującego do wszystkich jednoukładowych komputerów. Dlatego też w niniejszym rozdziale opisana zostanie instalacja systemu Linux od podstaw \footnote{ang. \emph{Linux From Scratch}}.
+Podczas instalacji dystrybucji linuksa na komputerze nie potrzebne jest kompilowanie jądra. Większość dystrybucji udostępnia gotowy obraz, który zawiera podstawowe programy i usługi niezbędne do instalacji systemu operacyjnego ze środowiskiem graficznym. W przypadku systemu wbudowanego wygląda to nieco inaczej. Nie ma jednego gotowego obrazu pasującego do wszystkich jednoukładowych komputerów. Dlatego też w niniejszym rozdziale opisana zostanie instalacja systemu Linux od podstaw \footnote{ang. \emph{Linux From Scratch}}.
 
 \par
 
@@ -42,7 +48,7 @@ Na początku należy stworzyć sobie miejsce na dysku, w którym system będzie 
 \subsubsection{Przygotowanie karty SDHC}
 
 
-System debian zostanie zainstalowany na karcie SDHC \footnote{ang. \em{Secure Digital High Capacity}}, po czym zostanie uruchomiony na urządzeniu Rickomagic MK802 II. Komputer ten opiera się o architekturę ARM Cortex-A8, bazuję na chipie firmy AllWinner sun4i.
+System debian zostanie zainstalowany na karcie SDHC \footnote{ang. \em{Secure Digital High Capacity}}, po czym zostanie uruchomiony na urządzeniu Rickomagic MK802 II. Komputer ten opiera się o architekturę ARM Cortex-A8, bazuje na chipie firmy AllWinner sun4i.
 \par
 	\begin{table}[t]
 		\centering
@@ -70,15 +76,15 @@ System debian zostanie zainstalowany na karcie SDHC \footnote{ang. \em{Secure Di
 \end{table}
 
 \par
-Po włożniu karty SD do czytnika kart pamięci i podłączenia go do komputera, należy sprawdzić i upewnić się jak nazywa się podłączone urządzenie. Jest to o tyle ważne gdyż w systemach linux montowane jest w tym samym katalogu i zwykle z tym samym przedrostkiem co dysk twardy komputera. Gdyby karta pamięci zostałaby źle zidentyfikowana mogło być dojść do bezpowrotnego usunięcia danych z dysku twardego komputera. Po włożeniu karty do czytnika nazwę urządzenia w komputerze można sprawdzić za pomocą polecenia \lstinline{sudo dmesg} wyświetlając systemowy bufor komunikatów. 
+Po włożniu karty SD do czytnika kart pamięci i podłączeniu go do komputera, należy sprawdzić i upewnić się, jak nazywa się podłączone urządzenie. Jest to o tyle ważne, że w systemach linux montowane jest w tym samym katalogu i zwykle z tym samym przedrostkiem, co dysk twardy komputera. Gdyby karta pamięci została źle zidentyfikowana, mogłoby dojść do bezpowrotnego usunięcia danych z dysku twardego komputera. Po włożeniu karty do czytnika nazwę urządzenia w komputerze można sprawdzić za pomocą polecenia \lstinline{sudo dmesg}, wyświetlając systemowy bufor komunikatów. 
 \par
-Pierwszym krokiem w przygotowaniu systemu jest skasowanie pierwszych 2047 sektorów pamięci na karcie pamięci - zgodnie z tym co widzimy na tabeli ~\ref{tab:sd-layout} pierwszy MB pamięci (2048 sektorów * 512B) jest zarezerwowany dla danych potrzebnych do uruchomienia systemu z karty.
+Pierwszym krokiem w przygotowaniu systemu jest skasowanie pierwszych 2047 sektorów pamięci na karcie pamięci - zgodnie z tym co widzimy w tabeli ~\ref{tab:sd-layout}, pierwszy MB pamięci (2048 sektorów * 512B) jest zarezerwowany dla danych potrzebnych do uruchomienia systemu z karty.
 \par
 \begin{lstlisting}[language=bash]
 dd if=/dev/zero of=/dev/sdh bs=512 count=2047
 \end{lstlisting}
 \par
-Następnie za pomocą programu do partycjonowania (np. fdisk) należy utworzyć dwie partycje - pierwszą zaczynającą się w 2048 sektorze bądź dalszym o wielkości 16MB w której będzie przechowywane jądro (uImage), plik boot.scr i script.bin, oraz drugą partycja zajmująca pozostałą część karty, która będzie przechowywała główny system plików.
+Następnie za pomocą programu do partycjonowania (np. fdisk) należy utworzyć dwie partycje - pierwszą zaczynającą się w 2048. sektorze bądź dalszym o wielkości 16MB, w której będzie przechowywane jądro (uImage), plik boot.scr i script.bin, oraz drugą partycją zajmującą pozostałą część karty, która będzie przechowywała główny system plików.
 \par
 
 \begin{lstlisting}[language=bash]
@@ -92,16 +98,16 @@ W powyższym fragmencie tworzony jest katalog mnt w domowym folderze projektu, p
 
 Niezbędnymi narzędziami do zainstalowania systemu są:
 \begin{itemize}
-	\item {\lstinline{gcc-x-arm-linux-gnueabi}}  - kompilator dla architektury ARM. Fraza eabi, znajdująca się na końcu nazwy tego pakietu to pewien standard opracowany przez firmę ARM. ABI  \footnote{ang. \emph{Application Binary Interface}} jest to zestaw reguł i ustawień kompilacji, które decydują o tym jak dany program współpracuje z innymi bibliotekami, czy aplikacjami. Programy skompilowane przy pomocy kompilatora używającego standardu EABI są przenośne pomiędzy systemami operacyjnymi (jedyną barierą są biblioteki z którymi współpracuje dany program).
-	\item {\lstinline{build-essential}} - jak sama nazwa wskazuje jest to zbiór pakietów niezbędnych do budowania oprogramowania. Zależnościami tego pakietu to m.in. g++, libc, czy make.
+	\item {\lstinline{gcc-x-arm-linux-gnueabi}}  - kompilator dla architektury ARM. Fraza eabi, znajdująca się na końcu nazwy tego pakietu to pewien standard opracowany przez firmę ARM. ABI  \footnote{ang. \emph{Application Binary Interface}} jest to zestaw reguł i ustawień kompilacji, które decydują o tym jak dany program współpracuje z innymi bibliotekami czy aplikacjami. Programy skompilowane przy pomocy kompilatora używającego standardu EABI są przenośne pomiędzy systemami operacyjnymi (jedyną barierą są biblioteki, z którymi współpracuje dany program).
+	\item {\lstinline{build-essential}} - jak sama nazwa wskazuje, jest to zbiór pakietów niezbędnych do budowania oprogramowania. Zależnościami tego pakietu są m.in. g++, libc, czy make.
 	\item {\lstinline{git}} - system kontroli wersji
-	\item {\lstinline{u-boot-tools}} - zestaw narzędzi do bootloadera, który zostanie opisany w dalszej części pracy.
+	\item {\lstinline{u-boot-tools}} - zestaw narzędzi do bootloadera, który zostanie opisany w następnym rozdziale.
 \end{itemize}
 
 
 \subsubsection{Bootloader}
 
-W komputerach o architekturze ARM proces uruchamiania systemu operacyjnego oparty jest o program uruchomieniowy Bootstrap. Na samym początku szuka on programu uruchomieniowego w pierwszym sektorze pamięci NAND, następnie przeszukiwana jest karta SD/MMC (szukając pliku boot.bin na pierwszej partycji karty), pamięć Dataflash, i jako ostatnia pamięć EEPROM podłączona do magistrali I2C. Jeżeli w którejś z tych lokacji bootstrap znajdzie prawidłowy kod, to jest on kopiowany do wewnętrznej pamięci operacyjnej procesora (SRAM) i tam uruchamiany. W następnej kolejności uruchamiany jest bootloader pierwszego poziomu, jest to zwykle mały program, którego zadaniem jest inicjalizacja pamięci RAM, oraz jednej z pamięci nieulotnych, a następnie uruchomienie bootloadera drugiego poziomu.
+W komputerach o architekturze ARM proces uruchamiania systemu operacyjnego oparty jest o program uruchomieniowy Bootstrap. Na samym początku szuka on programu uruchomieniowego w pierwszym sektorze pamięci NAND, następnie przeszukiwana jest karta SD/MMC (szukając pliku boot.bin na pierwszej partycji karty), pamięć Dataflash, i jako ostatnia pamięć EEPROM podłączona do magistrali I2C. Jeżeli w którejś z tych lokacji bootstrap znajdzie prawidłowy kod, to jest on kopiowany do wewnętrznej pamięci operacyjnej procesora (SRAM) i tam uruchamiany. W następnej kolejności uruchamiany jest bootloader pierwszego poziomu, jest to zwykle mały program, którego zadaniem jest inicjalizacja pamięci RAM oraz jednej z pamięci nieulotnych, a następnie uruchomienie bootloadera drugiego poziomu.
 Najpopularniejszym bootloaderem w systemach opartych o architekturę ARM jest u-boot. Głównym zadaniem bootloadera drugiego poziomu jest wczytanie pliku jądra systemu. Za pomocą u-boota można go wczytać z karty SD, czy nawet poprzez serwer ftp.
 
 \par
@@ -117,9 +123,9 @@ make sun4i CROSS_COMPILE=arm-linux-gnueabi-
 
 \par
 
-W pierwszej lini pobierane jest repozytorium, w linii 3 z kolei przełączamy pobrane repozytorium na odpowiednią gałąź, wreszcie w linii 4 kompilujemy bootloader na architekturę \lstinline{sun4i} używając do tego celu kompilatora \lstinline{arm-linux-gnueabi-gcc}.
+W pierwszej lini pobierane jest repozytorium, w linii 3 z kolei przełączamy pobrane repozytorium na odpowiednią gałąź, wreszcie w linii 4 kompilujemy bootloader na architekturę \lstinline{sun4i}, używając do tego celu kompilatora \lstinline{arm-linux-gnueabi-gcc}.
 
-Po skompilowaniu można wgrać niezbędny pliki na kartę SD:
+Po skompilowaniu można wgrać niezbędne pliki na kartę SD:
 
 \begin{lstlisting}[language=bash]
 dd if=spl/sun4i-spl.bin of=/dev/sdh bs=1024 seek=8  (if sun4i-spl.bin not found, try sunxi-spl.bin)
@@ -152,9 +158,9 @@ sudo cp boot.scr mnt/
 
 \subsubsection{Kompilacja jądra i przygotowanie plików konfiguracyjnych}
 
-Jądro systemu wykrywa i inicjuje sprzęt, oraz uruchamia proces init, który może być procesem dowolnego programu, natomiast aby uzyskać funkcjonalny system proces ten powinien zająć się uruchamianiem m.in. skryptów startowych, czy odbieraniem kodów wyjścia z zakończonych procesów.
+Jądro systemu wykrywa i inicjuje sprzęt oraz uruchamia proces init, który może być procesem dowolnego programu, natomiast aby uzyskać funkcjonalny system, proces ten powinien zająć się uruchamianiem m.in. skryptów startowych, czy też odbieraniem kodów wyjścia z zakończonych procesów.
 
-Pierwszym krokiem jest ściągnięcie kodu źródłowego jądra, z racji tego, że architektura ARM Allwinner sun4i nie jest oficjalnie wspierana przez repozytorium w którym znajduję się jądro linuksa posłużono się repozytorium wywodzącym się z niego przystosowanym do potrzeb tej architektury.
+Pierwszym krokiem jest ściągnięcie kodu źródłowego jądra; z racji tego, że architektura ARM Allwinner sun4i nie jest oficjalnie wspierana przez repozytorium, w którym znajduje się jądro linuksa posłużono się repozytorium wywodzącym się z niego przystosowanym do potrzeb tej architektury.
 
 Aktualną wersję jądra można pobrać za pomocą polecenia: \lstinline{git clone https://github.com/linux-sunxi/linux-sunxi}, a następnie przełączyć się na odpowiednią gałąź kodu: \lstinline{git checkout sunxi-3.4}. By skompilować jądro należy wykonać polecenia:
 
@@ -167,16 +173,16 @@ arm
 sudo cp linux-allwinner/arch/arm/boot/uImage mnt/
 \end{lstlisting}
 
-W pierwszej linii generowana jest standardowa konfiguracja jądra dla danej platformy. Parametr \lstinline{ARCH=arm} określa architekturę jądra. Parametr \lstinline{CROSS_COMPILE=arm-linux-gnueabi-} określa przedrostek cross kompilatora, używany przy budowaniu i przy instalacji (czyli cross kompilator dla poleceń w liniach 1-3 to arm-linux-gnueabi-gcc).
+W pierwszej linii generowana jest standardowa konfiguracja jądra dla danej platformy. Parametr \lstinline{ARCH=arm} określa architekturę jądra. Parametr \lstinline{CROSS_COMPILE=arm-linux-gnueabi-} określa przedrostek cross- kompilatora, używany przy budowaniu i przy instalacji (czyli cross- kompilator dla poleceń w liniach 1-3 to arm-linux-gnueabi-gcc).
 
 \par
 
-W linii drugiej budowane są moduły jądra, oraz plik z jądrem, następnie dodawana do niego jest suma kontrolna, oraz informacje wymagane przez bootloader. Parametr j16 jest parametrem programu \lstinline{make} określającym ile jednocześnie zadań może być uruchamianych, przez zadanie w przypadku programu \lstinline{make} rozumiane jest rozwiązanie jednej zależności. Program make za pomocą grafu zależności określa kolejność wykonywanych zadań.
+W linii drugiej budowane są moduły jądra oraz plik z jądrem, następnie dodawana do niego jest suma kontrolna oraz informacje wymagane przez bootloader. Parametr j16 jest parametrem programu \lstinline{make} określającym ile jednocześnie zadań może być uruchamianych; przez zadanie w przypadku programu \lstinline{make} rozumiane jest rozwiązanie jednej zależności. Program make za pomocą grafu zależności określa kolejność wykonywanych zadań.
 
 \par
 Komenda z linii trzeciej instaluje moduły w zadanej lokacji.
 \par
-Plik script.bin jest plikiem konfiguracyjnym dla danej platformy. Można go wygenerować samemu, dokumentacja znajduję się na oficjalnej stronie architektury sunxi - \url{http://linux-sunxi.org/Fex_Guide}. a następnie skompilować plik konfiguracyjny do formatu bin za pomocą narzędzia \lstinline{fex2bin}. W pliku tym konfigurowane są wartości typowe dla urządzenia tj. adres MAC komputera, czy maksymalna rozdzielczość.  W internecie istnieje wiele gotowych plików konfiguracyjnych dla komputera MK 802 II, na potrzeby niniejszej pracy konfiguracja została pobrana ze strony - \url{http://dl.miniand.com/gamboita/script-mk802ii-1080p60.7z}. 
+Plik script.bin jest plikiem konfiguracyjnym dla danej platformy. Można go wygenerować samemu, dokumentacja znajduje się na oficjalnej stronie architektury sunxi - \url{http://linux-sunxi.org/Fex_Guide}, a następnie skompilować plik konfiguracyjny do formatu bin za pomocą narzędzia \lstinline{fex2bin}. W pliku tym konfigurowane są wartości typowe dla urządzenia tj. adres MAC komputera, jak też maksymalna rozdzielczość.  W internecie istnieje wiele gotowych plików konfiguracyjnych dla komputera MK 802 II, na potrzeby niniejszej pracy konfiguracja została pobrana ze strony - \url{http://dl.miniand.com/gamboita/script-mk802ii-1080p60.7z}. 
 
 Po wygenerowaniu pliku należy go skopiować na kartę pamięci do pierwszej partycji \lstinline{sudo cp script.bin mnt/script.bin}. 
 
@@ -186,7 +192,7 @@ By odmontować partycje należy wpisać \lstinline{sudo umount mnt}
 
 \subsubsection{Przygotowanie głównego systemu plików}
 
-Pakiet debootstrap jest to narzędzie, który pozwala zainstalować bazowy system debiana w podkatalogu na obecnie zainstalowanym systemie. Jest on dostępny w oficjalnych repozytoriach debiana.
+Pakiet debootstrap jest to narzędzie, które pozwala zainstalować bazowy system debiana w podkatalogu na obecnie zainstalowanym systemie. Jest on dostępny w oficjalnych repozytoriach debiana.
 
 \begin{lstlisting}[language=bash]
 sudo apt-get install debootstrap
@@ -214,7 +220,7 @@ sudo chroot mnt/
 /debootstrap/debootstrap --second-stage
 \end{lstlisting}
 
-Pakiet \lstinline{quemu-user-static} pozwala na emulowanie binarek zbudowanych statycznie. Ogólnie rzecz biorąc pozwala na uruchamianie procesów linuksowych na procesorze pod który nie zostały one skompilowane. Pakiet binfmt-support pozwala na obsługe dodatkowych formatów binarnych. Za pomocą polecenia \lstinline{modprobe} moduł obsługi dodatkowych formatów binarnych zostaje włączony jako moduł do jądra. Polecenie z linii 4 kopiuje aplikacje do nowo stworzonego systemu. Linie 5-6 to przygotowaniu interfejsu tzw. pseudoterminala. Poprzez zamontowanie systemu plików \lstinline{/proc} do nowo powstającego systemu, po wykonaniu chroota będzie możliwość korzystania z informacji dostarczonych przez jądro systemu. Wreszcie wykonujemy polecenie \lstinline{chroot} \footnote{ang. \emph{change root}}, które jak sama nazwa wskazuje zmienia główny system plików. Po wykonaniu przed ostatniego polecenia linia poleceń powinna wyświetlić komunikat \lstinline{I have no name!@hostname:/#}, ostatnie polecenie uruchamia wszystkie skrypty konfiguracyjne, które muszą zostać wykonane na architekturze docelowej (dlatego właśnie skopiowany został do /usr/bin program qemu-user-static). Mając uruchomiony system na komputerze wykonano podstawową konfiguracje dla systemu debian.
+Powyższe instrukcje pozwalają na kontynuowanie kolejnego etapu instalacji systemu. Pakiet \lstinline{quemu-user-static} pozwala na emulowanie programów zbudowanych statycznie. Ogólnie rzecz biorąc pozwala na uruchamianie procesów linuksowych na procesorze, pod który nie zostały one skompilowane. Pakiet binfmt-support pozwala na obsługę dodatkowych formatów binarnych. Za pomocą polecenia \lstinline{modprobe} moduł obsługi dodatkowych formatów binarnych zostaje włączony jako moduł do jądra. Polecenie z linii 4 kopiuje aplikacje do nowo stworzonego systemu. Linie 5-6 to przygotowanie interfejsu tzw. pseudoterminala. Poprzez zamontowanie systemu plików \lstinline{/proc} do nowo powstającego systemu, po wykonaniu programu chroot będzie możliwość korzystania z informacji dostarczonych przez jądro systemu. Wreszcie wykonujemy polecenie \lstinline{chroot} \footnote{ang. \emph{change root}}, które- jak sama nazwa wskazuje- zmienia główny system plików. Po wykonaniu przedostatniego polecenia linia poleceń powinna wyświetlić komunikat \lstinline{I have no name!@hostname:/#}, ostatnie polecenie uruchamia wszystkie skrypty konfiguracyjne, które muszą zostać wykonane na architekturze docelowej (dlatego właśnie skopiowany został do /usr/bin program qemu-user-static). Mając uruchomiony system na komputerze wykonano podstawową konfigurację dla systemu debian.
 \\
 Edycja repozytoriów menadżera pakietów:
 \begin{lstlisting}[language=bash]
@@ -244,7 +250,7 @@ apt-get install dhcp3-client udev netbase ifupdown iproute openssh-server \
     iputils-ping wget net-tools ntpdate uboot-mkimage uboot-envtools vim nano less X
 \end{lstlisting}
 
-Po skonfigurowaniu usług internetowych, i konta roota, należy wyjść z trybu \lstinline{chroot}, oraz odmontować partycję:
+Po skonfigurowaniu usług internetowych i konta root, należy wyjść z trybu \lstinline{chroot} oraz odmontować partycję:
 
 \begin{lstlisting}[language=bash]
 exit
@@ -252,9 +258,9 @@ sudo umount mnt/proc
 sudo umount mnt/dev/pts
 \end{lstlisting}
 
-Ostatnim elementem w przygotowywaniu drugiej partycji jest zainstalowaniu modułów jądra na głównym systemie plików, poleceniem: \lstinline{sudo make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- INSTALL_MOD_PATH=../debian-rootfs/mnt modules_install}.
+Ostatnim elementem w przygotowywaniu drugiej partycji jest zainstalowanie modułów jądra na głównym systemie plików, poleceniem: \lstinline{sudo make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- INSTALL_MOD_PATH=../debian-rootfs/mnt modules_install}.
 
-Po zainstalowaniu modułów pozostaje tylko przygotować drugą partycje na karcie SD i zainstalować przygotowany system plików:
+Po zainstalowaniu modułów pozostaje tylko przygotować drugą partycję na karcie SD i zainstalować przygotowany system plików:
 \begin{lstlisting}[language=bash]
 cd /home/share/mele-hacking
 mkdir mnt2
@@ -265,16 +271,16 @@ sudo umount mnt2
 sudo umount debian-rootfs/mnt
 \end{lstlisting}
 
-\subsection{Uruchomienie oprogramowania generujące zdarzenia urządzeń wejścia dla systemów Mac OS X i Linux}
+\subsection{Uruchomienie oprogramowania generującego zdarzenia urządzeń wejścia dla systemów Mac OS X i Linux}
 
 
-Aby uruchomić oprogramowanie klienta Linux należy pobrać repozytorium dostępne pod adresem: \url{https://github.com/athlan/remotely}, a następnie w folderze client wybrać dostępny system (macosx lub linux), i w odpowiednim podfolderze skompilować oprogramowanie poleceniem \lstinline{make}.
+Aby uruchomić oprogramowanie klienta Linux należy pobrać repozytorium dostępne pod adresem: \url{https://github.com/athlan/remotely}, a następnie w folderze client wybrać dostępny system (macosx lub linux) i w odpowiednim podfolderze skompilować oprogramowanie poleceniem \lstinline{make}.
 Po pomyślnej kompilacji należy uruchomić serwer poleceniem \lstinline{./bin/server}.
 
 
 \subsection{Uruchomienie serwera www zarządzającego infrastrukturą}
 
-W celu zainstalowania serwera www zarządzającego infrastrukturą należy zainstalować framework play, a następnie pobrać z repozytorium kod źródłowy aplikacji zarządzającej systemem dostępy pod adresem - \url{https://github.com/badeleux/remotely-web}. Uruchomienie serwera za pomocą polecenia \lstinline|play ~run|, rozwiąże wszystkie zależności, oraz skompiluje kod. 
+W celu zainstalowania serwera www zarządzającego infrastrukturą należy zainstalować framework play, a następnie pobrać z repozytorium kod źródłowy aplikacji zarządzającej systemem dostępny pod adresem  \url{https://github.com/badeleux/remotely-web}. Uruchomienie serwera za pomocą polecenia \lstinline|play ~run| rozwiąże wszystkie zależności oraz skompiluje kod. 
 
 \subsection{Instalacja i uruchamianie Varnish cache}
 

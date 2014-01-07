@@ -41,7 +41,7 @@ Interfejs wejściowy dla serwera:
 
 \begin{description}
 	\item[connectToRemote] \hfill \\
-	Komunikat wysyłany przez pilota, informujący o połączeniu do serwera programu generującego zdarzenia urządzeń wejścia. Po jego przyjęciu serwer podejmuje próbę nawiązania połączenia z ów programem.
+	Komunikat wysyłany przez pilota, informujący o połączeniu do serwera programu generującego zdarzenia urządzeń wejścia. Po jego przyjęciu serwer podejmuje próbę nawiązania połączenia z owym programem.
 	\begin{enumerate}
 		\item host (string)
 		\item port (float)
@@ -53,7 +53,7 @@ Interfejs wejściowy dla serwera:
 
 Serwer gry PONG przyjmuje każde połączenie w protokole Web Sockets oraz dodaje je do kolejki. Zaraz po dodaniu podejmowana jest próba uruchomienia gry dla \(n\) graczy (domyślnie dwóch). Przy każdej zmianie stanu gry (podłączanie i rozłączanie się użytkowników, uruchomienie i zakończenie gry) wysyłana jest informacja do wszystkich o jej zmianie.
 
-Istotnym jest fakt, że serwer jest napisany w taki sposób, aby móc sterować dowolnym programem reprezentującym grę, która spełnia interfejs:
+Istotnym jest fakt, że serwer jest napisany w taki sposób, aby móc sterować dowolnym programem reprezentującym grę, która implementuje interfejs:
 
 \lstset{language=JavaScript}
 \begin{lstlisting}
@@ -61,15 +61,15 @@ var gameserver = new gameServer.gameserver(app, server, io);
 var clientDispatcher = new clientDispatcher.clientDispatcher(app, server, io, gameserver);
 \end{lstlisting}
 
-Pierwszy program to obsługa gry, a drugi to strategia rozgrywki, czyli w jaki sposób gracze mają zostać włączanie do gry. W przypadku gry PONG gracze ustawiani są w kolejce do gry i wybierani sąsiednie parami.
+Pierwszy program to obsługa gry, a drugi to strategia rozgrywki, czyli w jaki sposób gracze mają być włączani do gry. W przypadku gry PONG gracze ustawiani są w kolejce do gry i wybierani sąsiednie parami.
 
 Interfejs wyjściowy dla serwera:
 
 \begin{description}
 	\item[signalCurrentServerState] \hfill \\
-	Komunikat wysyłany w trybie broadcast do wszystkich użytkowników, informujący o stanie gry oraz kolejki. Wysyłany jest za każdym razem, gdy zmienia się stan gry: ilość użytkowników oczekujących na grę, włączenie gry.
+	Komunikat wysyłany w trybie broadcast do wszystkich użytkowników, informujący o stanie gry oraz kolejki. Wysyłany jest za każdym razem, gdy zmienia się stan gry: liczba użytkowników oczekujących na grę, włączenie gry.
 	\begin{enumerate}
-		\item count (int) ilość użytkowników oczekujących w kolejce do gry
+		\item count (int) liczba użytkowników oczekujących w kolejce do gry
 		\item isGame (boolean) informacja, czy jest rozgrywana gra, czy nie
 	\end{enumerate}
 \end{description}
@@ -89,7 +89,7 @@ Interfejs wyjściowy dla serwera:
 	Komunikat wysyłany do wybranych użytkowników biorących udział w grze, informujący o zakończeniu gry.
 	\begin{enumerate}
 		\item score (int) wynik klienta
-		\item scoreEnermy (int) wynik przeciwnika
+		\item scoreEnemy (int) wynik przeciwnika
 	\end{enumerate}
 \end{description}
 
@@ -120,7 +120,7 @@ Interfejs wyjściowy dla serwera:
 
 \begin{description}
 	\item[signalGameSart] \hfill \\
-	Komunikat informujący grę o konieczności jej zakończenia (z przyczyny np. ucieczki jednego z gracza tj. rozłączenia się).
+	Komunikat informujący grę o konieczności jej zakończenia (z przyczyny np. ucieczki jednego z gracza, tj. rozłączenia się).
 \end{description}
 
 \begin{description}
@@ -134,7 +134,7 @@ Interfejs wejściowy dla serwera:
 	\item[signalGameStop] \hfill \\
 	Komunikat klienta gry o jej zakończeniu wraz z danymi pozwalającymi ustalić wynik. Wynik jest wysyłany do klientów.
 	\begin{enumerate}
-		\item scoreL (int) wynik gracza po lewej stornie
+		\item scoreL (int) wynik gracza po lewej stronie
 		\item scoreR (int) wynik gracza po prawej stronie
 	\end{enumerate}
 \end{description}
