@@ -4,14 +4,13 @@
 Klient to komputer podłączony bezpośrednio do ekranu wyświetlającego obraz. Istotnymi cechami takiego urządzenia są przede wszystkim:
 \begin{itemize}
 	\item niska cena,
-	\item wystarczająca moc obliczeniowa do uruchomienia przeglądarki, oraz prostej gry w technologi Flash, lub HTML5,
-	\item duża dostępność,
+	\item moc obliczeniowa wystarczająca do uruchomienia przeglądarki, oraz prostej gry w technologi Flash, lub HTML5,
 	\item mały rozmiar.
 \end{itemize}
 
 Głównym zadaniem klientów jest komunikacja serwerem poprzez sieć Ethernet w celu wyświetlania obrazu na podłączonym do klienta ekranie, oraz możliwość sterowania urządzeniami wejścia (klawiatura, myszka) poprzez udostępniony interfejs w sieci Ethernet.
 
-Jeśli chodzi o wybór architektury procesora wybór był całkiem prosty, za sprawą sporej liczby dostępnych urządzeń dostępnych w tej architekturze (32 bitowa architektura ARM\footnote{Advanced RISC Machine} jest najczęściej stosowaną architekturą w urządzeniach mobilnych\cite{acm}), jak i uzasadnioną ich popularnością. Architektura ARM cechuje cię niskim poborem energii, dużą niezawodnością w systemach wbudowanych, oraz dla praktycznie wszystkich dostępnych na rynku procesorów możliwością instalacji w pełni funkcjonalnego systemu operacyjnego.
+Jeśli chodzi o wybór architektury procesora wybór był całkiem prosty, za sprawą sporej liczby dostępnych urządzeń dostępnych w tej architekturze (32 bitowa architektura ARM\footnote{Advanced RISC Machine} jest najczęściej stosowaną architekturą w urządzeniach mobilnych\cite{acm}). Architektura ARM cechuje cię niskim poborem energii, dużą niezawodnością w systemach wbudowanych, oraz dla praktycznie wszystkich dostępnych na rynku procesorów możliwością instalacji w pełni funkcjonalnego systemu operacyjnego.
 Procesory oparte o architekturę ARM przetwarzają instrukcje z wykorzystaniem mechanizmu potokowania. Procesor może wykonywać trzy rodzaje instrukcji:
 \begin{itemize}
 	\item 32-bitowe ARM
@@ -32,7 +31,7 @@ Po wyborze architektury procesora należy wybrać rodzinę procesora. Rodzina Co
 \begin{center}
 	\includegraphics[scale=0.6]{ARM_Comparison}
 \end{center}
-\caption{Porównanie rodzin architektury ARM. \emph{Źródło: \cite{arm-mmu}}}
+\caption{Porównanie rodzin architektury ARM (źródło: \emph{Dokumentacja ARM} \cite{arm-mmu}}
 \label{fig:ARM_Comp}
 \end{figure}
 
