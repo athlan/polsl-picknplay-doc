@@ -141,6 +141,7 @@ Opisane w sekcji \ref{sub:communication-methods} metody nie zapewniają komunika
   \centering
     \includegraphics[scale=0.75]{websockets-flow.jpg}
   \caption[Zasada działania protokołu Web Sockets]{Zasada działania protokołu Web Sockets}
+  Źródło: IBM Developer Works\footnote{\url{http://www.ibm.com/developerworks/library/wa-reverseajax2/}}
 \end{figure}
 
 Protokół Web Sockets został zaprojektowany dla przeglądarek internetowych, natomiast może być użyty w jakiejkolwiek aplikacji. Opiera się na protokole HTTP do czasu przełączenia za pomocą \emph{Upgrade Request} do etapu \emph{handshake}, a następnie na właściwą wymianę danych. Aby ustanowić połączenie w protokole Web Sockets, klient wysyła żądanie w protokole HTTP:
@@ -184,6 +185,7 @@ Od tego momentu rozpoczyna się transmisja w protokole Web Socekts, w którym pr
   \centering
     \includegraphics[scale=0.65]{WebSocketFrame.png}
   \caption[Ramka protokołu Web Sockets]{Ramka protokołu Web Sockets}
+  Źródło: Pro HTML5 Programming, Using the WebSocket API\footnote{\url{http://apress.jensimmons.com/v5/pro-html5-programming/ch7.html}}
 \end{figure}
 
 \subsection{Skalowanie}
@@ -238,14 +240,14 @@ W modelu reverse-proxy zamiast odwoływać się do lokalnych pamięci cache uży
 
 \begin{figure}[H]
   \centering
-    \includegraphics[scale=0.75]{varnish-miss.png} \\
-    Rysunek przedstawia przypadek, gdy Varnish nie znalazł wpisu w cache oraz przekazuje żądanie do serwera aplikacji, aby otrzymać odpowiedź.
+    \includegraphics[scale=0.75]{varnish-miss.png}
   \caption[Varnish cache miss]{Varnish cache miss}
+    Rysunek przedstawia przypadek, gdy Varnish nie znalazł wpisu w cache oraz przekazuje żądanie do serwera aplikacji, aby otrzymać odpowiedź. Źródło \cite{varnish-cache}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[scale=0.75]{varnish-hit.png} \\
-    Rysunek przedstawia przypadek, gdy Varnish znalazł wpis w cache, nie jest konieczne przekazanie połączenia do serwera aplikacji, odpowiedź jest wczytywana prosto z pamięci RAM.
+    \includegraphics[scale=0.75]{varnish-hit.png}
   \caption[Varnish cache hit]{Varnish cache hit}
+    Rysunek przedstawia przypadek, gdy Varnish znalazł wpis w cache, nie jest konieczne przekazanie połączenia do serwera aplikacji, odpowiedź jest wczytywana prosto z pamięci RAM. Źródło \cite{varnish-cache}
 \end{figure}

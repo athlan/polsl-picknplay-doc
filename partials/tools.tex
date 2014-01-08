@@ -127,21 +127,21 @@ W porównaniu do programowania asynchronicznego przedstawione krótko zostanie p
   \label{fig:syncprogramming-flow}
   \centering
     \includegraphics[scale=0.5]{syncprogramming-flow.png}
-  \caption[Programowanie synchroniczne - przebieg instrukcji programu w czasie]{Programowanie synchroniczne - przebieg instrukcji programu w czasie}
+  \caption[Programowanie synchroniczne - przebieg instrukcji programu w czasie]{Programowanie synchroniczne - przebieg instrukcji programu w czasie. Źródło \cite{programming-async}}
 \end{minipage}
 
 \begin{minipage}[b]{0.45\linewidth}
 \label{fig:syncprogramming-threads}
   \centering
     \includegraphics[scale=0.5]{syncprogramming-threads.jpg}
-  \caption[Programowanie synchroniczne - wątki]{Programowanie synchroniczne - wątki}
+  \caption[Programowanie synchroniczne - wątki]{Programowanie synchroniczne - wątki. Źródło \cite{programming-async}}
 \end{minipage}
 
 \begin{minipage}[b]{0.45\linewidth}
 \label{fig:syncprogramming-waiting}
   \centering
     \includegraphics[scale=0.5]{syncprogramming-waiting.png}
-  \caption[Programowanie synchroniczne - operacje blokujące]{Programowanie synchroniczne - operacje blokujące}
+  \caption[Programowanie synchroniczne - operacje blokujące]{Programowanie synchroniczne - operacje blokujące. Źródło \cite{programming-async}}
 \end{minipage}
 \end{figure}
 
@@ -153,7 +153,7 @@ Asynchroniczny model programowania oparty jest na programie uruchomionym w jedny
 \begin{figure}[H]
   \centering
     \includegraphics[width=\linewidth]{asyncprogramming-loop.png}
-  \caption[Event loop w asynchronicznym modelu programowania]{Event loop w asynchronicznym modelu programowania}
+  \caption[Event loop w asynchronicznym modelu programowania]{Event loop w asynchronicznym modelu programowania. Źródło \cite{async-servers}}
 \end{figure}
 
 Realizacja niskopoziomowa to użycie funkcji \lstinline{select()} (zarówno systemów POSIX jak i Windows), deskryptorów \lstinline{/dev/poll}, kqueue, poll i epool. Warta rozpoznania jest biblioteka \emph{libevent}\footnote{\url{http://libevent.org/}}, która zakłada abstrakcję na użyte mechanizmy z punktu widzenia programisty\cite{programming-async-sockets}.
@@ -185,9 +185,10 @@ Zatem program napisany asynchronicznie blokuje swoje działanie tylko wtedy, gdy
 Node.js jest środowiskiem używającym składni skryptowego języka JavaScript\footnote{Po kliku nieudanych próbach implementacji w C, Lua,  Haskell, twórca Node.js Ryan Dahl, po pojawieniu się Google JavaScript Engine V8 zdecydował się na jego użycie}, udostępniającym mechanizmy programowania asynchronicznego opartego o wywołania funkcji \mbox{\emph{callbacks}}. Node.js działa w pojedynczym wątku opartym o pętlę zdarzeń obsługiwanych przez procedury obsługi (callbacks). Środowisko wykorzystuje projekt opensource \emph{V8 Javascript Engine} wydanym przez Google, który (w odróżnieniu od innych) kompiluje JavaScript do kodu maszynowego\footnote{Obsługiwane platformy: IA-32, x86-64, ARM oraz MIPS ISAs} przed jego wykonaniem.
 
 \begin{figure}[H]
-  \caption[Model działania Node.js]{Model działania Node.js na przykładzie serwera HTTP}
   \centering
     \includegraphics[scale=0.75]{nodejs-flow.png}
+  \caption[Model działania Node.js]{Model działania Node.js}
+  Model działania pętli zdarzeń Node.js na przykładzie serwera HTTP \footnote{Źródło: \emph{http://sekurak.pl/bezpieczenstwo-aplikacji-internetowych-opartych-o-platforme-node-js-czesc-1/}}.
 \end{figure}
 
 \subsubsection{Socket.io}
