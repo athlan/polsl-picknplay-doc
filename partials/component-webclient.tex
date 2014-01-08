@@ -1,12 +1,12 @@
 \subsection{Klient webowy}
 \label{subsub:impl-webclient}
 
-Klient webowy został zaimplementowany w obu aplikacjach jako statyczna strona internetowa, której kod JavaScript przechowany jest w Web Storage (podsekcja \ref{subsub:webstorage}) za pomocą basket.js (podsekcja \ref{subsub:tools-basketjs}). Komunikacja z serwerem została zrazlizowana przy pomocy biblioteki Socket.io (podsekcja \ref{subsub:socketio}), odbywa się ona za pomocą protokołu Web Sockets (podsekcja \ref{subsub:websockets}) lub w przypadku braku wsparcia z jedną ze wspieranych metod przez bibliotekę Socket.io z modelu Comet (podsekcja \ref{sub:communication-methods}). W aplikacjach wykrywane są dotknięcia ekranu urządzenia mobilnego (sekcja \ref{sub:touch-detection}) przy użyciu biblioteki jQuery Mobile (podsekcja \ref{subsub:tool-jquery-mobile}).
+Klient webowy został zaimplementowany w obu aplikacjach (pilota do sterowania zdalnym monitorem oraz grze PONG) jako statyczna strona internetowa, której kod JavaScript przechowany jest w Web Storage (podsekcja \ref{subsub:webstorage}) za pomocą basket.js (podsekcja \ref{subsub:tools-basketjs}). Komunikacja z serwerem została zrealizowana przy użyciu biblioteki Socket.io (podsekcja \ref{subsub:socketio}), odbywa się ona za pomocą protokołu Web Sockets (podsekcja \ref{subsub:websockets}) lub, w przypadku braku obsługi standardu przez przeglądarkę internetową, z jedną ze wspieranych metod przez bibliotekę Socket.io z modelu Comet (podsekcja \ref{sub:communication-methods}). W aplikacjach wykrywane są dotknięcia ekranu urządzenia mobilnego (sekcja \ref{sub:touch-detection}) przy użyciu biblioteki jQuery Mobile (podsekcja \ref{subsub:tool-jquery-mobile}).
 
 \subsubsection{Reprezentacja kursora na płaszczyźnie}
 \label{subsub:cursor-representation}
 
-Kursor jest reprezentowany za pomocą punktu \(C(x_{c}, y_{c})\) o nieujemnych, całkowitych współrzędnych \emph{cursor coordinate} oznaczających jego pozycję od punktu \(P(0, 0)\) umieszczonego w lewym, górnym rogu ekranu, a wektor jest skierowany ku punktowi w prawym, dolnym rogu ekranu.
+Kursor jest reprezentowany za pomocą punktu \(C(x_{c}, y_{c})\) o nieujemnych, całkowitych współrzędnych \emph{cursor coordinate} oznaczających jego pozycję od punktu \(P(0, 0)\) umieszczonego w lewym, górnym rogu ekranu, a wektor jest skierowany ku punktowi w prawym dolnym rogu ekranu.
 
 \begin{figure}[h!]
   \caption{Sposób wyznaczania pozycji kursora myszy.}
@@ -14,11 +14,11 @@ Kursor jest reprezentowany za pomocą punktu \(C(x_{c}, y_{c})\) o nieujemnych, 
     \includegraphics{wyznaczanie-pozycji-kursora}
 \end{figure}
 
-Uwzględniając różne proporcje \(p = \frac{szerokosc}{wysokosc}\) ekranu na którym pojawia się zdalnie sterowany kursor oraz proporcje powierzchni ekranu urządzenia mobilnego, w implementacji pilota użyta została reprezentacja procentowa punktu na ekranie.
+Uwzględniając różne proporcje \(p = \frac{szerokosc}{wysokosc}\) ekranu, na którym pojawia się zdalnie sterowany kursor oraz proporcje powierzchni ekranu urządzenia mobilnego, w implementacji pilota użyta została reprezentacja procentowa punktu na ekranie.
 
 Pozycja kursora reprezentowana jest przez punkt \(P(x, y)\) na dwuwymiarowej płaszczyźnie w zakresie \( x\in \langle0, 1\rangle \), gdzie \(x = \frac{x_{c}}{w_{x}}\), \(y = \frac{x_{c}}{w_{y}}\), a \(w_{x}\) oraz \(w_{y}\) oznaczają kolejno szerokość i wysokość ekranu.
 
-Wyznaczanie pozycji uwzględnia również zmianę orientacji (poziomej lub pionowe), szerokości i wysokości rzutni okna przeglądarki wyświetlanej na urządzeniu mobilnym.
+Wyznaczanie pozycji uwzględnia również zmianę orientacji (poziomej lub pionowej), szerokości i wysokości rzutni okna przeglądarki wyświetlanej na urządzeniu mobilnym.
 
 \lstset{language=JavaScript}
 \begin{lstlisting}
@@ -100,7 +100,7 @@ Aplikacja posiada również zapisy konfiguracji (nazwa hosta oraz port) połącz
 </body>
 \end{lstlisting}
 
-Interfejs wyjściowy aplikacji:
+Interfejs wyjściowy aplikacji obejmuje dwa komunikaty: \emph{mouseMoveToPercent} i \emph{connectToRemote}.
 
 \begin{description}
 	\item[mouseMoveToPercent] \hfill \\
@@ -128,7 +128,7 @@ Brak.
 
 Pilot do sterowania grą PONG wyświetlaną na zdalnym monitorze umożliwia zgłoszenie chęci uczestnictwa w grze oraz sterowanie paletką. Na ekranie startowym użytkownik widzi przycisk, dzięki któremu może zgłosić chęć uczestnictwa w grze, następnie pilot wyświetla komunikaty, aż wreszcie umożliwia sterowanie paletką. Aplikacja jest napisana w jQuery oraz ostylowana arkuszem napisanym w CSS 3.
 
-Interfejs wyjściowy aplikacji:
+Interfejs wyjściowy aplikacji obejmuje jeden komunikat: \emph{paddleMove}.
 
 \begin{description}
 	\item[paddleMove] \hfill \\
@@ -139,13 +139,13 @@ Interfejs wyjściowy aplikacji:
 	\end{enumerate}
 \end{description}
 
-Interfejs wejściowy aplikacji (komunikaty wysyłane przez serwer do klienta):
+Interfejs wejściowy aplikacji (komunikaty wysyłane przez serwer do klienta) obejmuje cztery komunikaty: \emph{signalCurrentServerState}, \emph{signalWaitingForPartner}, \emph{welcome} i \emph{gameOver}.
 
 \begin{description}
 	\item[signalCurrentServerState] \hfill \\
 	Komunikat informujący o stanie gry oraz kolejki. Odbierany jest za każdym razem, gdy zmienia się stan gry: ilość użytkowników oczekujących na grę, włączenie gry. Na podstawie otrzymanych danych wyświetla się komunikat, który w kolejce jest użytkownik.
 	\begin{enumerate}
-		\item count (int) ilość użytkowników oczekujących w kolejce do gry
+		\item count (int) liczba użytkowników oczekujących w kolejce do gry
 		\item isGame (boolean) informacja, czy jest rozgrywana gra, czy nie
 	\end{enumerate}
 \end{description}
@@ -165,6 +165,6 @@ Interfejs wejściowy aplikacji (komunikaty wysyłane przez serwer do klienta):
 	Komunikat wysyłany przez serwer informujący o zakończeniu gry. Na podstawie otrzymanych danych wyświetla się informacja, czy klient przegrał, czy wygrał.
 	\begin{enumerate}
 		\item score (int) wynik klienta
-		\item scoreEnermy (int) wynik przeciwnika
+		\item scoreEnemy (int) wynik przeciwnika
 	\end{enumerate}
 \end{description}

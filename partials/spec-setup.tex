@@ -318,7 +318,7 @@ DAEMON_OPTS="-a :80 \
             -s malloc,256m"
 \end{lstlisting}
 
-Następnie w pliku \lstinline{/etc/varnish/default.vcl} należy zdefiniować, na jaki serwer przekierowywane są żądania o treść. Należy wskazać serwer Apache nasłuchujący na porcie 81:
+Następnie w pliku \lstinline{/etc/varnish/default.vcl} należy zdefiniować, na jaki serwer przekierowywane są żądania użytkoników. Należy wskazać serwer Apache nasłuchujący na porcie 81:
 
 \begin{lstlisting}[language=bash]
 backend default {

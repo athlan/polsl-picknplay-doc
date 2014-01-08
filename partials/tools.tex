@@ -70,19 +70,19 @@ Dla ułatwienia zarządzania kodem wykonującym się asynchronicznie stosuje si�
   \item[Wzorzec Events] \hfill \\
   Jako środek zaradczy na reagowanie tylko jedną funkcją na zakończenie operacji przychodzi wzorzec projektowy \emph{Events} (ang. zdarzenia), który domyślnie implementuje funkcję, która w pętli iteracyjnie wykonuje wszystkie funkcje zarejestrowane jako callback. Innymi słowy, istnieje wiele funkcji callback, które reagują na dane zdarzenie, na przykład:\\
 
-  
+\lstset{language=Octave}
+\begin{lstlisting}
+var funkcja1 = function() {
+	console.log('zaszlo zdarzenie klikniecia')
+  }
+element.on('click', funkcja1)
+element.on('click', function() {
+	console.log('zaszlo zdarzenie klikniecia')
+})
+\end{lstlisting}
 
   Wzorzec projektowy nie rozwiązuje natomiast problemu, iż w przypadku powodzenia lub niepowodzenia operacji, wykonuje się ten sam zestaw funkcji callback. Z wykonania wielu funkcji callback w systemach, gdzie mogą one być wykonywane równolegle, wzorzec projektowy posiada wadę wynikającą z synchronizacji funkcji.
-  \lstset{language=Octave}
-  \begin{lstlisting}
-  var funkcja1 = function() {
-  	console.log('zaszlo zdarzenie klikniecia')
-  }
-  element.on('click', funkcja1)
-  element.on('click', function() {
-  	console.log('zaszlo zdarzenie klikniecia')
-  })
-  \end{lstlisting}
+  
   \item[Promise] \hfill \\
   Jest to wzorzec projektowy deklarujący strukturę funkcji reprezentującą zdarzenie, które zajdzie w przyszłości. Pozwala to na wykonywanie funkcji zarówno jako Events, jak i Callback, bowiem obiekty mogą być łączone w synchroniczny łańcuch.
 \end{description}

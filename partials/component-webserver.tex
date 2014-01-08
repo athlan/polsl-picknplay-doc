@@ -1,10 +1,10 @@
 \subsection{Serwer}
 
-Serwer został zaimplementowany w obu przypadkach na platformie Node.js (podsekcja \ref{sub:tool-server-nodejs}), która umożliwia asynchroniczne wykonywanie się kodu w pojedynczym wątku (podsekcja \ref{subsub:asyncprogramming} oraz \ref{sub:tool-server-nodejs}).
+Serwer został zaimplementowany w obu przypadkach (pilota do sterowania zdalnym monitorem oraz grze PONG) na platformie Node.js (podsekcja \ref{sub:tool-server-nodejs}), która umożliwia asynchroniczne wykonywanie się kodu w pojedynczym wątku (podsekcja \ref{subsub:asyncprogramming} oraz \ref{sub:tool-server-nodejs}).
 
 \subsubsection{Serwer sterowania zdalnym monitorem}
 
-Serwer sterowania zdalnym ekranem przyjmuje każde połączenie w protokole Web Sockets i przekazuje dane do serwera generującego zdarzenia urządzeń wejścia (podsekcja \ref{sub:impl-displayclient-events-dispatcher}) łącząc się z nim uprzednio poprzez standardowe gniazdo. Każdy podłączony klient wysyła również konfigurację połączenia z serwerem generującym zdarzenia urządzeń wejścia.
+Serwer sterowania zdalnym ekranem przyjmuje każde połączenie w protokole Web Sockets i przekazuje dane do serwera generującego zdarzenia urządzeń wejścia (podsekcja \ref{sub:impl-displayclient-events-dispatcher}), łącząc się z nim uprzednio poprzez standardowe gniazdo. Każdy podłączony klient wysyła również konfigurację połączenia z serwerem generującym zdarzenia urządzeń wejścia.
 
 \par \hfill
 
@@ -28,7 +28,7 @@ gdzie \emph{POZYCJA X} i \emph{POZYCJA Y} to wartości z przedziału \(\langle0,
 
 \par \hfill
 
-Interfejs wejściowy dla serwera:
+Interfejs wejściowy dla serwera obejmuje dwa komunikaty: \emph{mouseMoveToPercent} i \emph{connectToRemote}.
 
 \begin{description}
 	\item[mouseMoveToPercent] \hfill \\
@@ -63,13 +63,13 @@ var clientDispatcher = new clientDispatcher.clientDispatcher(app, server, io, ga
 
 Pierwszy program to obsługa gry, a drugi to strategia rozgrywki, czyli w jaki sposób gracze mają być włączani do gry. W przypadku gry PONG gracze ustawiani są w kolejce do gry i wybierani sąsiednie parami.
 
-Interfejs wyjściowy dla serwera:
+Interfejs wyjściowy dla serwera obejmuje cztery komunikaty: \emph{signalCurrentServerState}, \emph{signalWaitingForPartner}, \emph{welcome} i \emph{gameOver}.
 
 \begin{description}
 	\item[signalCurrentServerState] \hfill \\
-	Komunikat wysyłany w trybie broadcast do wszystkich użytkowników, informujący o stanie gry oraz kolejki. Wysyłany jest za każdym razem, gdy zmienia się stan gry: liczba użytkowników oczekujących na grę, włączenie gry.
+	Komunikat wysyłany w trybie broadcast do wszystkich użytkowników, informujący o stanie gry oraz kolejki. Wysyłany jest za każdym razem, gdy zmienia się stan gry: ilość użytkowników oczekujących na grę, włączenie gry.
 	\begin{enumerate}
-		\item count (int) liczba użytkowników oczekujących w kolejce do gry
+		\item count (int) ilość użytkowników oczekujących w kolejce do gry
 		\item isGame (boolean) informacja, czy jest rozgrywana gra, czy nie
 	\end{enumerate}
 \end{description}
@@ -93,7 +93,7 @@ Interfejs wyjściowy dla serwera:
 	\end{enumerate}
 \end{description}
 
-Interfejs wejściowy dla serwera:
+Interfejs wejściowy dla serwera obejmuje jeden komunikat: \emph{paddleMove}.
 
 \begin{description}
 	\item[paddleMove] \hfill \\
@@ -106,7 +106,7 @@ Interfejs wejściowy dla serwera:
 
 Z jednej strony serwer prowadzi komunikację z pilotami klientów, z drugiej natomiast z aplikacją wyświetlającą grę (podsekcja \ref{sub:impl-displayclient-game}). I tu wymieniane są komunikaty, kolejno:
 
-Interfejs wyjściowy dla serwera:
+Interfejs wyjściowy dla serwera obejmuje trzy komunikaty: \emph{paddleMove}, \emph{signalGameSart} i \emph{signalGameStop}.
 
 \begin{description}
 	\item[paddleMove] \hfill \\
@@ -128,7 +128,7 @@ Interfejs wyjściowy dla serwera:
 	Komunikat informujący grę o konieczności jej inicjalizacji oraz rozpoczęcia.
 \end{description}
 
-Interfejs wejściowy dla serwera:
+Interfejs wejściowy dla serwera obejmuje jeden komunikat:  \emph{signalGameStop}.
 
 \begin{description}
 	\item[signalGameStop] \hfill \\
