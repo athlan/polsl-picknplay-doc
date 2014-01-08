@@ -129,14 +129,20 @@ W porównaniu do programowania asynchronicznego przedstawione krótko zostanie p
     \includegraphics[scale=0.5]{syncprogramming-flow.png}
   \caption[Programowanie synchroniczne - przebieg instrukcji programu w czasie]{Programowanie synchroniczne - przebieg instrukcji programu w czasie. Źródło \cite{programming-async}}
 \end{minipage}
+\end{figure}
 
+\begin{figure}[ht]
+  \centering
 \begin{minipage}[b]{0.45\linewidth}
 \label{fig:syncprogramming-threads}
   \centering
     \includegraphics[scale=0.5]{syncprogramming-threads.jpg}
   \caption[Programowanie synchroniczne - wątki]{Programowanie synchroniczne - wątki. Źródło \cite{programming-async}}
 \end{minipage}
+\end{figure}
 
+\begin{figure}[ht]
+  \centering
 \begin{minipage}[b]{0.45\linewidth}
 \label{fig:syncprogramming-waiting}
   \centering
@@ -182,14 +188,14 @@ Zatem program napisany asynchronicznie blokuje swoje działanie tylko wtedy, gdy
 \subsubsection{Zasada działania Node.js}
 \label{sub:tool-server-nodejs}
 
-Node.js jest środowiskiem używającym składni skryptowego języka JavaScript\footnote{Po kliku nieudanych próbach implementacji w C, Lua,  Haskell, twórca Node.js Ryan Dahl, po pojawieniu się Google JavaScript Engine V8 zdecydował się na jego użycie}, udostępniającym mechanizmy programowania asynchronicznego opartego o wywołania funkcji \mbox{\emph{callbacks}}. Node.js działa w pojedynczym wątku opartym o pętlę zdarzeń obsługiwanych przez procedury obsługi (callbacks). Środowisko wykorzystuje projekt opensource \emph{V8 Javascript Engine} wydanym przez Google, który (w odróżnieniu od innych) kompiluje JavaScript do kodu maszynowego\footnote{Obsługiwane platformy: IA-32, x86-64, ARM oraz MIPS ISAs} przed jego wykonaniem.
-
-\begin{figure}[H]
+\begin{figure}[h!]
   \centering
     \includegraphics[scale=0.75]{nodejs-flow.png}
   \caption[Model działania Node.js]{Model działania Node.js}
   Model działania pętli zdarzeń Node.js na przykładzie serwera HTTP \footnote{Źródło: \emph{http://sekurak.pl/bezpieczenstwo-aplikacji-internetowych-opartych-o-platforme-node-js-czesc-1/}}.
 \end{figure}
+
+Node.js jest środowiskiem używającym składni skryptowego języka JavaScript\footnote{Po kliku nieudanych próbach implementacji w C, Lua,  Haskell, twórca Node.js Ryan Dahl, po pojawieniu się Google JavaScript Engine V8 zdecydował się na jego użycie}, udostępniającym mechanizmy programowania asynchronicznego opartego o wywołania funkcji \mbox{\emph{callbacks}}. Node.js działa w pojedynczym wątku opartym o pętlę zdarzeń obsługiwanych przez procedury obsługi (callbacks). Środowisko wykorzystuje projekt opensource \emph{V8 Javascript Engine} wydanym przez Google, który (w odróżnieniu od innych) kompiluje JavaScript do kodu maszynowego\footnote{Obsługiwane platformy: IA-32, x86-64, ARM oraz MIPS ISAs} przed jego wykonaniem.
 
 \subsubsection{Socket.io}
 \label{subsub:socketio}
