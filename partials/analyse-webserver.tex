@@ -1,31 +1,31 @@
 \subsection{Serwer}
 
-Klient webowy uruchamiany w przeglądarce internetowej na urzadzeniu mobilbym użytkownika końcowego łączy się z serwerem przez sieć\footnote{Diagram komponentów w dodatku \ref{app:network_diagram_app}}, który odpowiada za poprawne działanie systemu. Korzystając z nowych możliwości przeglądarek internetwoych zaimplementowano dwustronną komunikację (ang. \emph{full duplex communication}) przy uzyciu mechanizmu \emph{Web Sockets}\cite{websockets-rfc} opisaną w podsekcji \ref{subsub:websockets}. Dla urządzeń nie wspierających Web Sockets, przy użyciu biblioteki \emph{Socket.io} (opisanej w podsekcji \ref{subsub:socketio}) dostępne są inne mechanizmy (przegląd w podsekcji \ref{sub:communication}) dwustronnej komunikacji nie wykazujące tak szybkiego działania.
+Klient webowy uruchamiany w przeglądarce internetowej na urządzeniu mobilnym użytkownika końcowego łączy się z serwerem przez sieć\footnote{Diagram komponentów w dodatku \ref{app:network_diagram_app}}, odpowiadającym za poprawne działanie systemu. Korzystając z nowych możliwości przeglądarek internetwoych zaimplementowano dwustronną komunikację (ang. \emph{full duplex communication}) przy użyciu mechanizmu \emph{Web Sockets}\cite{websockets-rfc} opisaną w podsekcji \ref{subsub:websockets}. Dla urządzeń nie obsługujących standardu Web Sockets, przy użyciu biblioteki \emph{Socket.io} (opisanej w podsekcji \ref{subsub:socketio}) dostępne są inne mechanizmy (przegląd w podsekcji \ref{sub:communication-methods}) dwustronnej komunikacji nie wykazujące tak szybkiego działania.
 
 \subsection{Komunikacja między klientem webowym, a serwerem}
 
-W obu aplikacjach, zarówno grze PONG, jak i pilocie sterującym zdalnym monitorem komunikacja między rozproszonym systemem jest oparta o asynchroniczną wymianę komunikatów (ang. \emph{Asynchronous Message-oriented middleware - MOM})\cite{message-oriented-middleware}.
+W obu aplikacjach, zarówno w grze PONG, jak i w pilocie sterującym zdalnym monitorem, komunikacja między rozproszonym systemem jest oparta o asynchroniczną wymianę komunikatów (ang. \emph{Asynchronous Message-oriented middleware - MOM})\cite{message-oriented-middleware}.
 
-Dodatkowo przeprowadzano dywagację na temat skalowania stworzonego systemu opisaną w podsekcji \ref{subsub:scalability}. W obliczu skalowalności klienci łączą się do centralnego serwera, który rozdysponuje ruch sieciowy pomiędzy dostępne serwery (ang. \emph{nodes}) obsługujących żądania. W kontekście rozproszenia systemu, architektura MOM polega na asynchronicznem modelu wymiany komunikatów, w przeciwieństwie do modelu żądanie-odpowiedź (\emph{request-response model}). W asynchronicznych systemach kolejki komunikatów pełnią rolę tymczasowego bufora, kiedy odbiorca wiadomości jest zajęty lub niepodłączony do sieci. W dodatku istnieje możliwość stworzenia kolejek trwałych (ang. \emph{persistent queues}), w których wiadomości są zapisywane w pamięci trwałej (np. na dysku) zachowania ich kopii, dzięki czemu nadawca i odbiorca wiadomości nie musi być dostępny w sieci w tym samym czasie - mechanizm ten nazywany jest asynchroniczną dostawa (ang. \emph{asynchronous delivery}). Oznacza to, że gdy odbiorca wiadomości jest niedostępny, wysyłający wiadomości może pracować, a wiadomości zostaną odłożone w kolejce celem późniejszej dostawy, kiedy odbiorca będzie dostępny.
+Przeprowadzano dywagację na temat skalowania stworzonego systemu opisaną w podsekcji \ref{subsub:scalability}. W obliczu skalowalności klienci łączą się do centralnego serwera, który rozdysponuje ruch sieciowy pomiędzy dostępne serwery (ang. \emph{nodes}) obsługujące żądania. W kontekście rozproszenia systemu, architektura MOM polega na asynchronicznym modelu wymiany komunikatów, w przeciwieństwie do modelu żądanie-odpowiedź (\emph{request-response model}). W asynchronicznych systemach kolejki komunikatów pełnią rolę tymczasowego bufora, kiedy odbiorca wiadomości jest zajęty lub niepodłączony do sieci. W dodatku istnieje możliwość stworzenia kolejek trwałych (ang. \emph{persistent queues}), w których wiadomości są zapisywane w pamięci trwałej (np. na dysku) zachowania ich kopii, dzięki czemu nadawca i odbiorca wiadomości nie musi być dostępny w sieci w tym samym czasie - mechanizm ten nazywany jest asynchroniczną dostawa (ang. \emph{asynchronous delivery}). Oznacza to, że gdy odbiorca wiadomości jest niedostępny, wysyłający wiadomości może pracować, a wiadomości zostaną odłożone w kolejce celem późniejszej dostawy, kiedy odbiorca będzie dostępny.
 
 \begin{figure}[H]
-  \caption[Model asynchronicznej interakcji w systemach opartych o wymianę komunikatów]{Model asynchronicznej interakcji w systemach opartych o wymianę komunikatów}
   \centering
-    \includegraphics[width=\linewidth]{mom-flow.png} \\
-    Diagram UML przepływu przedstawiający model producenta i konsumenta wiadomości połączonego przez system kolejek, źródło\cite{message-oriented-middleware}
+    \includegraphics[width=\linewidth]{mom-flow.png}
+  \caption[Model asynchronicznej interakcji w systemach opartych o wymianę komunikatów]{Model asynchronicznej interakcji w systemach opartych o wymianę komunikatów}
+    Diagram UML przepływu przedstawiający model producenta i konsumenta wiadomości połączonego przez system kolejek (źródło: Edward Curry, \emph{Message-Oriented Middleware}\cite{message-oriented-middleware})
 \end{figure}
 
 \begin{figure}[H]
-  \caption[Schemat działania kolejki w systemach opartych o wymianę komunikatów]{Schemat działania kolejki w systemach opartych o wymianę komunikatów}
   \centering
-    \includegraphics[width=\linewidth]{mom-queue.png} \\
-    Diagram przedstawiający model producenta i konsumenta wiadomości połączonego przez system kolejek FIFO, źródło\cite{message-oriented-middleware}
+    \includegraphics[width=\linewidth]{mom-queue.png}
+  \caption[Schemat działania kolejki w systemach opartych o wymianę komunikatów]{Schemat działania kolejki w systemach opartych o wymianę komunikatów}
+    Diagram przedstawiający model producenta i konsumenta wiadomości połączonego przez system kolejek FIFO, (źródło: Edward Curry, \emph{Message-Oriented Middleware}\cite{message-oriented-middleware})
 \end{figure}
 
 \subsection{Komunikacja HTTP - model Comet}
 \label{sub:communication-methods}
 
-Protokół HTTP\footnote{Hypertext Transfer Protocol} przewiduje komunikację inicjowaną przez klienta do serwera\cite{http-rfc}. Klient wysyła żądanie (ang. \emph{request}) złożoną z nagłówków (ang. \emph{headers}) oraz treści (ang. \emph{body} lub \emph{content}), natomiast serwer zwraca odpowiedź również w postaci nagłówków oraz treści. Każde żądanie jest bezstanowe, swego rodzaju transakcją, to znaczy, że nie zależy od poprzedniego, ani kolejnego. Aby zapewnić transakcyjność stosuje się mechanizmy podtrzymania sesji użytkownika za pomocą przesyłania w nagłówkach ciasteczek zawierający unikatowy identyfikator sesji znany zarówno po stronie klienta, jak i serwera - tym sposobem serwer jest w stanie zidentyfikować następujące po sobie bezstanowe żądania. Istotnym minusem w kontekście prowadzenia komunikacji w protokole HTTP jest to, że serwer nie może zainicjować wysłania danych do przeglądarki, bowiem połączenie jest zamykane zaraz po odesłaniu odpowiedzi. Komunikacja jest jednostronna (ang. \emph{half-duplex communication}).
+Protokół HTTP\footnote{Hypertext Transfer Protocol} przewiduje komunikację inicjowaną przez klienta do serwera\cite{http-rfc}. Klient wysyła żądanie (ang. \emph{request}) złożone z nagłówków (ang. \emph{headers}) oraz treści (ang. \emph{body} lub \emph{content}), natomiast serwer zwraca odpowiedź również w postaci nagłówków oraz treści. Każde żądanie jest bezstanowe, swego rodzaju transakcją, to znaczy, że nie zależy od poprzedniego, ani kolejnego. Aby zapewnić transakcyjność stosuje się mechanizmy podtrzymania sesji użytkownika za pomocą przesyłania w nagłówkach ciasteczek zawierający unikatowy identyfikator sesji znany zarówno po stronie klienta, jak i serwera - tym sposobem serwer jest w stanie zidentyfikować następujące po sobie bezstanowe żądania. Istotnym minusem w kontekście prowadzenia komunikacji w protokole HTTP jest to, że serwer nie może zainicjować wysłania danych do przeglądarki, bowiem połączenie jest zamykane zaraz po odesłaniu odpowiedzi. Komunikacja jest jednostronna (ang. \emph{half-duplex communication}).
 
 Przykładowe zapytanie:
 \lstset{language=Octave}
@@ -51,7 +51,7 @@ Aby zapewnić komunikację dwustronną (ang. \emph{full-duplex communication}) (
 \subsubsection{Komunikacja HTTP persistent connection}
 \label{subsub:http-persistent-connection}
 
-Protokół HTTP w wersji 1.0 umożliwia tworzenie stałych połączeń (ang. \emph{persistent connection}) przez przesłanie nagłówka Connection: Keep-Alive, serwer w ramach odpowiedzi odsyła ten sam nagłówek, a od wersji protokołu 1.1 Keep-Alive jest uznawane za domyślne i nie jest konieczne wysłanie nagłówka. Otwarte połączenie przez przeglądarkę internetową nie zamyka go po tuż otrzymaniu odpowiedzi od serwera, a podtrzymuje je mogąc wysłać w ramach niego kilka żądań. Optymalizacja ma na celu zmniejszenia czasu wykonywania żądań o czas otwarcia połączenia po stronie przeglądarki internetowej oraz serwera. Korzyści jest znacznie więcej:
+Protokół HTTP w wersji 1.0 umożliwia tworzenie stałych połączeń (ang. \emph{persistent connection}) przez przesłanie nagłówka Connection: Keep-Alive, serwer w ramach odpowiedzi odsyła ten sam nagłówek, a od wersji protokołu 1.1 Keep-Alive jest uznawane za domyślne i nie jest konieczne wysłanie nagłówka. Otwarte połączenie przez przeglądarkę internetową nie zamyka go tuż po otrzymaniu odpowiedzi od serwera, a podtrzymuje je mogąc wysłać w ramach niego kilka żądań. Optymalizacja ma na celu zmniejszenie czasu wykonywania żądań o czas otwarcia połączenia po stronie przeglądarki internetowej oraz serwera. Korzyści jest znacznie więcej:
 
 \begin{itemize}
 	\item mniejsze zużycie procesora i pamięci operacyjnej,
@@ -62,56 +62,56 @@ Protokół HTTP w wersji 1.0 umożliwia tworzenie stałych połączeń (ang. \em
 \end{itemize}
 
 \begin{figure}[H]
-  \caption[HTTP Persistent Connection]{HTTP Persistent Connection}
   \centering
-    \includegraphics[scale=0.75]{http-persistent-connection.png} \\
-    Rysunek przedstawia wysyłanie kolejnych żądań HTTP w ramach osobnych połączeń (domyślnie HTTP 1.0, po lewej stronie) oraz w ramach jednego połączenia (persistent connection, po prawej).
+    \includegraphics[scale=0.65]{http-persistent-connection.png}
+  \caption[HTTP Persistent Connection]{HTTP Persistent Connection}
+    Rysunek przedstawia wysyłanie kolejnych żądań HTTP w ramach osobnych połączeń (domyślnie HTTP 1.0, po lewej stronie) oraz w ramach jednego połączenia (persistent connection, po prawej). Źródło: \url{http://en.wikipedia.org/wiki/HTTP_persistent_connection}.
 \end{figure}
 
-\subsubsection{HTTP Server Push, Pushlet, JSONP Pooling oraz Script Tag long pooling, Hidden IFRAME}
+\subsubsection{HTTP Server Push, Pushlet, JSONP Pooling oraz Script Tag \mbox{long pooling}, Hidden IFRAME}
 
-Korzystając z możliwości użycia \emph{persistent connections} (opisanego w podsekcji \ref{subsub:http-persistent-connection}) powstały mechanizmy umożliwiające komunikację ze strony od serwera do klienta w trybie push:
+Powstanie \emph{persistent connections} (opisanego w podsekcji \ref{subsub:http-persistent-connection}) umożliwiło wypracowanie mechanizmów umożliwiających komunikację ze strony od serwera do klienta w trybie push:
 
 \begin{description}
   \item[HTTP Server Push] \hfill \\
-  Mechanizm polega na tym, że klient inicjuje żądanie, serwer natomiast podtrzymuje je w trybie zawieszonym (nie odsyła odpowiedzi, połączenie pozostaje otwarte), a gdy wystąpi zdarzenie, może zostać ono wysłane do klienta w trybie natychmiastowym. Jeżeli zachodzi zdarzenie, a klient nie jest podłączony, może zostać dodane do kolejki do wysłania przy następnym żądaniu klienta. Po otrzymaniu odpowiedzi i zerwaniu połączenia klient inicjuje nowe żądanie powtarzając cały proces w pętli. Zwalnia to z konieczności periodycznego sprawdzania, czy zaszły jakieś zdarzenia na serwerze poprzez odpytywania serwera (ang. \emph{pooling}).
+  Mechanizm polega na tym, że klient inicjuje żądanie, serwer natomiast podtrzymuje je w trybie zawieszonym (nie odsyła odpowiedzi, połączenie pozostaje otwarte), a gdy wystąpi zdarzenie, może zostać ono wysłane do klienta w trybie natychmiastowym. Jeżeli zachodzi zdarzenie, a klient nie jest podłączony, może zostać dodane do kolejki do wysłania przy następnym żądaniu klienta. Po otrzymaniu odpowiedzi i zerwaniu połączenia klient inicjuje nowe żądanie, powtarzając cały proces w pętli. Zwalnia to z konieczności periodycznego sprawdzania, czy zaszły jakieś zdarzenia na serwerze poprzez odpytywania serwera (ang. \emph{pooling}).
 
   \begin{figure}[H]
-    \caption[Zasada działania HTTP Server Push]{Zasada działania HTTP Server Push}
     \centering
       \includegraphics[scale=0.75]{http-server-push.png}
+    \caption[Zasada działania HTTP Server Push]{Zasada działania HTTP Server Push}
   \end{figure}
 
   \begin{figure}[H]
-    \caption[Porównanie HTTP Pooling oraz HTTP Long Pooling]{Porównanie HTTP Pooling oraz HTTP Long Pooling}
     \centering
       \includegraphics[scale=0.65]{http-pooling-vs-longpooling.jpg}
+    \caption[Porównanie HTTP Pooling oraz HTTP Long Pooling]{Porównanie HTTP Pooling oraz HTTP Long Pooling}
   \end{figure}
 
   \item[Pushlet] \hfill \\
-  Podejście polegające na podtrzymaniu zainicjowanego połączenia przez klienta w trybie zawieszonym w stanie ciągłego ładowania odpowiedzi (serwer nigdy nie zamyka połączenia). Umożliwia to ciągłe dostarczanie treści do odpowiedzi, która jest interpretowana przez przeglądarkę, np w postaci kodu JavaScript osiągając w ten sposób możliwość wysyłania odpowiedzi z serwera do klienta. W ten sposób po stronie klienta nie jest konieczne uruchomienie appletu Java lub kodu Flash, które dostarczając opcję otwarcia połączenia, ale wymagają zezwolenia od użytkownika.
+  Podejście polegające na podtrzymaniu zainicjowanego połączenia przez klienta w trybie zawieszonym w stanie ciągłego ładowania odpowiedzi (serwer nigdy nie zamyka połączenia). Umożliwia to ciągłe dostarczanie treści do odpowiedzi, która jest interpretowana przez przeglądarkę, np w postaci kodu JavaScript, osiągając w ten sposób możliwość wysyłania odpowiedzi z serwera do klienta. W ten sposób po stronie klienta nie jest konieczne uruchomienie appletu Java lub kodu Flash, które dostarczają opcję otwarcia połączenia, natomiast wymagają zezwolenia od użytkownika.
 
   \item[XHR Pooling] \hfill \\
-  Możliwe jest wykorzystanie obiektu \lstinline{XMLHttpRequest} (\emph{XHR})\cite{xhr-rfc} wykorzystywane w aplikacjach AJAX (ang. \emph{Asynchronous JavaScript and XML}), który umożliwia asynchroniczne odbieranie framgmentow treści strony bez konieczności odświeżenia całej jej zawartości (ponowienia żądania i odpowiedzi). Dane mogą być odbierane w dowolnym formacie, co umożliwia wykorzystanie mechanizmu Comet.\\
+  Możliwe jest posłużenie się obiektem \lstinline{XMLHttpRequest} (\emph{XHR})\cite{xhr-rfc} wykorzystywanym w aplikacjach AJAX (ang. \emph{Asynchronous JavaScript and XML}), który umożliwia asynchroniczne odbieranie framgmentów treści strony bez konieczności odświeżenia całej jej zawartości (ponowienia żądania i odpowiedzi). Dane mogą być odbierane w dowolnym formacie, co umożliwia wykorzystanie mechanizmu Comet.\\
 
-  W 1995 roku przeglądarka Netscape Navigator wprowadziła mechanizm który umożliwił serwerowi odświeżanie zawartości obrazka lub kodu HTML wysyłając odpowiedź jako wieloczęściową (ang. \emph{multipart response}) oznaczając ją nagłówkiem
+  W 1995 roku przeglądarka Netscape Navigator wprowadziła mechanizm który umożliwił serwerowi odświeżanie zawartości obrazka lub kodu HTML za pomocą wysyłania odpowiedzi wieloczęściowej (ang. \emph{multipart response}) oznaczając ją nagłówkiem
 
 \lstinline{Content-type: multipart/x-mixed-replace}\cite{xhr-rfc}
 
-  Po stornie serwera, każde zdarzenie, które ma być wysłane do klienta jest kolejną częścią odpowiedzi HTTP, odbierane po stronie klienta i interpretowane w wywoływanej funkcji wskazanej jako callback \lstinline{onreadystatechange} wykonywanej za każdym razem, gdy pojawią się nowe dane. Umożliwia to dosyłanie dowolnych porcji danych.
+  Po stronie serwera, każde zdarzenie, które ma być wysłane do klienta, jest kolejną częścią odpowiedzi HTTP, odbierane po stronie klienta i interpretowane w wywoływanej funkcji wskazanej jako \lstinline{onreadystatechange callback} wykonywanej za każdym razem, gdy pojawią się nowe dane. Umożliwia to dosyłanie dowolnych porcji danych.
 
   \item[Hidden IFRAME] \hfill \\
-  Technika znana również pod nazwą \emph{forever frame}, polegająca na umieszczeniu w kodzie strony www ukrytej ramki (umożliwiającej wstawienie dokument HTML pochodzący z innej strony internetowej) wykorzystującej mechanizm Pushlet. Gdy wystąpi zdarzenie na serwerze, może ono zostać wysłane jako treść odpowiedzi w postaci tagu HTML
+  Technika znana również pod nazwą \emph{forever frame}, polegająca na umieszczeniu w kodzie strony www ukrytej ramki (umożliwiającej wstawienie dokumentu HTML pochodzącego z innej strony internetowej) wykorzystującej mechanizm Pushlet. Gdy wystąpi zdarzenie na serwerze, może ono zostać wysłane jako treść odpowiedzi w postaci tagu HTML
   \lstinline{<script>}
   wypełnionego treścią wykonywalnego kodu JavaScript, który jest natychmiastowo interpretowany przez przeglądarkę. Dokument HTML przyrasta o nowe tagi \lstinline{<script>}. Podstawową zaletą tego rozwiązania jest to, że jest obsługiwane przez każdą przeglądarkę.
 
   \item[Script Tag long pooling] \hfill \\
-  Wszystkie wcześniej wymienione sposoby komunikacji w trybie push od strony serwera wykorzystujące protokół HTTP nie są zdolne do wykonania żądania inicjującego przez klienta poza domenę ze względu na \emph{Same Origin Policy}, bowiem nie można wykonywać połączeń XHR poza domenę\footnote{SLDs - second-level domains} oraz przechwytywać zdarzeń JavaScript z ramki IFRAME z innej domeny. Istnieje sposób na wczytywanie danych spoza domeny za pomocą wczytywania kodu javascript tagiem \lstinline{<script>}, który może wskazywać dowolny adres url wykorzystując technikę Pushlet oraz doładowywać fragmentu kodu JavaScript natychmiastowo wykonywane po stronie przeglądarki.
+  Wszystkie wyżej wymienione sposoby komunikacji w trybie push od strony serwera wykorzystujące protokół HTTP nie są zdolne do wykonania żądania inicjującego przez klienta pod adres wskazujący na inną domenę, niż otwarta przez użytkownika ze względu na \emph{Same Origin Policy}, bowiem nie można wykonywać połączeń XHR poza domenę\footnote{SLDs - second-level domains} oraz przechwytywać zdarzeń JavaScript z ramki IFRAME z innej domeny. Istnieje sposób na odebranie danych spoza domeny za pomocą załadowania kodu JavaScript przy użyciu tagu \lstinline{<script>}, który może wskazywać dowolny adres URL wykorzystując technikę Pushlet oraz reagować na każdorazowe kolejne doładowanie danych w postaci fragmentu kodu JavaScript, który jest natychmiastowo wykonywany po stronie przeglądarki użytkownika.
   
   \item[JSONP Pooling] \hfill \\
-  Oparta na technice \emph{Script Tag long pooling} polegająca na doładowywaniu kodu JavaScript zawierającego dane w postaci JSON\footnote{JSON - JavaScript Object Notation} przekazywane jako argument wskazanej wcześniej funkcji w postaci obiektu JavaScript.
+  Oparta na technice \emph{Script Tag long pooling} polegająca na doładowywaniu kodu JavaScript zawierającego dane w postaci JSON\footnote{JSON - JavaScript Object Notation} przekazywane jako argument nazwanej wcześniej przez programistę funkcji\footnote{do adresu URL przekazuje się argument, którego wartością jest nazwa funkcji} w postaci obiektu JavaScript.
   
-  Przykład wywołania JSONP Pooling:
+  Przykład wywołania JSONP Pooling ze wskazaniem funkcji \lstinline{parseResponse()} w atrybucie \emph{functionName}:
 \lstset{language=HTML}
 \begin{lstlisting}
   <script type="application/javascript"
@@ -130,20 +130,20 @@ Korzystając z możliwości użycia \emph{persistent connections} (opisanego w p
 
 \subsubsection{Metody oparte o wykorzystanie Flash i Java Applets}
 
-Wykorzystując możliwości osadzanych niewidocznych (lub małych, 1x1 pikseli\footnote{one-pixel element}) elementów Flash oraz appletów Java zapewnia się mechanizmy otwierające połączenie TCP bezpośrednio z tych elementów, a komunikacja z przeglądarką internetową odbywa się za pomocą wywoływania funkcji JavaScript z przekazywanymi danymi. Niestety, Flash oraz applety Java nie są wspierane przez przeglądarki na urządzeniach mobilnych, a każda interakcja często jest poprzedzona zgodą klienta.
+Wykorzystując możliwości osadzanych niewidocznych (lub małych, 1x1 pikseli\footnote{one-pixel element}) elementów Flash oraz appletów Java możliwe jest otwarcie połączenie TCP bezpośrednio z tych elementów, a komunikacja z przeglądarką internetową odbywa się za pomocą wywoływania funkcji JavaScript z przekazywanymi danymi. Niestety, Flash oraz applety Java nie są obsługiwane przez większość przeglądarek na urządzeniach mobilnych, a każda interakcja często jest poprzedzona zgodą klienta.
 
 \subsubsection{Web Sockets}
 \label{subsub:websockets}
 
-Opisane metody w sekcji \ref{sub:communication-methods} nie zapewniają komunikacji dwukierunkowej (ang. \emph{full-duplex} lub \emph{bi-directional communication}) za pomocą jednego połączenia TCP. Wychodząc na przeciw oczekiwaniom twórców witryn www czasu rzeczywistego wprowadzony został mechanizm \emph{Web Sockets} ustandaryzowany przez IETF\footnote{Internet Engineering Task Force} w dokumencie RFC-6455\cite{websockets-rfc} umożliwiający nawiązanie połączenia TCP wprost z przeglądarki internetowej. W chwili obecnej większość przeglądarek internetowych wspiera standard Web Sockets\cite{caniuse-websockets}, w tym przeglądarki na urządzeniach mobilnych.
+Opisane w sekcji \ref{sub:communication-methods} metody nie zapewniają komunikacji dwukierunkowej (ang. \emph{full-duplex} lub \emph{bi-directional communication}) za pomocą jednego połączenia TCP. Wychodząc na przeciw oczekiwaniom twórców witryn www czasu rzeczywistego, wprowadzony został mechanizm \emph{Web Sockets} ustandaryzowany przez IETF\footnote{Internet Engineering Task Force} w dokumencie RFC-6455\cite{websockets-rfc} umożliwiający nawiązanie połączenia TCP wprost z przeglądarki internetowej. W chwili obecnej większość przeglądarek internetowych jest zgodna standardem Web Sockets\cite{caniuse-websockets}, w tym przeglądarki na urządzeniach mobilnych.
 
 \begin{figure}[H]
-  \caption[Zasada działania protokołu Web Sockets]{Zasada działania protokołu Web Sockets}
   \centering
     \includegraphics[scale=0.75]{websockets-flow.jpg}
+  \caption[Zasada działania protokołu Web Sockets]{Zasada działania protokołu Web Sockets}
 \end{figure}
 
-Protokół Web Sockets został zaprojektowany dla przeglądarek internetowych, natomiast może być użyty w jakiejkolwiek aplikacji. Opiera się na protokole HTTP, ale tylko do czasu przełączenia za pomocą \emph{Upgrade Request} na właściwą wymianę danych, by przystąpić do etapu \emph{handshake}. Aby ustanowić połączenie w protokole Web Sockets, klient wysyła żądanie w protokole HTTP:
+Protokół Web Sockets został zaprojektowany dla przeglądarek internetowych, natomiast może być użyty w jakiejkolwiek aplikacji. Opiera się na protokole HTTP do czasu przełączenia za pomocą \emph{Upgrade Request} do etapu \emph{handshake}, a następnie na właściwą wymianę danych. Aby ustanowić połączenie w protokole Web Sockets, klient wysyła żądanie w protokole HTTP:
 
 \lstset{language=Octave}
 \begin{lstlisting}
@@ -170,20 +170,20 @@ Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
 Sec-WebSocket-Protocol: chat
 \end{lstlisting}
 
-W odpowiedzi na nagłówek \lstinline{Sec-WebSocket-Key} serwer odsyła w odpowiedzi nagłówek \lstinline{Sec-WebSocket-Accept} o wartości będącą równą:
+W odpowiedzi na nagłówek \lstinline{Sec-WebSocket-Key} serwer odsyła nagłówek \lstinline{Sec-WebSocket-Accept} o wartości będącą równą:
 
 \vspace*{1\baselineskip}
 \lstinline{base64(sha1( klucz ))}
 \vspace*{1\baselineskip}
 
-Gdzie klucz to sklejenie ciągu znaków pochodzących z wartości \lstinline{Sec-WebSocket-Key} oraz stałej, ustalonej wartości \lstinline{258EAFA5-E914-47DA-95CA-C5AB0DC85B11}.
+Wartość \emph{klucz} to sklejenie ciągu znaków pochodzących z wartości \lstinline{Sec-WebSocket-Key} oraz stałej, ustalonej wartości \lstinline{258EAFA5-E914-47DA-95CA-C5AB0DC85B11}.
 
-Od tego momentu rozpoczyna się transmisja w protokole Web Socekts, grze przesyłane są ramki w trybie full-duplex:
+Od tego momentu rozpoczyna się transmisja w protokole Web Socekts, w którym przesyłane są ramki w trybie full-duplex:
 
 \begin{figure}[H]
-  \caption[Ramka protokołu Web Sockets]{Ramka protokołu Web Sockets}
   \centering
     \includegraphics[scale=0.65]{WebSocketFrame.png}
+  \caption[Ramka protokołu Web Sockets]{Ramka protokołu Web Sockets}
 \end{figure}
 
 \subsection{Skalowanie}
@@ -193,21 +193,21 @@ Podczas budowy systemu zauważono konieczność skalowania aplikacji przy jednoc
 
 Rozróżniane są Load Balancery w dwóch kategoriach w zależności od warstwy działania w modelu sieciowym ISO/OSI:
 \begin{itemize}
-	\item Działające w warstwie 4 - sieciwoej. Tzw. sprzętowe (ang. \emph{hardware L4 load balancing}). Analizuje ramki ruchu sieciowego, szybkie w działaniu.
-	\item Działające w warstwie 7 - aplikacji. Tzw. programowe (ang. \emph{software L7 load balancing}). Pozwala na zaawansowaną analizę logiczną ruchu sieciowego, tańsze, ale wolniejsze.
+	\item Działające w warstwie 4. - sieciowej, tzw. sprzętowe (ang. \emph{hardware L4 load balancing}). Analizuje ramki ruchu sieciowego, szybkie w działaniu.
+	\item Działające w warstwie 7. - aplikacji, tzw. programowe (ang. \emph{software L7 load balancing}). Pozwala na zaawansowaną analizę logiczną ruchu sieciowego, tańsze, ale wolniejsze.
 \end{itemize}
 
-Znanym programowym load balancerem jest HAProxy, który umożliwia rozłożenie ruchu pomiędzy bliźniacze aplikacje ze względu na kilka algorytmów rozłożenia ruchu\cite{haproxy-conf}:
+Znanym programowym load balancerem jest HAProxy, który umożliwia podzielenie ruchu pomiędzy bliźniacze aplikacje przy użyciu kilku algorytmów\cite{haproxy-conf}:
 
 \begin{description}
   \item[roundrobin] \hfill \\
-  Zakłada wybór serwera na podstawie karuzeli, jeden po drugim, uwzględniając przypisane wagi. Sprawiedliwy dla krótko trwających połączeń o przybliżonym czasie obsługi, np. HTTP.
+  Algorytm zakłada wybór serwera na zasadzie karuzeli, jeden po drugim, uwzględniając przypisane wagi. Sprawiedliwy dla krótko trwających połączeń o przybliżonym czasie obsługi, np. większość żądań w protokole HTTP.
   \item[leastconn] \hfill \\
-  Wybierany jest serwer, który w danym momencie posiada najmniej otwartych połączeń. Sprawiedliwy dla długo trwających połączeń o niejednostajnym czasie obsługi, np. LDAP, połączenia serwerów bazodanowych.
+  W algorytmie wybierany jest serwer, który w danym momencie posiada najmniej otwartych połączeń. Sprawiedliwy dla długo trwających połączeń o niejednostajnym czasie obsługi, np. LDAP, połączenia serwerów bazodanowych.
   \item[source] \hfill \\
-  Adres IP z którego obsługiwane jest połączenie jest argumentem funkcji mieszającej, której wynik jest podzielony przez sumę wszystkich wag. Dzięki temu jeden użytkownik zawsze trafi na ten sam serwer.
+  W algorytmie adres IP, z którego obsługiwane jest połączenie, jest argumentem funkcji mieszającej, której wynik jest podzielony przez sumę wszystkich wag przypisanym serwerom pomiędzy którymi przydzielany jest ruch. Dzięki temu jeden użytkownik zawsze trafi na ten sam serwer.
   \item[uri] \hfill \\
-  Adres \emph{URI}\footnote{Część adresu URL przez znakiem zapytania} jest argumentem funkcji mieszającej, której wynik jest podzielony przez sumę wszystkich wag. Zapewnia to, że żądania z danego adresu trafią zawsze na jeden serwer. Strategia przydatna do zwiększenia ograniczonej pamięci cache skoncentrowanej na adresy URI, aby zwiększyć liczbę trafień do pamięci cache (ang. \emph{cache rate}).
+  W algorytmie adres \emph{URI}\footnote{Część adresu URL przez znakiem zapytania} jest argumentem funkcji mieszającej, której wynik jest podzielony przez sumę wszystkich wag. Zapewnia to, że żądania z danego adresu trafią zawsze na jeden serwer. Strategia przydatna do zwiększenia ograniczonej pamięci cache uwzględniającej jako klucz skojarzeniowy adresy URI, aby zwiększyć liczbę trafień do pamięci cache (ang. \emph{cache rate}).
   \item[url param] \hfill \\
   Analogicznie do uri, natomiast argument funkcji mieszającej stanowi jeden, wybrany \emph{url param}\footnote{Część adresu URL po znaku zapytania}.
 \end{description}
@@ -217,35 +217,35 @@ Znanym programowym load balancerem jest HAProxy, który umożliwia rozłożenie 
 
 \subsubsection{Serwowanie statycznej treści}
 
-Aby zmniejszyć czas ładowania statycznych części składowych stron internetowych, umieszcza się je na wielu serwerach CDN\footnote{Content Delivery Network}. Celem ma być szybszy dostęp do statycznych treści, np. wybór najbliższego geograficznie serwera lub serwera który ze względu na uszkodzenia sieci odpowiada szybciej względem innych serwerów.
+Aby zmniejszyć czas ładowania statycznych części składowych stron internetowych, umieszcza się je na wielu serwerach CDN\footnote{Content Delivery Network}. Celem ma być szybszy dostęp do statycznych treści, np. wybór najbliższego geograficznie serwera lub serwera, który ze względu na uszkodzenia sieci odpowiada szybciej względem innych serwerów.
 
-W ramach pracy dyplomowej skonfigurowany został serwer CDN oparty na Varnish Cache, który udostępnia mechanizm możliwości umieszczenia odpowiedzi HTTP bezpośrednio w pamięci RAM, aby przy ponownym połaczniu nie nastąpił odczyt z dysku lub uruchomienie aplikacji w celu wygenerowania odpowiedzi HTTP. Model, w którym działa Varnish nazywa się man-in-the-middle, a wykorzystany jest mechanizm \emph{reverse proxy}.
+W ramach pracy dyplomowej skonfigurowany został serwer CDN oparty na Varnish Cache, który udostępnia mechanizm możliwości umieszczenia odpowiedzi HTTP bezpośrednio w pamięci RAM, aby przy ponownym połączniu nie nastąpił odczyt z dysku lub uruchomienie aplikacji w celu wygenerowania odpowiedzi HTTP. Model, w którym działa Varnish, nazywa się man-in-the-middle, a wykorzystany jest mechanizm \emph{reverse proxy}.
 
 \subsubsection{Reverse Proxy w protokole HTTP}
 
-W przypadku rozkładu ruchu korzysta się z serwerów proxy, które przekazują żądanie klientów na inne serwery. W przypadku optymalizacji serwowania statycznej treści (ang. \emph{static content delivery}) korzysta się z odwrotnego modelu - \emph{reverse} proxy. Korzystając z faktu możliwości wykorzystania zapamiętywania odpowiedzi wygenerowanej przez serwer w protokole HTTP\cite{http-rfc}\footnote{\cite{http-rfc}, rozdział \emph{Caching in HTTP}} przez klientów, dla których pamięć cache jest indywidualna i serwowanie statycznej treści odbywa się dla każdego z nich indywidualnie, powstaje wątpliwość, czy można zapobiec nadmiernym odczytom z dysków.
+W przypadku rozkładu ruchu korzysta się z serwerów proxy, które przekazują żądanie klientów na inne serwery. W przypadku optymalizacji serwowania statycznej treści (ang. \emph{static content delivery}) korzysta się z odwrotnego modelu - \emph{reverse} proxy. Przyglądając się możliwościom wykorzystania zapamiętywania odpowiedzi wygenerowanej przez serwer w protokole HTTP\cite{http-rfc}\footnote{\cite{http-rfc}, rozdział \emph{Caching in HTTP}} przez klientów, dla których pamięć cache jest indywidualna i serwowanie statycznej treści odbywa się dla każdego z nich indywidualnie, powstaje wątpliwość, czy można zapobiec nadmiernym odczytom z dysków.
 
-Protokół HTTP zapewnia dwa modele cacheowania przesłanej odpowiedzi:
+Protokół HTTP zapewnia dwa modele zapamiętywania w pamięci cache przesłanej odpowiedzi:
 
 \begin{description}
   \item[Expiration model] \hfill \\
   Model oparty o czas ważności odpowiedzi. Serwer wraz z odpowiedzią przesyła w nagłówku \lstinline{Expires} datę jej ważności, która jest skojarzona bezpośrednio z adresem URL, do którego przesłane zostało żądanie. W przypadku ponownego wysłania zapytania, przeglądarka użytkownika może wczytać treść odpowiedzi z lokalnej pamięci cache, aby skrócić czas ładowania strony, o ile czas ważności odpowiedzi nie minął.
   \item[Validation model] \hfill \\
-  Model oparty o poprawność odpowiedzi. Serwer wraz z odpowiedzią przesyła w nagłówku \lstinline{Last-Modified} datę ostatniej modyfikacji odpowiedzi (np. datę modyfikacji pliku). Przy ponownym żądaniu przeglądarka wysyła zapytanie o plik pod wskazany adres URL wraz z uprzednio przesłaną datą. W przypadku, gdy data jest taka sama, serwer odpowiada wyłącznie nagłówkiem \lstinline{304 (Not Modified)} nie przesyłając w odpowiedzi treści statycznej treści. Umożliwia to odciążenie odczytów z dysku serwera.
+  Model oparty o poprawność odpowiedzi. Serwer wraz z odpowiedzią przesyła w nagłówku \lstinline{Last-Modified} datę ostatniej modyfikacji odpowiedzi (np. datę modyfikacji pliku). Przy ponownym żądaniu przeglądarka wysyła zapytanie o plik pod wskazany adres URL wraz z uprzednio przesłaną datą. W przypadku, gdy data jest taka sama, serwer odpowiada wyłącznie nagłówkiem \lstinline{304 (Not Modified)} nie przesyłając w odpowiedzi treści statycznej treści. Umożliwia to zredukowanie liczby odczytów z dysku serwera.
 \end{description}
 
 W modelu reverse-proxy zamiast odwoływać się do lokalnych pamięci cache użytkowników, kreuje się wirtualnego, globalengo użytkownika z pamięcią cache, który jest widziany jako serwer dla wszystkich klientów, w ten sposób pamięć cache jest wspólna dla wszystkich, co dodatkowo redukuje obciążenie serwera związane z odczytem statycznych plików z dysków. Globalna pamięć może być przechowywana w pamięci RAM, aby szybciej dostarczać treści.
 
 \begin{figure}[H]
-  \caption[Varnish cache miss]{Varnish cache miss}
   \centering
     \includegraphics[scale=0.75]{varnish-miss.png} \\
     Rysunek przedstawia przypadek, gdy Varnish nie znalazł wpisu w cache oraz przekazuje żądanie do serwera aplikacji, aby otrzymać odpowiedź.
+  \caption[Varnish cache miss]{Varnish cache miss}
 \end{figure}
 
 \begin{figure}[H]
-  \caption[Varnish cache hit]{Varnish cache hit}
   \centering
     \includegraphics[scale=0.75]{varnish-hit.png} \\
     Rysunek przedstawia przypadek, gdy Varnish znalazł wpis w cache, nie jest konieczne przekazanie połączenia do serwera aplikacji, odpowiedź jest wczytywana prosto z pamięci RAM.
+  \caption[Varnish cache hit]{Varnish cache hit}
 \end{figure}

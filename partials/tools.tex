@@ -24,7 +24,7 @@ W projekcie narzędzie wykorzystane zostało do monitorowania postępów prac or
 \label{sub:Vim}
 Prawdopodobnie najpopularniejszy konsolowy edytor tekstu. Vim jest klonem edytora vi, z wieloma nowymi funkcjami. Przede wszystkim jest to modalny edytor tesktu tzn. że posiada więcej niż jeden tryb pracy (INPUT, COMMAND, VISUAL). Dzięki swojej prostocie, szybkości, oraz mnogości wtyczek ten konsolowy edytor jest wciąż bardzo popularny i używany w zastępstwie wielu zintegrowanych środowisk programistycznych jak np. Eclipse czy VisualStudio.  
 
-\subsection{Technologia wykorzystana w pilotach}
+\subsection{Wykorzystana technologia w pilotach}
 
 \subsubsection{jQuery Mobile}
 \label{subsub:tool-jquery-mobile}
@@ -110,7 +110,7 @@ basket
 
 Funkcja \lstinline{require} na rzecz obiektu \lstinline{basket} zwraca obiekt Promise, który uruchamia równolegle trzy funkcje callback. Funkcje callback również mogą zwracać obiekty Promise, tworząc synchroniczny łańcuch.
 
-\subsection{Technologia wykorzystywana w części serwerowej}
+\subsection{Wykorzystywana technologia w części serwerowej}
 \label{sub:tool-server-technology}
 
 Część serwerowa infrastruktury została napisana w środowisku \emph{Node.js}, stworzonym przez Ryana Dahla w 2009 roku. Node.js używa składni skryptowego\footnote{Kod języków skryptowych wykonywany jest wewnątrz jakiejś aplikacji/środowiska w odróżnieniu od programów napisanych w językach nieskryptowych, które kompilują się i stanowią aplikację.} języka JavaScript znanego z tworzenia dynamicznych elementów stron internetowych. Kod JavaScript, choć wykonuje się w ramach przeglądarki internetowej, w Node.js uruchamiany jest po stronie serwera. Technologia umożliwia uzyskanie dużej przepustowości, zapewniającej nieblokujące wykonywanie operacji wejścia/wyjścia (ang. \emph{non-blocking I/O}). Podejście to nazywa się programowaniem asynchronicznym (jest ono opisane w podrozdziale \ref{subsub:asyncprogramming}).
@@ -125,23 +125,23 @@ W porównaniu do programowania asynchronicznego przedstawione krótko zostanie p
 \centering
 \begin{minipage}[b]{0.45\linewidth}
   \label{fig:syncprogramming-flow}
-  \caption[Programowanie synchroniczne - przebieg instrukcji programu w czasie]{Programowanie synchroniczne - przebieg instrukcji programu w czasie}
   \centering
     \includegraphics[scale=0.5]{syncprogramming-flow.png}
+  \caption[Programowanie synchroniczne - przebieg instrukcji programu w czasie]{Programowanie synchroniczne - przebieg instrukcji programu w czasie}
 \end{minipage}
 
 \begin{minipage}[b]{0.45\linewidth}
 \label{fig:syncprogramming-threads}
-  \caption[Programowanie synchroniczne - wątki]{Programowanie synchroniczne - wątki}
   \centering
     \includegraphics[scale=0.5]{syncprogramming-threads.jpg}
+  \caption[Programowanie synchroniczne - wątki]{Programowanie synchroniczne - wątki}
 \end{minipage}
 
 \begin{minipage}[b]{0.45\linewidth}
 \label{fig:syncprogramming-waiting}
-  \caption[Programowanie synchroniczne - operacje blokujące]{Programowanie synchroniczne - operacje blokujące}
   \centering
     \includegraphics[scale=0.5]{syncprogramming-waiting.png}
+  \caption[Programowanie synchroniczne - operacje blokujące]{Programowanie synchroniczne - operacje blokujące}
 \end{minipage}
 \end{figure}
 
@@ -151,9 +151,9 @@ W porównaniu do programowania asynchronicznego przedstawione krótko zostanie p
 Asynchroniczny model programowania oparty jest na programie uruchomionym w jednym wątku. Znany jest z frameworków graficznych interfejsów użytkownika GUI (na przykład WinApi). W uproszczeniu, budowa programu to nieskończona pętla oraz kolejka operacji odłożona na stos. Z każdym przebiegiem pętla sprawdza w kolejce operacji, czy możliwe są do wykonania jakieś operacje, jeżeli tak, uruchamiane są procedury obsługi (ang. \emph{handlers} lub \emph{callbacks}). Umożliwia to realizację wielu operacji, które oczekują na wyniki, bez blokowania pracy całego programu.
 
 \begin{figure}[H]
-  \caption[Event loop w asynchronicznym modelu programowania]{Event loop w asynchronicznym modelu programowania}
   \centering
     \includegraphics[width=\linewidth]{asyncprogramming-loop.png}
+  \caption[Event loop w asynchronicznym modelu programowania]{Event loop w asynchronicznym modelu programowania}
 \end{figure}
 
 Realizacja niskopoziomowa to użycie funkcji \lstinline{select()} (zarówno systemów POSIX jak i Windows), deskryptorów \lstinline{/dev/poll}, kqueue, poll i epool. Warta rozpoznania jest biblioteka \emph{libevent}\footnote{\url{http://libevent.org/}}, która zakłada abstrakcję na użyte mechanizmy z punktu widzenia programisty\cite{programming-async-sockets}.
@@ -177,12 +177,12 @@ W przeciwieństwie do synchronicznego modelu w programowaniu imperatywnym, model
   \item Zadania wykonują wiele operacji wejścia/wyjścia (I/O) powodujących, że program synchroniczny zostaje zawieszony do momentu otrzymania rezultatu, wtenczas może wykonywać inne zadania.
 \end{enumerate}
 
-Zatem program napisany asynchronicznie blokuje swoje działanie tylko wtedy, gdy nie ma zadań do wykonania i nie jest możliwy dalszy postęp przebiegu programu (dlatego jest nazywany nieblokującym). Przy wykonaniu wielu blokujących zadań program napisany asynchronicznie może być znacznie szybszy spędzając mniej czasu na czekaniu na wyniki, a wykonując wiele pojedynczych zadań podczas przebiegu pętli.
+Zatem program napisany asynchronicznie blokuje swoje działanie tylko wtedy, gdy nie ma zadań do wykonania i nie jest możliwy dalszy postęp przebiegu programu (dlatego jest nazywany nieblokującym). Przy wykonaniu wielu blokujących zadań program napisany asynchronicznie może być znacznie szybszy, spędzając mniej czasu na czekaniu na wyniki, a wykonując wiele pojedynczych zadań podczas przebiegu pętli.
 
 \subsubsection{Zasada działania Node.js}
 \label{sub:tool-server-nodejs}
 
-Node.js jest środowiskiem używającym składni skryptowego języka JavaScript\footnote{Po kliku nieudanych próbach implementacji w C, Lua,  Haskell, twórca Node.js Ryan Dahl, po pojawieniu się Google JavaScript Engine V8 zdecydował się na jego użycie}, udostępniającym mechanizmy programowania asynchronicznego opartego o wywołania funkcji \emph{callbacks}. Node.js działa w pojedynczym wątku opartym o pętlę zdarzeń obsługiwanych przez procedury obsługi (callbacks). Środowisko oparte jest na projekcie opensource \emph{V8 Javascript Engine} wydanym przez Google, który (w odróżnieniu od innych) kompiluje JavaScript do kodu maszynowego\footnote{Obsługiwane platformy: IA-32, x86-64, ARM oraz MIPS ISAs} przed jego wykonaniem.
+Node.js jest środowiskiem używającym składni skryptowego języka JavaScript\footnote{Po kliku nieudanych próbach implementacji w C, Lua,  Haskell, twórca Node.js Ryan Dahl, po pojawieniu się Google JavaScript Engine V8 zdecydował się na jego użycie}, udostępniającym mechanizmy programowania asynchronicznego opartego o wywołania funkcji \mbox{\emph{callbacks}}. Node.js działa w pojedynczym wątku opartym o pętlę zdarzeń obsługiwanych przez procedury obsługi (callbacks). Środowisko wykorzystuje projekt opensource \emph{V8 Javascript Engine} wydanym przez Google, który (w odróżnieniu od innych) kompiluje JavaScript do kodu maszynowego\footnote{Obsługiwane platformy: IA-32, x86-64, ARM oraz MIPS ISAs} przed jego wykonaniem.
 
 \begin{figure}[H]
   \caption[Model działania Node.js]{Model działania Node.js na przykładzie serwera HTTP}
@@ -193,7 +193,7 @@ Node.js jest środowiskiem używającym składni skryptowego języka JavaScript\
 \subsubsection{Socket.io}
 \label{subsub:socketio}
 
-Socket.io to biblioteka Node.js, która zapewnia komunikację dwukierunkową między przeglądarka użytkownika, a serwerem. Co ważne, sposób wykorzystania biblioteki zarówno po stornie serwera, jak i klienta jest taki sam. Komunikacja zapewniana jest przez wspierane sposoby opisane w podrozdziale \ref{sub:communication-methods})\footnote{http://socket.io/\#browser-support}:
+Socket.io to biblioteka Node.js, która zapewnia komunikację dwukierunkową między przeglądarką użytkownika a serwerem. Co ważne, sposób wykorzystania biblioteki zarówno po stronie serwera, jak i klienta jest taki sam. Komunikacja zapewniana jest przez wykorzystanie sposobów opisanych w podrozdziale \ref{sub:communication-methods})\footnote{http://socket.io/\#browser-support}:
 
 \begin{enumerate}
   \item WebSocket
@@ -208,31 +208,31 @@ Przykładowy node.js kod po stronie serwera:
 
 \lstinputlisting[language=JavaScript]{assets/src/socketio-example-server.js}
 
-Powyższy kod uruchamia serwer nasłuchujący na porcie 8081, i przyjmuje zgłoszenia. Gdy klient się podłączy, dodawany jest callback na rzecz obiektu klienta \lstinline{socket} na wiadomość nazwaną \emph{the message from client}, który jest wykonywany, gdy wiadomość o takim identyfikatorze nadejdzie, za pomocą konstrukcji \lstinline{socket.on('the_message_from_client', function(data)}. Wysyłanie wiadomości podłączonemu klientowi odbywa się poprzez wywołanie metody emit na rzecz obiektu klienta socket \lstinline{socket.emit('the_message_from_server', function(data)} , która przyjmuje argument jako nazwę wiadomości \emph{the message from server} oraz drugi w postaci obiektu JavaScript, który zostanie zserializowany do formatu JSON i wysłany jako tekst, gdzie po stornie klienta zostanie zdeserializowany i zinterpretowany również jako obiekt JavaScript.
+Powyższy kod uruchamia serwer nasłuchujący na porcie 8081, po czym przyjmuje zgłoszenia. Gdy klient się podłączy, dodawany jest callback na rzecz obiektu klienta \lstinline{socket} na wiadomość nazwaną \emph{the message from client}, który jest wykonywany, gdy wiadomość o takim identyfikatorze nadejdzie, za pomocą konstrukcji \lstinline{socket.on('the_message_from_client', function(data)}. Wysyłanie wiadomości podłączonemu klientowi odbywa się poprzez wywołanie metody emit na rzecz obiektu klienta socket \lstinline{socket.emit('the_message_from_server', function(data)} , która przyjmuje argument jako nazwę wiadomości \emph{the message from server} oraz drugi w postaci obiektu JavaScript, który zostanie zserializowany do formatu JSON i wysłany jako tekst, gdzie po stronie klienta zostanie zdeserializowany i zinterpretowany również jako obiekt JavaScript.
 
-Przykładowy kod po stornie klienta:
+Przykładowy kod po stronie klienta:
 
 \lstinputlisting[language=JavaScript]{assets/src/socketio-example-client.js}
 
-Kod jest bliźniaczo podobny do kodu uruchamianego na serwerze. Klient ustanawia połączenie do adresu podanego jako argument funkcji \lstinline{connect}. Domyślnie używany jest protokół WebSocket ws://, można skorzystać z szyfrowanego protokołu wss://\footnote{analogiczny http:// do https://} wskazując go przed nazwę hosta. Istnieje możliwość skonfigurowania połączenia, np wskazać, czy ma zostać podjęta próba ponownego połączenia przy jego utracie.
+Kod jest bliźniaczo podobny do kodu uruchamianego na serwerze. Klient ustanawia połączenie do adresu podanego jako argument funkcji \lstinline{connect}. Domyślnie używany jest protokół WebSocket ws://, można skorzystać z szyfrowanego protokołu wss://\footnote{analogiczny http:// do https://}, wskazując go przed nazwę hosta. Istnieje możliwość skonfigurowania połączenia, np. można wskazać, czy ma zostać podjęta próba ponownego połączenia przy jego utracie.
 
 \subsubsection{HAProxy}
 
-Programowy serwer proxy służący do możliwie równego rozłożenia ruchu sieciowego w warstwie 7 modelu ISO/OSI pomiędzy skonfigurowane serwery.
+HAProxy to programowy serwer proxy służący do możliwie równego rozłożenia ruchu sieciowego w warstwie 7 modelu ISO/OSI pomiędzy skonfigurowane serwery.
 
 \subsubsection{Varnish Cache}
 
-Serwer reverse-proxy służacy do zapamiętywania odpowiedzi generowanych przez aplikacje w pamięci cache umieszczonej w RAM. Instalowany jako serwer, z którym klienci łączą się po dostarczenie treści, w przypadku, gdy Varnish nie posiada zapamiętanej odpowiedzi, połączenie jest przekazywane do docelowego serwera, aby przekazać i zapamiętać wygenerowaną przez niego odpowiedź.
+Varnish Cache to serwer reverse-proxy służący do zapamiętywania odpowiedzi generowanych przez aplikacje w pamięci cache umieszczonej w RAM. Instalowany jako serwer, z którym klienci łączą się w celu dostarczenia treści, w przypadku, gdy Varnish nie posiada zapamiętanej odpowiedzi, połączenie jest przekazywane do docelowego serwera, aby przekazać i zapamiętać wygenerowaną przez niego odpowiedź.
 
-\subsection{Wykorzystane technologie i narzędzia w serwerze zarządzającym infrastrukturą}
+\subsection{Technologie i narzędzia wykorzystane w serwerze zarządzającym infrastrukturą}
 
 \subsubsection{SBT}
 
-SBT (ang. \emph{Simple Build Tool}) to narzędzie służące do budowania projektów, rozwiązywanie zależności, podobne jest bardzo do bardziej znanych tego typu narzędzi jak Maven, czy Ant. Natomiast w przeciwieństwie do tych narzędzi cała konfiguracja odbywa się w jednym pliku i do tego napisanym w języku Scala. Nie jest również niezbędna dodatkowa integracja środowiska programistycznego. By dodać nową zależność do projektu, należy otworzyć plik \lstinline|Build.sbt| i dodać zależność według następującego schematu:
+SBT (ang. \emph{Simple Build Tool}) to narzędzie służące do budowania projektów, rozwiązywania zależności, podobne jest bardzo do bardziej znanych tego typu narzędzi, takich jak Maven, czy Ant. Natomiast w przeciwieństwie do tych narzędzi cała konfiguracja odbywa się w jednym pliku i do tego napisanym w języku Scala. Nie jest również niezbędna dodatkowa integracja środowiska programistycznego. By dodać nową zależność do projektu, należy otworzyć plik \lstinline|Build.sbt| i dodać zależność według następującego schematu:
 
 \begin{lstlisting}
-//identyfikator grupy    %%     identyfikator artefaktu  %   wersja
-"com.decodified"         %%     "scala-ssh"              %   "0.6.4"
+//identyfikator grupy %% identyfikator artefaktu % wersja
+"com.decodified"      %% "scala-ssh"             % "0.6.4"
 \end{lstlisting}
 
 Standardowo SBT korzysta tylko z publicznych standardowych repozytoriów, by dodać nowe (mogą to być repozytoria Maven czy Ivy), należy w tym samym pliku dodać je według następującego przykładu:
@@ -243,7 +243,7 @@ resolvers += "spray repo" at "http://repo.spray.io"
 
 \subsubsection{Akcje we frameworku Play}
 
-W kontrolerach (które w scali są obiektami) definiowane są metody, każda z metod odpowiada za konkretną akcje, odpowiadając na żądanie użytkownika. Proszę przyjrzeć się następującemu kontrolerowi:
+W kontrolerach (które w scali są obiektami) definiowane są metody, każda z metod reprezentuje konkretną akcje, odpowiadając na żądanie użytkownika. Proszę przyjrzeć się następującemu kontrolerowi:
 
 \begin{lstlisting}
 object Application extends Controller {
@@ -253,22 +253,24 @@ object Application extends Controller {
 }
 \end{lstlisting}
 
-Obiekt \lstinline{Application} dziedziczy po cesze \lstinline{Controller}, która między innymi zapewnia szereg metod pomocniczych do zdefiniowania akcji. Metoda \lstinline{index} jest definiowana przez funkcję \lstinline{Action} (reprezentowana w Javie jako obiekt), która jako argument przyjmuje obiekt typu \lstinline{Request}, a zwraca z kolei obiekty typu \lstinline{Response}. 
+Obiekt \lstinline{Application} dziedziczy po cesze \lstinline{Controller}, która między innymi posiada szereg metod pomocniczych do zdefiniowania akcji. Metoda \lstinline{index} jest definiowana przez funkcję \lstinline{Action} (reprezentowana w Javie jako obiekt), która jako argument przyjmuje obiekt typu \lstinline{Request}, a zwraca z kolei obiekty typu \lstinline{Response}. 
 
 \par
 
-Tak zdefiniowana akcja definiuje blok kodu w sposób synchroniczny zwracający wynik, jednak aplikacje internetowe coraz częściej zorientowane są wokół usług internetowych (ang. \emph{Web Services}), które w sporej większości nie mają WSLA\footnote{ang. \emph{Web Service Legal Agreement} umowa utrzymania jakości usług. Pozwala autorom na wyszczególnienie wymagań co do usługi, oraz akcji, które powinny zostać podjęte podczas gdy te nie zostaną spełnione}.
+Tak zdefiniowana akcja definiuje blok kodu w sposób synchroniczny zwracający wynik, jednak aplikacje internetowe coraz częściej zorientowane są wokół usług internetowych (ang. \emph{Web Services}), które w sporej większości nie mają WSLA\footnote{ang. \emph{Web Service Legal Agreement} umowa utrzymania jakości usług. Pozwala autorom na wyszczególnienie wymagań co do usługi, oraz akcji, które powinny zostać podjęte w przypadku gdy te nie zostaną spełnione}.
 
 \par
 
-Framework Play w założeniu działa na bardzo małym zbiorze wątków, dlatego też podczas gdy dana akcja nie może odpowiedzieć natychmiastowo np. z powodu wykorzystywanej usługi internetowej czy długiego zapytania do bazy danych, wątek obsługujący daną akcje nie może zostać zablokowany, ale musi zostać zwolniony.
+Framework Play w założeniu działa na bardzo małym zbiorze wątków, dlatego też w sytuacji gdy dana akcja nie może odpowiedzieć natychmiastowo np. z powodu wykorzystywanej usługi internetowej czy długiego zapytania do bazy danych, wątek obsługujący daną akcje nie może zostać zablokowany, ale musi zostać zwolniony.
 
 \begin{description}	
 	\item[Future] \hfill \\
-		Za pomocą zmiennej o tym typie, można uzyskać wartość, kiedy tylko będzie dostępna.
+		Za pomocą zmiennej o tym typie można uzyskać wartość, kiedy tylko będzie dostępna.
 	\item[Promise] \hfill \\
-		Typ Promise działa w przeciwną stronę tzn. jeżeli \lstinline{Future} jest typem konsumenta, tak \lstinline{Promise} jest typem charakterystycznym dla producenta. Za każdym razem gdy programista chcę obliczyć lub pobrać jakieś dane tworzy obiekt \lstinline{Promise}, który jest kontenerem na nowe dane. Z obiektu \lstinline{Promise} otrzymuje się obiekt typu \lstinline{Future}.
+		Typ Promise działa w przeciwną stronę, tzn. jeżeli \lstinline{Future} jest typem konsumenta, tak \lstinline{Promise} jest typem charakterystycznym dla producenta. Za każdym razem, gdy programista chce obliczyć lub pobrać jakieś dane, tworzy obiekt \lstinline{Promise}, który jest kontenerem na nowe dane. Z obiektu \lstinline{Promise} otrzymuje się obiekt typu \lstinline{Future}.
 \end{description}
+
+Rozważmy następujący listing:
 
 \begin{lstlisting}
 def index = Action.async {

@@ -5,13 +5,13 @@ Kluczowym z punktu widzenia systemu jest poprawnie działający, uniwersalny kli
 \subsection{Wykrywanie gestów telefonu komórkowego}
 \label{sub:touch-detection}
 
-Pojawienie się na rynku urządzeń dotykowych postawiły przed twórcami interfejsów nowe wyzwania, a projektantom mobilnych przeglądarek internetowych wyzwanie obsługi gestów wykonywanych palcami na ekranie i ich interpretacje na istniejące już, dobrze zakorzenione standardy obsługi zdarzeń myszy.
+Pojawienie się na rynku urządzeń dotykowych postawiło przed twórcami interfejsów nowe wyzwania, a przed projektantami mobilnych przeglądarek internetowych pojawił się problem obsługi gestów wykonywanych palcami na ekranie i ich interpretacje zgodnie z istniejącymi już, dobrze zakorzenionymi standarda obsługi zdarzeń myszy.
 
-Przeglądarki internetowe uruchamiane na urządzeniach mobilnych, które przewidują dotykowy sposób komunikacji z interfejsem aplikacji internetowej zazwyczaj odwzorowują dotyk jako zdarzenia myszy (ang. \emph{mouse events}), aby umożliwić interakcję z uruchomioną na ekranie aplikacją. Niestety interpretacja dotyku jako zdarzeń myszy ma pewne ograniczenia użyteczności związane z fizycznym dostępem do treści. Co więcej, w przeglądarce internetowej nie ma możliwości obsługi wielu kursorów jako dotyku kilku palców jednocześnie, ze względu na ograniczenia interfejsu zdarzeń myszy, niezależnie od możliwości urządzenia. Oba te ograniczenia, na poziomie systemowym oraz ze względu na wsteczną zgodność standardów rodzą problemy z obsługą dotyku jako zdarzeń.
+Przeglądarki internetowe uruchamiane na urządzeniach mobilnych, które przewidują dotykowy sposób komunikacji z interfejsem aplikacji internetowej, zazwyczaj odwzorowują dotyk jako zdarzenia myszy (ang. \emph{mouse events}), aby umożliwić interakcję z uruchomioną na ekranie aplikacją. Niestety, interpretacja dotyku jako zdarzeń myszy ma pewne ograniczenia użyteczności związane z fizycznym dostępem do treści. Co więcej, w przeglądarce internetowej nie ma możliwości obsługi wielu kursorów jako dotyku kilku palców jednocześnie, ze względu na ograniczenia interfejsu zdarzeń myszy, niezależnie od możliwości urządzenia. Oba te ograniczenia, na poziomie systemowym oraz ze względu na wsteczną zgodność standardów rodzą problemy z obsługą dotyku jako zdarzeń skojarzonych z generowaniem przez mysz.
 
 \subsubsection{W3C Touch Events specification}
 
-Specyfikacja zdarzeń dotyku (\emph{Touch Events specification}\cite{touch-events-w3c}) opracowana przez W3C\footnote{W3C - World Wide Web Consortium} rozwiązuje powyższe problemy definiując interfejsy umożliwiające aplikacjom bezpośrednią obsługę zdarzeń gestów, z możliwością interpretacji wielu dotyków jednocześnie dla urządzeń zdolnych do ich obsługi. Jej pierwsza wersja (\emph{Proposed Recommendation}) powstała już 5 maja 2011, aż po pięciu poprawkach (przechodząc przez statusy \emph{Working Draft} oraz \emph{Candidate Recommendation}) uzyskała status \emph{W3C Recommendation}.
+Specyfikacja zdarzeń dotyku (\emph{Touch Events specification}\cite{touch-events-w3c}) opracowana przez W3C\footnote{W3C - World Wide Web Consortium} rozwiązuje powyższe problemy, definiując interfejsy umożliwiające aplikacjom bezpośrednią obsługę zdarzeń gestów, z możliwością interpretacji wielu dotyków jednocześnie dla urządzeń zdolnych do ich obsługi. Pierwsza wersja tej specyfikacji (\emph{Proposed Recommendation}) powstała już 5 maja 2011, aż po pięciu poprawkach (przechodząc przez statusy \emph{Working Draft} oraz \emph{Candidate Recommendation}) uzyskała status \emph{W3C Recommendation}.
 
 Definiuje ona interfejs punktu dotyku \emph{Touch} jako obiekt niezmienny (ang. \emph{immutable object}\footnote{Immutable object - Obiekt niezmienny raz utworzony, nie może zmieniać swojego stanu}):
 
@@ -29,17 +29,19 @@ interface Touch {
 };
 \end{lstlisting}
 
+Znaczenie jest następujące:
+
 \begin{description}
   \item[identifier] \hfill \\
   Unikatowy identyfikator punktu dotyku względem pozostałych identyfikatorów już aktywnych\footnote{Można wyobrazić sobie sytuację, gdy nowy punkt dotyku pojawia się, gdy użytkownik dotykał powierzchnię w innych miejscach} punktów dotyku. Każdy punkt dotyku otrzymuje identyfikator w momencie jego zarejestrowania.
   \item[target] \hfill \\
-  Obiekt na powierzchni który został wskazany przez punkt dotyku w momencie jego zarejestrowania. Nawet, jeżeli punkt dotyku się przesuwa wskazując inne obiekty, target nie ulega zmianie\footnote{Można wykorzystać ten fakt do zmiany położenia zgodnie ze zmianą pozycji punktu dotyku, np. do przesuwania obiektów}.
+  Obiekt na powierzchni, który został wskazany przez punkt dotyku w momencie jego zarejestrowania. Nawet jeżeli punkt dotyku się przesuwa, wskazując inne obiekty, target nie ulega zmianie\footnote{Można wykorzystać ten fakt do zmiany położenia zgodnie ze zmianą pozycji punktu dotyku, np. do przesuwania obiektów}.
   \item[screenX, screenY] \hfill \\
   Współrzędne punktu dotyku względem punktu zerowego ekranu.
   \item[clientX, clientY] \hfill \\
-  Współrzędne punktu dotyku względem punktu zerowego powierzchni rzutni na której wyświetlana jest strona internetowa, z wyłączeniem przesunięcia punktu widoczności.
+  Współrzędne punktu dotyku względem punktu zerowego powierzchni rzutni, na której wyświetlana jest strona internetowa, z wyłączeniem przesunięcia punktu widoczności.
   \item[pageX, pageY] \hfill \\
-  Współrzędne punktu dotyku względem punktu zerowego powierzchni rzutni na której wyświetlana jest strona internetowa, z uwzględnieniem przesunięcia punktu widoczności (suma przesunięcia oraz pozycji punktu dotyku na widocznej części rzutni).
+  Współrzędne punktu dotyku względem punktu zerowego powierzchni rzutni, na której wyświetlana jest strona internetowa, z uwzględnieniem przesunięcia punktu widoczności (suma przesunięcia oraz pozycji punktu dotyku na widocznej części rzutni).
 \end{description}
 
 Ponadto do obsługi wielu punktów dotyku pojawiających się równolegle zdefiniowano interfejs \lstinline{TouchList} zawierający listę punktów dotyku:
@@ -68,7 +70,7 @@ Aby reagować na zdefiniowane zdarzenia, należy zarejestrować procedurę obsł
 \subsubsection{Respektowanie standardu Touch Events przez producentów przeglądarek}
 \label{subsec:w3c-touch-events-implementations}
 
-Pojawienie się propozycji standardu nie gwarantuje, że producenci popularnych przeglądarek internetowych zaimplementują daną funkcjonalność wg podanej specyfikacji, bądź czy obsługa w ogóle występuje. W chwili obecnej biorąc pod uwagę przeglądarki internetowe dla urządzeń mobilnych, standard jest wspierany przez\cite{caniuse-touch-events}:
+Pojawienie się propozycji standardu nie gwarantuje, że producenci popularnych przeglądarek internetowych zaimplementują daną funkcjonalność wg podanej specyfikacji, bądź czy obsługa w ogóle występuje. W chwili obecnej biorąc pod uwagę przeglądarki internetowe dla urządzeń mobilnych zgodne ze standardem\cite{caniuse-touch-events}:
 
 \begin{enumerate}
   \item \textbf{iOS Safari}\cite{browser-ios-safari} \footnote{\cite{browser-ios-safari} Rozdział \em{Handling events}, \url{https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/HandlingEvents/HandlingEvents.html}}, natywna przeglądarka systemu iOS firmy Apple;
@@ -77,7 +79,7 @@ Pojawienie się propozycji standardu nie gwarantuje, że producenci popularnych 
   \item \textbf{Firefox} - określa własny, bardzo podobny standard, dzięki któremu można osiągnąć te same efekty\cite{browser-firefox} \footnote{\cite{browser-firefox} Rozdział \em{Touch events}, \url{https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Touch_events}}.
 \end{enumerate}
 
-Przeglądarki nie wspierające standardu:
+Przeglądarki nie zgodne ze standardem:
 
 \begin{enumerate}
   \item \textbf{Opera Mini},
@@ -89,9 +91,9 @@ Przeglądarki nie wspierające standardu:
 
 Klient webowy uruchomiony na urządzeniu mobilnym zawiera pliki z kodem JavaScript, które są pobierane do przeglądarki internetowej celem ich interpretacji i późniejszego wykonania. Ze względu na specyfikę sieci 3G: mniejsza przepustowość (ang. \emph{bandwidth}), koszt transferu (ponoszony przez użytkownika końcowego), większe opóźnienia (ang. \emph{latency}) niezbędnym jest zapamiętywanie lokalnie pobranych plików, celem ich ponownego otwarcia z lokalnej przestrzeni dyskowej urządzenia, bez konieczności dostępu do nich przez sieć.
 
-Przeglądarki internetowe na urządzeniach mobilnych wspierają pamięć tymczasową \emph{cache} protokołu HTTP opisaną w dokumencie RFC-2616 \emph{Hypertext Transfer Protocol - HTTP/1.1}\cite{http-rfc} \footnote{Rozdział 13, \emph{Caching in HTTP}}. Można by było zadać pytanie, czy pamięć jest zachowywana po zamknięciu przeglądarki na urządzeniu mobilnym jako aplikacji, przy blokowaniu i wyłączaniu telefonu. Wykonane testy dowodzą, że przeglądarki internetowe na urządzeniach mobilnych wykazują poprawne zachowanie\cite{http-cache-mobile-benchmark}.
+Przeglądarki internetowe na urządzeniach mobilnych korzystają z pamięci tymczasowej \emph{cache} protokołu HTTP opisanej w dokumencie RFC-2616 \emph{Hypertext Transfer Protocol - HTTP/1.1}\cite{http-rfc} \footnote{Rozdział 13, \emph{Caching in HTTP}}. Można by było zadać pytanie, czy pamięć jest zachowywana po zamknięciu przeglądarki na urządzeniu mobilnym jako aplikacji, przy blokowaniu i wyłączaniu telefonu. Wykonane testy dowodzą, że przeglądarki internetowe na urządzeniach mobilnych wykazują poprawne zachowanie\cite{http-cache-mobile-benchmark}\footnote{tj. zgodne ze standardem, zachowują dane w pamięci}.
 
-Można by było zaprzestać na serwowaniu plików JavaScript z nagłówkiem \lstinline{Cache-Control} oraz \lstinline{Expires} na bardzo odległy czas, przykładowo:
+Można by było poprzestać na serwowaniu plików JavaScript z nagłówkiem \lstinline{Cache-Control} oraz \lstinline{Expires} na bardzo odległy czas, przykładowo:
 
 \lstset{language=Octave}
 \begin{lstlisting}
@@ -104,12 +106,13 @@ Expires: Mon, 30 Oct 2023 14:19:41 GMT
 
 Zaproponowany standard W3C \emph{Web Storage}\cite{webstorage}\footnote{W3C Recommendation, {\em Web Storage}, \url{http://www.w3.org/TR/webstorage/}}, który również zapewnia przechowywanie danych lokalnie, dał początek testom związanych z szybkością ładowania plików z obu pamięci podręcznych. Local Storage to pamięć asocjacyjna klucz-wartość (ang. \emph{key-value storage}), gdzie zarówno klucz, jak i wartość są ciągiem znaków. Wartości JavaScript nie będące ciągiem znaków są na niego rzutowane.
 
-Co prawda, w swoim zamierzeniu Web Storage nie miał na celu przechowywanie plików wchodzących w skład strony internetowej, ale posiada interfejs, który umożliwia wykorzystanie go właśnie w ten sposób. Wykonane testy wykazały, że ładowanie danych z Web Storage (dokładniej \emph{Local Storage}) jest nawet do 5 razy szybsze, niż w przypadku ładowania danych z pamięci podręcznej przeglądarki (\emph{Native cache})\cite{http-cache-mobile-benchmark}\footnote{Testy dotyczące przeglądarek internetowych na urządzeniach mobilnych opublikowanych 13 maja 2013 przez Petera McLachlana}:
+Co prawda, w swoim zamierzeniu Web Storage nie miał na celu przechowywanie plików wchodzących w skład strony internetowej, ale posiada interfejs, który umożliwia wykorzystanie go właśnie w ten sposób. Wykonane testy wykazały, że ładowanie danych z Web Storage (dokładniej \emph{Local Storage}) jest nawet do 5 razy szybsze, niż w przypadku ładowania danych z pamięci podręcznej przeglądarki (\emph{Native cache})\cite{http-cache-mobile-benchmark}:
 
 \begin{figure}[h!]
-  \caption[Porównanie czasu ładowania danych z cache przeglądarki oraz Web Storage]{Czerwoną kreską oznaczono średnią.}
   \centering
     \includegraphics[width=\textwidth]{localstorage-benchmark}
+  \caption[Porównanie czasu ładowania danych z cache przeglądarki oraz Web Storage]{Porównanie czasu ładowania danych z cache przeglądarki oraz Web Storage.}
+  Czerwoną kreską oznaczono średnią. Testy dotyczące przeglądarek internetowych na urządzeniach mobilnych opublikowanych 13 maja 2013 przez Petera McLachlana\cite{http-cache-mobile-benchmark}
 \end{figure}
 
 \begin{center}
@@ -129,7 +132,7 @@ Co prawda, w swoim zamierzeniu Web Storage nie miał na celu przechowywanie plik
 
 W przypadku Local Storage zarówno średni czas ładowania, jak i wariancja i odchylenie standardowe jest znacznie mniejsze.
 
-Dokument standardu W3C\cite{webstorage} definiuje sposób dostępu do danych z pamięci lokalnej przeglądarki. Propozycja wynikła z faktu, iż dane zachowane lokalnie w przeglądarce internetowej przed jego pojawieniem się, implementowane za pomocą mechanizmu ciasteczek (ang. \emph{Cookies}) brały udział w transmisji w protokole HTTP jako dane nagłówkowe wychodzące od strony klienta do serwera, co nie było pożądane ze względu na dodatkowy narzut transmisji. Ponadto serwer jest świadom istnienia danych lokalnych i jest w stanie je odebrać (nagłówek HTTP \lstinline{Cookie: } podczas wysyłania żądania do serwera) oraz, co gorsza modyfikować (nagłówek HTTP \lstinline{Set-Cookie: } podczas wysyłania odpowiedzi od serwera).
+Dokument standardu W3C\cite{webstorage} definiuje sposób dostępu do danych z pamięci lokalnej przeglądarki. Propozycja wynikła z faktu, iż dane zachowane lokalnie w przeglądarce internetowej przed wprowadzeniem standardu, implementowane za pomocą mechanizmu ciasteczek (ang. \emph{Cookies}) brały udział w transmisji w protokole HTTP jako dane nagłówkowe wychodzące od strony klienta do serwera, co nie było pożądane ze względu na dodatkowy narzut transmisji. Ponadto serwer jest świadom istnienia danych lokalnych i jest w stanie je odebrać (nagłówek HTTP \lstinline{Cookie: } podczas wysyłania żądania do serwera) oraz, co gorsza, modyfikować (nagłówek HTTP \lstinline{Set-Cookie: } podczas wysyłania odpowiedzi od serwera).
 
 Przykładowe żądanie HTTP z ciasteczkiem:
 \lstset{language=Octave}
@@ -165,11 +168,11 @@ interface Storage {
 };
 \end{lstlisting}
 
-Istnieją dwa rodzaje pamięci:
+Istnieją dwa rodzaje pamięci - \emph{Local Sotrage} i \emph{Session Storage}:
 
 \begin{description}
   \item[Local Storage] \hfill \\
-  Przypisany dla danego źródła \emph{Origin}\footnote{Origin to zestaw wartości w postaci: \emph{protocol://domain:port}, gdzie \emph{protocol} to skrótowa nazwa protokołu (np http, https), \emph{domain} to nazwa hosta oraz \emph{port} to numer portu, pod którym jest uruchomiona dana usługa} a trybucie \emph{document} pamięć typu \emph{Storage}. Oznacza to, że każda strona internetowa otwarta w przeglądarce posiada swoją niezależną pamięć podręczną, niedostępną dla stron internetowych uruchomionych z innego adresu (protokół, nazwa hosta, numer portu). \emph{Same Origin Policy} zapewnia, że jedna pamięć może być dzielona tylko i wyłącznie między dokumentami otwartymi przez przeglądarkę dla tej samej nazwy hosta, uruchomiona na wybranym, określonym porcie oraz przekazywana jednym określonym protokołem (np. http, czy https). Dla każdej różnej kombinacji tworzona jest oddzielna pamięć, a dokumenty nie mają dostępu do swoich pamięci na wzajem. Pamięć \emph{Local Storage} ma nieograniczony czas życia, nie ulega zdezaktualizowaniu, dopóki nie zabraknie limitowanego miejsca\footnote{Ilość miejsca jest różna dla przeglądarek} lub użytkownik nie wyczyści danych przeglądarki ręcznie.
+  Przypisany dla danego źródła \emph{Origin}\footnote{Origin to zestaw wartości w postaci: \emph{protocol://domain:port}, gdzie \emph{protocol} to skrótowa nazwa protokołu (np http, https), \emph{domain} to nazwa hosta oraz \emph{port} to numer portu, pod którym jest uruchomiona dana usługa} jako atrybut \emph{document} pamięć typu \emph{Storage}. Oznacza to, że każda strona internetowa otwarta w przeglądarce posiada swoją niezależną pamięć podręczną, niedostępną dla stron internetowych uruchomionych z innego adresu (protokół, nazwa hosta, numer portu). \emph{Same Origin Policy} zapewnia, że jedna pamięć może być dzielona tylko i wyłącznie między dokumentami otwartymi przez przeglądarkę dla tej samej nazwy hosta, uruchomiona na wybranym, określonym porcie oraz przekazywana jednym określonym protokołem (np. http, czy https). Dla każdej innej kombinacji tworzona jest oddzielna pamięć, a dokumenty nie mają dostępu do swoich pamięci na wzajem. Pamięć \emph{Local Storage} ma nieograniczony czas życia, nie ulega zdezaktualizowaniu, dopóki nie zabraknie limitowanego miejsca\footnote{Ilość miejsca jest różna dla przeglądarek} lub użytkownik nie wyczyści danych przeglądarki ręcznie.
   \item[Session Storage] \hfill \\
   Ma te same właściwości, jak \emph{Local Storage} za wyjętkiem tej, że pamięć jest czyszczona po zamknięciu sesji, tj. po zamknięciu wszystkich okien dla danego \emph{Origin}.
 \end{description}
@@ -197,29 +200,33 @@ Przeglądarki nie wspierające standardu:
 \subsection{Projektowanie stron internetowych zgodnie z Responsive Web Design}
 \label{subsubsec:rwd}
 
-\emph{Responsive Web Design} (RWD) to sposób projektowania stron internetowych przyjaznych do przeglądania oraz obsługiwania na szerokiej gamie rozdzielczości ekranów (począwszy na urządzeniach mobilnych, po netbooki, komputery jak i monitory z dużą rozdzielczością)\cite{rwd}; rozumianej jako brak konieczności skalowania, przewijania pasków przez użytkownika. Zaprojektowane w ten sposób strony internetowe potrafią zmieniać swój układ, rozmiar grafik, czcionek w zależności od wymiarów widocznej powierzchni ekranu (ang. \emph{viewport}).
+\emph{Responsive Web Design} (RWD) to sposób projektowania stron internetowych przyjaznych dla przeglądania oraz obsługiwania na szerokiej gamie rozdzielczości ekranów (począwszy na urządzeniach mobilnych, po netbooki, komputery jak i monitory z dużą rozdzielczością)\cite{rwd}; i wynikający z tego fakt braku konieczności skalowania, przewijania pasków przez użytkownika. Zaprojektowane w ten sposób strony internetowe potrafią zmieniać swój układ, rozmiar grafik, czcionek w zależności od wymiarów widocznej powierzchni ekranu (ang. \emph{viewport}).
 
 \subsubsection{Viewport}
 
-Viewport to widoczna część strony internetowej w oknie przeglądarki. W ramach tej części wykonywana jest projekcja rzutni, na której generowana jest strona internetowa w graficznej postaci. Jeżeli rozmiar rzutni strony internetowej jest większy niż viewport, użytkownik nawiguje się po jej zawartości przeciągając pasek przesówania (horyzontalny i/lub wertykalny).
+Viewport to widoczna część strony internetowej w oknie przeglądarki. W ramach tej części wykonywana jest projekcja rzutni, na której generowana jest strona internetowa w graficznej postaci. Jeżeli rozmiar rzutni strony internetowej jest większy niż viewport, użytkownik nawiguje się po jej zawartości przeciągając pasek przesuwania (horyzontalny i/lub wertykalny).
 
-Na rysunkach poniżej prezentowany jest przykładowy viewport w kontekście wyświetlenia strony internetowej:
+Na rysunkach poniżej (\ref{fig:viewport-default}, \ref{fig:viewport-adjusted}) prezentowany jest przykładowy viewport w kontekście wyświetlenia strony internetowej:
 
 \begin{figure}[h!]
+  \centering
+    \includegraphics[scale=0.75]{viewport-default.png}
   \caption[Apple default viewport w Safari iOS]{Domyślny viewport iOS Safari na urządzeniu firmy Apple.}
-  \centering
-    \includegraphics[scale=0.75]{viewport-default.png} \\
     Domyślnie w przeglądarce iOS Safari viewport wynosi 980 pikseli szerokości, mimo, iż ekran optymalnie wyświetla 320 pikseli. Aby przedstawić całą stronę internetową szerokość jest dobierana automatycznie.
+  \label{fig:viewport-default}
 \end{figure}
 
-Podczas projektowania interfejsu strony internetowej wyświetlanej na stronie internetowej istotne jest okreslenie viewportu, aby uniknąć nieoczekiwanemu przyjęciu domyślnych wartości, bowiem strategie ich okreslania są różne. Niektóre przeglądarki dopasowują szerokość viewportu do najszerszego elementu strony internetowej, co powoduje, że tekst i elementy interaktywne mogą być niewidoczne. Aby przyjąć szerokość viewportu zgodne z szerokością przeglądarki internetowej na urządzeniu, należy zdefiniować wartość jako \lstinline{device-width}, wówczas szerokość strony zostanie przycięta, a w przypadku projektowania interfejsu zgodnie z zasadą Responsive Web Design (opisanum w podsekcji \ref{subsubsec:rwd}), istnieje możliwość określenia dedykowanych arkuszy styli definiujących wygląd strony w zależności od szerokości viewportu (który nie może być zmieniany na urządzeniu mobilnym, a w przypadku przeglądarki uruchomionej na komputerze - tak, poprzez zmianę rozmiaru okna).
+Podczas projektowania interfejsu strony internetowej wyświetlanej na stronie internetowej istotne jest określenie viewportu, aby zapobiec nieoczekiwanemu przyjęciu domyślnych wartości, bowiem strategie ich określania są różne. Niektóre przeglądarki dopasowują szerokość viewportu do najszerszego elementu strony internetowej, co powoduje, że tekst i elementy interaktywne mogą być niewidoczne. Aby przyjąć szerokość viewportu zgodne z szerokością przeglądarki internetowej na urządzeniu, należy zdefiniować wartość jako \lstinline{device-width}, wówczas szerokość strony zostanie przycięta, a w przypadku projektowania interfejsu zgodnie z zasadą Responsive Web Design (opisanym w podsekcji \ref{subsubsec:rwd}), istnieje możliwość określenia dedykowanych arkuszy stylów definiujących wygląd strony w zależności od szerokości viewportu (który nie może być zmieniany na urządzeniu mobilnym, a w przypadku przeglądarki uruchomionej na komputerze - tak, poprzez zmianę rozmiaru okna).
 
 \begin{figure}[h!]
-  \caption[Apple fixed viewport w Safari iOS]{Ustawiony viewport iOS Safari na urządzeniu firmy Apple}
   \centering
-    \includegraphics[scale=0.75]{viewport-adjusted.png} \\
+    \includegraphics[scale=0.75]{viewport-adjusted.png}
+  \caption[Apple fixed viewport w Safari iOS]{Ustawiony viewport iOS Safari na urządzeniu firmy Apple}
     Viewport można regulować ustawiając stałe wartości, np 320px lub \lstinline{device-width} jako szerokość okna przeglądarki.
+  \label{fig:viewport-adjusted}
 \end{figure}
+
+Aby określić ścisłą szerokość viewportu konieczne jest zdefiniowanie poniższej właściwości:
 
 \lstset{language=HTML}
 \begin{lstlisting}
@@ -228,7 +235,9 @@ Podczas projektowania interfejsu strony internetowej wyświetlanej na stronie in
 
 \subsubsection{Cascading Style Sheet - Media Queries}
 
-Znane są rozszerzenia kaskadowych arkuszy styli (ang. \emph{Cascading Style Sheet}, w skrócie \emph{CSS}) z wersji 2.1\cite{css21}, gdzie za pomocą atrybutu \emph{@media} istnieje możliwość zdefiniowania, jakiego typu urządzenia dotyczy wybrany arkusz styli\footnote{\cite{css21}, Rozdział \emph{Media types}}, tzw \emph{Media Queries}, np:
+Znane są rozszerzenia kaskadowych arkuszy styli (ang. \emph{Cascading Style Sheet}, w skrócie \emph{CSS}) z wersji 2.1\cite{css21}, gdzie za pomocą atrybutu \emph{@media} istnieje możliwość zdefiniowania, jakiego typu urządzenia dotyczy wybrany arkusz styli\footnote{\cite{css21}, Rozdział \emph{Media types}}, tzw \emph{Media Queries}, np: \lstinline{all}, \lstinline{print}, \lstinline{handheld}, \lstinline{projection}, \lstinline{tty}.
+
+Poniżej opisano zastosowania:
 
 \begin{description}
   \item[all] \hfill \\
@@ -238,12 +247,12 @@ Znane są rozszerzenia kaskadowych arkuszy styli (ang. \emph{Cascading Style She
   \item[handheld] \hfill \\
   Dla urządzeń kieszonkowych o zmniejszonej rozdzielczości ekranu.
   \item[projection] \hfill \\
-  Dla urządzeń, które wyświetlają stronę w trybie prezentacyjnym, np projektorów.
+  Dla urządzeń, które wyświetlają stronę w trybie prezentacyjnym, np. projektorów.
   \item[tty] \hfill \\
-  Dla urządzeń o ściśle określonym obszarze na wyświetlanie znaków, np. terminale, urządzenia przenośne z okraniczonym tekstowym wyświetlaczem.
+  Dla urządzeń o ściśle określonym obszarze na wyświetlanie znaków, np. terminale, urządzenia przenośne z ograniczonym tekstowym wyświetlaczem.
 \end{description}
 
-Sposob załączania arkusza w zależności od jego przeznaczenia jest następujący dla dokumentu HTML:
+Istnieje możliwość załączania arkusza, w zależności od jego przeznaczenia, z poziomu dokumentu HTML oraz bezpośrednio w arkuszu stylów:
 
 \lstset{language=HTML}
 \begin{lstlisting}
@@ -252,8 +261,6 @@ Sposob załączania arkusza w zależności od jego przeznaczenia jest następuj�
 <link rel="stylesheet" type="text/css" href="print.css"
   media="print" />
 \end{lstlisting}
-
-Lub bezpośrednio w arkuszu stylów:
 
 \lstset{language=Octave}
 \begin{lstlisting}
@@ -268,7 +275,7 @@ Lub bezpośrednio w arkuszu stylów:
 }
 \end{lstlisting}
 
-Nie jest to jednak wystarczające w kontekście dostosowania strony internetowej do rozmiarów i rozdzielczości okna przeglądarki. W CSS w wersji 3.1 wprowadzono możliwość załączania styli w zależności od rozdzielczości dostępnej powierzchni (\emph{viewport}) za pomocą rozszerzonego o tę możliwość \emph{Media Queries}\cite{css3}\footnote{\cite{css3} Rozdział \emph{Media Queries}, http://www.w3.org/TR/css3-mediaqueries/}.
+Nie jest to jednak wystarczające w kontekście dostosowania strony internetowej do rozmiarów i rozdzielczości okna przeglądarki. W CSS w wersji 3.1 wprowadzono możliwość załączania stylów w zależności od rozdzielczości dostępnej powierzchni (\emph{viewport}) za pomocą rozszerzonego o tę możliwość \emph{Media Queries}\cite{css3}\footnote{\cite{css3} Rozdział \emph{Media Queries}, http://www.w3.org/TR/css3-mediaqueries/}.
 
 Pojawiła się między innymi wartość atrybutu \lstinline{@media}: \lstinline{device-width} oraz \lstinline{device-height} z przedrostkami \lstinline{min-} i \lstinline{max-}, co w pełni wyczerpuje potrzeby projektowania stron internetowych zgodnie z RWD.
 
