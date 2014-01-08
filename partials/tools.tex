@@ -281,10 +281,10 @@ def index = Action.async {
 
 \par
 
-W linii pierwszej powyższego listingu definiowana jest funkcja \lstinline{Action.async}. Funkcja ta powoduje, że wątek obsługujący tą akcje jest zwalniany, i system wraca do wykonania tej metody podczas gdy zmienna \lstinline{foo} zostanie pobrana/obliczona.
+W linii pierwszej powyższego listingu definiowana jest funkcja \lstinline{Action.async}. Funkcja ta powoduje, że wątek obsługujący tę akcje jest zwalniany i system wraca do wykonania tej metody, podczas gdy zmienna \lstinline{foo} zostanie pobrana/obliczona.
 
 \par
-Interesująca funkcjonalność jest zaprezentowana w linii trzeciej. Funkcja \lstinline{map} wywołana na obiekcie \lstinline{Future}, zwraca rezultat dopiero podczas gdy obiekt \lstinline{foo} zostanie uzupełniony. Mechanizm ten jest o tyle interesujący, że w innych językach programowania jest to wykonywane za pomocą funkcji \lstinline{onSuccess}. Takie rozwiązanie w przykładzie, który został przedstawiony byłoby jak najbardziej dopuszczalne natomiast rozważając inny bardziej skomplikowany przypadek, możemy dojść do wniosku, że nie jest to najlepsze rozwiązanie.
+Interesująca funkcjonalność jest zaprezentowana w linii trzeciej. Funkcja \lstinline{map} wywołana na obiekcie \lstinline{Future} zwraca rezultat dopiero wtedy gdy obiekt \lstinline{foo} zostanie uzupełniony. Mechanizm ten jest o tyle interesujący, że w innych językach programowania jest to wykonywane za pomocą funkcji \lstinline{onSuccess}. Takie rozwiązanie w przykładzie, który został przedstawiony, byłoby jak najbardziej dopuszczalne, natomiast rozważając inny, bardziej skomplikowany przypadek, możemy dojść do wniosku, że nie jest to najlepsze rozwiązanie.
 
 \begin{lstlisting}
 val currencyValue = future {
@@ -302,11 +302,11 @@ currencyValue onSuccess {
 }
 \end{lstlisting}
 
-Powyższy kod odwołuje się do usługi internetowej by sprawdzić kurs waluty, i jeśli kurs waluty jest opłacalny, zadana ilość jest kupowana.
+Powyższy kod odwołuje się do usługi internetowej, by sprawdzić kurs waluty, i jeśli kurs waluty jest opłacalny, zadana ilość jest kupowana.
 Używając metody \lstinline{onSuccess} zagnieżdżamy wykonanie kolejnej operacji. Przedstawione rozwiązanie nie jest najlepsze z dwóch powodów:
 \begin{itemize}
-	\item Każde kolejne zagnieżdżenie następnej operacji powoduje, że kod staję się nieczytelny (ang. \emph{Callback Hell})
-	\item Kod wywołujący zagnieżdżoną operację jest zagnieżdżony co uniemożliwia wywołanie ponownie tego samego kodu z innego miejsca programu.
+	\item Każde kolejne zagnieżdżenie następnej operacji powoduje, że kod staje się nieczytelny (ang. \emph{Callback Hell})
+	\item Kod wywołujący zagnieżdżoną operację jest zagnieżdżony przez co dany blok instrukcji nie może być ponownie użyty w programie.
 \end{itemize}
 
 Dlatego zalecanym sposobem do rozwiązania tego problemu jest następujący sposób.
